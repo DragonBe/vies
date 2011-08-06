@@ -1,0 +1,16 @@
+<phpunit bootstrap="./TestHelper.php" colors="true">
+    <!-- Version: $Id: phpunit.xml 844 2010-09-23 13:34:35Z andries $ -->
+    <testsuite name="Unit test suite">
+        <directory>./</directory>
+    </testsuite>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">../application/</directory>
+            <directory suffix=".php">../library/Bas/</directory>
+            <exclude>
+                <directory suffix=".phtml">../application/</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Always run the Phing build script with the Jenkin user as follows:
+    sudo -u jenkins phing -f jenkins.xml
+
+    If you want to print extra debug info, pass the following parameter:
+    sudo -u jenkins phing -f jenkins.xml -Dpassthru=true
+-->
+
+<project name="Continuous Integration" default="build">
+
+    <property name="project.name" value="VIES"/>
+    <property name="passthru" value="false"/>
+
+    <fileset id="php-files" dir="${project.basedir}">
+        <include name="**/*.php"/>
+        <exclude name="library/Zend/**"/>
+        <exclude name="library/ZendX/**"/>
+        <exclude name="tests/**"/>
+    </fileset>
+
+    <target name="clean" description="Cleaning up build artifacts">
+        <delete dir="${project.basedir}/build/api"/>
+        <delete dir="${project.basedir}/build/code-browser"/>
+        <delete dir="${project.basedir}/build/coverage"/>
+        <delete dir="${project.basedir}/build/logs"/>
+        <delete dir="${project.basedir}/build/pdepend"/>
+        <mkdir dir="${project.basedir}/build/api/phpdoc"/>
+        <mkdir dir="${project.basedir}/build/api/docblox"/>
+        <mkdir dir="${project.basedir}/build/code-browser"/>
+        <mkdir dir="${project.basedir}/build/coverage"/>
+        <mkdir dir="${project.basedir}/build/logs"/>
+        <mkdir dir="${project.basedir}/build/pdepend"/>
+    </target>
+
+	<target name="phplint" description="Syntax checking of code">
+	    <phplint haltonfailure="true">
+			<fileset refid="php-files" />
+		</phplint>
+	</target>
+
+    <target name="phpdoc" description="Generate API documentation with PHPDocumentor">
+        <phpdoc
+            title="${project.name} API Documentation"
+            target="${project.basedir}/build/api/phpdoc"
+            output="HTML:frames:earthli"
+            quiet="true">
+            <fileset refid="php-files"/>
+        </phpdoc>
+    </target>
+    
+    <target name="docblox" description="Generate API documentation with DocBlox">
+        <docblox 
+            title="${project.name} API Documentation"
+            destdir="${project.basedir}/build/api/docblox">
+            <fileset refid="php-files"/>
+        </docblox>
+    </target>
+
+    <target name="phpunit" description="Run unit tests on codebase and generate code coverage">
+        <exec passthru="${passthru}" dir="${project.basedir}/tests" command="phpunit
+            --log-junit=${project.basedir}/build/logs/junit.xml
+            --coverage-clover=${project.basedir}/build/logs/clover.xml
+            --coverage-html=${project.basedir}/build/coverage"/>
+    </target>
+
+    <target name="phpcs" description="Coding Standards Analysis">
+        <exec passthru="${passthru}" command="phpcs 
+            --report=checkstyle
+            --report-file=${project.basedir}/build/logs/checkstyle.xml
+            --standard=Zend
+            --ignore=library/Zend,library/ZendX,tests,docs,scripts
+            --extensions=php
+            ${project.basedir}"/>
+    </target>
+
+    <target name="phpcpd" description="Copy/Paste detection">
+        <phpcpd>
+            <fileset refid="php-files"/>
+            <formatter type="pmd" outfile="${project.basedir}/build/logs/pmd-cpd.xml"/>
+        </phpcpd>
+    </target>
+
+    <target name="phpmd" description="Generate pmd.xml using PHPMD">
+        <phpmd>
+            <fileset refid="php-files"/>
+            <formatter type="xml" outfile="${project.basedir}/build/logs/pmd.xml"/>
+        </phpmd>
+    </target>
+
+    <target name="pdepend" description="Calculate dependencies of the code base">
+        <exec passthru="${passthru}" dir="${project.basedir}" command="pdepend
+            --configuration=${project.basedir}/pdepend.xml
+            --jdepend-chart=${project.basedir}/build/pdepend/dependencies.svg
+            --jdepend-xml=${project.basedir}/build/logs/jdepend.xml
+            --overview-pyramid=${project.basedir}/build/pdepend/overview-pyramid.svg
+            --suffix=php
+            --ignore=library/Zend,library/ZendX,tests
+            ${project.basedir}"/>
+    </target>
+
+    <target name="phploc" description="Generate phploc.csv">
+        <exec passthru="${passthru}" command="phploc
+            --log-csv ${project.basedir}/build/logs/phploc.csv
+            ${project.basedir}"/>
+    </target>
+
+    <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
+        <exec passthru="${passthru}" command="phpcb
+            --ignore build,library/Zend,library/ZendX,tests,docs
+            --log ${project.basedir}/build/logs
+            --source ${project.basedir}
+            --output ${project.basedir}/build/code-browser"/>
+    </target>
+
+    <target name="build" description="Start analyzing our application">
+        <phingCall target="clean" />
+		<phingCall target="phplint" />
+        <phingCall target="phpdoc" />
+        <phingCall target="phpcs" />
+        <phingCall target="phpunit" />
+        <phingCall target="phpcpd" />
+        <phingCall target="phpmd" />
+        <phingCall target="pdepend" />
+        <phingCall target="phploc" />
+        <phingCall target="phpcb" />
+    </target>
+</project>
