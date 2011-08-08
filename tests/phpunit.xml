@@ -7,7 +7,7 @@
     <filter>
         <whitelist>
             <directory suffix=".php">../application/</directory>
-            <directory suffix=".php">../library/Bas/</directory>
+            <directory suffix=".php">../library/My/</directory>
             <exclude>
                 <directory suffix=".phtml">../application/</directory>
             </exclude>
