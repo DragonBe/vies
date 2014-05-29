@@ -6,6 +6,23 @@ It either returns a successful validation with optional company name and registe
 
 More information at http://ec.europa.eu/taxation_customs/vies/faqvies.do#item16
 
+# Installation
+
+This project is on [Packagist](https://packagist.org/packages/dragonbe/vies)!
+
+To install the latest from master, just add to your `composer.json` the following:
+
+    "require-dev": {
+        "dragonbe/vies": "dev-master"
+    }
+
+To install the a specific version (e.g. 1.0.0), just add to your `composer.json` the following:
+
+    "require": {
+        "dragonbe/vies": "1.0.0"
+    }
+
+
 # Usage
 
      <?php
