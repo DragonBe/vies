@@ -1,12 +1,17 @@
 {
     "name": "DragonBe/Vies",
+    "type": "tool",
     "description": "European service to validate VAT numbers",
+    "keywords": ["VIES","VAT","EU"],
+    "homepage": "https://github.com/DragonBe/vies",
     "minimum-stability": "stable",
     "license": "MIT",
     "authors": [
         {
             "name": "Michelangelo van Dam",
-            "email": "dragonbe@gmail.com"
+            "email": "dragonbe@gmail.com",
+            "homepage": "http://dragonbe.com",
+            "role": "Developer"
         }
     ],
     "require": {
