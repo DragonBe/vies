@@ -1,4 +1,5 @@
 <?php
+namespace DragonBe\Vies;
 /**
  * My
  * 
@@ -23,31 +24,37 @@
  * @subpackage My_Service_Vies
  * @link http://ec.europa.eu/taxation_customs/vies/faqvies.do#item16
  */
-class My_Service_Vies extends Zend_Soap_Client
+class Vies extends \Zend_Soap_Client
 {
     const VIES_WSDL = 'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
-    
+    const VIES_SOAP_VERSION = '1.1';
+
+    /**
+     * @param string $wsdl
+     * @param null $options
+     */
     public function __construct($wsdl = self::VIES_WSDL, $options = null)
     {
         parent::__construct($wsdl, $options);
+        $this->setSoapVersion(SOAP_1_1);
     }
     
     /**
      * Validates a given country code and VAT number and returns a
-     * My_Service_Vies_CheckVatResponse object
+     * \DragonBe\Vies\CheckVatResponse object
      * 
      * @param string $countryCode The two-character country code of a European
      * member country
      * @param string $vatNumber The VAT number (without the country 
      * identification) of a registered company
-     * @return My_Service_Vies_CheckVatResponse
+     * @return \DragonBe\Vies\CheckVatResponse
      */
     public function validateVat($countryCode,$vatNumber)
     {
         $vatNumber = self::filterVat($vatNumber);
-        $response = $this->_soapClient->checkVat(array (
+        $response = $this->getSoapClient()->checkVat(array (
             'countryCode' => $countryCode, 'vatNumber' => $vatNumber));
-        return new My_Service_Vies_CheckVatResponse($response);
+        return new CheckVatResponse($response);
     }
     /**
      * Validates a company with additional information for more precise
@@ -75,7 +82,7 @@ class My_Service_Vies extends Zend_Soap_Client
             'traderStreet' => $traderStreet,'traderPostcode' => $traderPostcode,
             'traderCity' => $traderCity,'requesterCountryCode' => $requesterCountryCode,
             'requesterVatNumber' => $requesterVatNumber));
-        return new My_Service_Vies_CheckVatApproxResponse($response);
+        return new CheckVatApproxResponse($response);
     }
     /**
      * Filters a VAT number and normalizes it to an alfanumeric string

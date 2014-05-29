@@ -1,8 +1,0 @@
-VIES
-
-This is a service provided by the European Union to validate
-VAT numbers of companies registered within the EU.
-
-It either returns a successful validation with optional company name and registered address, or a simple false
-
-More information at http://ec.europa.eu/taxation_customs/vies/faqvies.do#item16

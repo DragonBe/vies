@@ -14,8 +14,6 @@
 
     <fileset id="php-files" dir="${project.basedir}">
         <include name="**/*.php"/>
-        <exclude name="library/Zend/**"/>
-        <exclude name="library/ZendX/**"/>
         <exclude name="tests/**"/>
     </fileset>
 

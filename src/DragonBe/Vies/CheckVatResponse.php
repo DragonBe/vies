@@ -1,4 +1,5 @@
 <?php
+namespace DragonBe\Vies;
 /**
  * My
  * 
@@ -21,7 +22,7 @@
  * @package My_Service
  * @subpackage My_Service_Vies
  */
-class My_Service_Vies_CheckVatResponse
+class CheckVatResponse
 {
     /**
      * @var string The country code for a member of the European Union
@@ -57,7 +58,7 @@ class My_Service_Vies_CheckVatResponse
      * Sets the two-character country code for a member of the European Union
      *   
      * @param string $countryCode
-     * @return My_Service_Vies_CheckVatResponse
+     * @return \DragonBe\Vies\CheckVatResponse
      */
     public function setCountryCode($countryCode)
     {
@@ -78,7 +79,7 @@ class My_Service_Vies_CheckVatResponse
      * Sets the VAT number of a company within the European Union
      * 
      * @param string $vatNumber
-     * @return My_Service_Vies_CheckVatResponse
+     * @return \DragonBe\Vies\CheckVatResponse
      */
     public function setVatNumber($vatNumber)
     {
@@ -98,7 +99,7 @@ class My_Service_Vies_CheckVatResponse
      * Sets the date- and timestamp when the VIES service response was created
      * 
      * @param string $requestDate
-     * @return My_Service_Vies_CheckVatResponse
+     * @return \DragonBe\Vies\CheckVatResponse
      */
     public function setRequestDate($requestDate)
     {
@@ -118,7 +119,7 @@ class My_Service_Vies_CheckVatResponse
      * Sets the flag to indicate the provided details were valid or not
      * 
      * @param bool $flag
-     * @return My_Service_Vies_CheckVatResponse
+     * @return \DragonBe\Vies\CheckVatResponse
      */
     public function setValid($flag)
     {
@@ -138,7 +139,7 @@ class My_Service_Vies_CheckVatResponse
      * Sets optionally the registered name of the company
      * 
      * @param string $name
-     * @return My_Service_Vies_CheckVatResponse
+     * @return \DragonBe\Vies\CheckVatResponse
      */
     public function setName($name)
     {
@@ -158,7 +159,7 @@ class My_Service_Vies_CheckVatResponse
      * Sets the registered address of a company
      * 
      * @param string $address
-     * @return My_Service_Vies_CheckVatResponse
+     * @return \DragonBe\Vies\CheckVatResponse
      */
     public function setAddress($address)
     {
@@ -182,7 +183,7 @@ class My_Service_Vies_CheckVatResponse
     public function populate($row)
     {
         if (is_array($row)) {
-            $row = new ArrayObject($row, ArrayObject::ARRAY_AS_PROPS);
+            $row = new \ArrayObject($row, \ArrayObject::ARRAY_AS_PROPS);
         }
         // required parameters
         $this->setCountryCode($row->countryCode)
@@ -202,11 +203,11 @@ class My_Service_Vies_CheckVatResponse
     {
         return array (
             'countryCode' => $this->getCountryCode(),
-            'vatNumber' => $this->getVatNumber(),
+            'vatNumber'   => $this->getVatNumber(),
             'requestDate' => $this->getRequestDate(),
-            'valid' => $this->isValid(),
-            'name' => $this->getName(),
-            'address' => $this->getAddress(),
+            'valid'       => $this->isValid(),
+            'name'        => $this->getName(),
+            'address'     => $this->getAddress(),
         );
     }
 }

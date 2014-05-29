@@ -1,0 +1,22 @@
+{
+    "name": "DragonBe/Vies",
+    "description": "European service to validate VAT numbers",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Michelangelo van Dam",
+            "email": "dragonbe@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "zendframework/zendframework1": "1.12.6",
+        "phpunit/phpunit": "3.7.37"
+    },
+    "autoload": {
+        "psr-0": {
+            "DragonBe\\Vies": "src/"
+        }
+    }
+}

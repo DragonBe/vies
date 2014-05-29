@@ -1,5 +1,7 @@
 <?php
-class My_Service_ViestTest extends PHPUnit_Framework_TestCase
+namespace DragonBe\Vies;
+
+class ViestTest extends \PHPUnit_Framework_TestCase
 {
     public function vatNumberProvider()
     {
@@ -16,7 +18,7 @@ class My_Service_ViestTest extends PHPUnit_Framework_TestCase
     public function testVatNumberFilter($vatNumber, $filteredNumber)
     {
         $this->assertEquals($filteredNumber,
-            My_Service_Vies::filterVat($vatNumber));
+            Vies::filterVat($vatNumber));
     }
     protected function _createdStubbedViesClient($response)
     {
@@ -25,13 +27,13 @@ class My_Service_ViestTest extends PHPUnit_Framework_TestCase
         $stub->expects($this->any())
              ->method('checkVat')
              ->will($this->returnValue($response));
-        $vies = new My_Service_Vies();
+        $vies = new Vies();
         $vies->setSoapClient($stub);
         return $vies;
     }
     public function testSuccessVatNumberValidation()
     {
-        $response = new StdClass();
+        $response = new \StdClass();
         $response->countryCode = 'BE';
         $response->vatNumber = '0123.456.789';
         $response->requestDate = '1983-06-24';
@@ -42,12 +44,12 @@ class My_Service_ViestTest extends PHPUnit_Framework_TestCase
         $vies = $this->_createdStubbedViesClient($response);
         
         $response = $vies->validateVat('BE', '0123.456.789');
-        $this->assertInstanceOf('My_Service_Vies_CheckVatResponse', $response);
+        $this->assertInstanceOf('\DragonBe\Vies\CheckVatResponse', $response);
         $this->assertTrue($response->isValid());
     }
     public function testFailureVatNumberValidation()
     {
-        $response = new StdClass();
+        $response = new \StdClass();
         $response->countryCode = 'BE';
         $response->vatNumber = '0123.ABC.789';
         $response->requestDate = '1983-06-24';
@@ -56,7 +58,7 @@ class My_Service_ViestTest extends PHPUnit_Framework_TestCase
         $vies = $this->_createdStubbedViesClient($response);
 
         $response = $vies->validateVat('BE', '0123.ABC.789');
-        $this->assertInstanceOf('My_Service_Vies_CheckVatResponse', $response);
+        $this->assertInstanceOf('\DragonBe\Vies\CheckVatResponse', $response);
         $this->assertFalse($response->isValid());
     }
 }

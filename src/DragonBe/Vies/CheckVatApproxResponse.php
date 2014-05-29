@@ -1,4 +1,6 @@
 <?php
+namespace DragonBe\Vies;
+
 /**
  * My
  * 
@@ -21,7 +23,7 @@
  * @package My_Service
  * @subpackage My_Service_Vies
  */
-class My_Service_Vies_CheckVatApproxResponse
+class CheckVatApproxResponse
 {
     /**
      * @var string The country code for a member of the European Union
@@ -293,7 +295,7 @@ class My_Service_Vies_CheckVatApproxResponse
     public function populate($row)
     {
         if (is_array($row)) {
-            $row = new ArrayObject($row, ArrayObject::ARRAY_AS_PROPS);
+            $row = new \ArrayObject($row, \ArrayObject::ARRAY_AS_PROPS);
         }
         // required parameters
         $this->setCountryCode($row->countryCode)

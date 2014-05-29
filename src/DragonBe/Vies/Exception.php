@@ -1,4 +1,5 @@
 <?php
+namespace DragonBe\Vies;
 /**
  * My
  * 
@@ -10,6 +11,8 @@
  * @link http://creativecommons.org/licenses/by-sa/3.0/
  *
  */
+use Symfony\Component\Yaml\Exception\RuntimeException;
+
 /**
  * My_Service_Vies_Exception
  * 
@@ -22,6 +25,6 @@
  * @package My_Service
  * @subpackage My_Service_Vies
  */
-class My_Service_Vies_Exception extends Zend_Exception
+class Exception extends \RuntimeException
 {
 }
