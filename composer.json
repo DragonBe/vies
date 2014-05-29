@@ -1,5 +1,5 @@
 {
-    "name": "DragonBe/Vies",
+    "name": "dragonbe/vies",
     "type": "tool",
     "description": "European service to validate VAT numbers",
     "keywords": ["VIES","VAT","EU"],
