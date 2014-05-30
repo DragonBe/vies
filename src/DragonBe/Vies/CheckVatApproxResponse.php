@@ -185,7 +185,7 @@ class CheckVatApproxResponse
      */
     public function setTraderName($traderName)
     {
-        $this->_traderName = (string) $name;
+        $this->_traderName = (string) $traderName;
         return $this;
     }
     /**
