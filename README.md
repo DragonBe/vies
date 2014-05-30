@@ -43,8 +43,6 @@ To install the a specific version (e.g. 1.0.0), just add to your `composer.json`
 
 # Roadmap
 
-- Add this project to [Packagist](http://packagist.org) so it can be easily included in PHP projects.
-- Hook it up onto [Travis-CI](http://travis-ci.org) for automated testing.
 - Add a heartbeat tool for checking if the VIES service is alive.
 
 # Licence

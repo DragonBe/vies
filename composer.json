@@ -16,7 +16,9 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "zendframework/zendframework1": "1.12.6",
+        "zendframework/zendframework1": "1.12.6"
+    },
+    "require-dev": {
         "phpunit/phpunit": "3.7.37"
     },
     "autoload": {
