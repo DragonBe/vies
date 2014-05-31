@@ -1,27 +1,25 @@
 <?php
 namespace DragonBe\Vies;
 /**
- * My
- * 
- * This library is an extension for Zend Framework and provides essential
- * components for usage within a full Zend Framework application.
- * 
+ * \DragonBe\Vies
+ *
+ * Component using the European Commission (EC) VAT Information Exchange System (VIES) to verify and validate VAT
+ * registration numbers in the EU, using PHP and Composer.
+ *
  * @author Michelangelo van Dam <dragonbe+github@gmail.com>
- * @license Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)
- * @link http://creativecommons.org/licenses/by-sa/3.0/
+ * @license MIT
  *
  */
 /**
- * My_Service_Vies
+ * Vies
  * 
  * This class provides a soap client for usage of the VIES web service
- * provided by the European commision to validate VAT numbers of companies
+ * provided by the European Commission to validate VAT numbers of companies
  * registered within the European Union
  * 
- * @see Zend_Soap_Client
- * @category My
- * @package My_Service
- * @subpackage My_Service_Vies
+ * @see \Zend_Soap_Client
+ * @category DragonBe
+ * @package \DragonBe\Vies
  * @link http://ec.europa.eu/taxation_customs/vies/faqvies.do#item16
  */
 class Vies extends \Zend_Soap_Client
@@ -69,6 +67,7 @@ class Vies extends \Zend_Soap_Client
      * @param string $traderCity
      * @param string $requesterCountryCode
      * @param string $requesterVatNumber
+     * @return CheckVatApproxResponse
      */
     public function validateVatApprox($countryCode,$vatNumber,
         $traderName = null,$traderCompanyType = null,$traderStreet = null,

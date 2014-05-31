@@ -8,8 +8,8 @@ $vies = new Vies();
 
 // Using my own VAT to verify, should be valid
 $result = $vies->validateVat('BE', '0811231190');
-var_dump($result->isValid());
+echo ($result->isValid() ? 'VALID' : 'INVALID') . ' VAT number' . PHP_EOL;
 
 // Using bogus VAT to verify, should be invalid
 $result = $vies->validateVat('BE', '1234567890');
-var_dump($result->isValid());
+echo ($result->isValid() ? 'VALID' : 'INVALID') . ' VAT number' . PHP_EOL;

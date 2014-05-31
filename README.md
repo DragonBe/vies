@@ -3,10 +3,13 @@
 Component using the European Commission (EC) VAT Information Exchange System (VIES) to verify and validate VAT registration numbers in the EU, using PHP and Composer.
 
 The `Vies` class provides functionality to make a SOAP call to VIES and returns an object `CheckVatResponse` containing the following information:
+
 - Country code (string): a 2-character notation of the country code
 - VAT registration number (string): contains the complete registration number without the country code
-- Date of request (string): the date when the request was made
+- Date of request (DateTime): the date when the request was made
 - Valid (boolean): flag indicating the registration number was valid (TRUE) or not (FALSE)
+- Name (string): registered company name (if provided by EC member state)
+- Address (string): registered company address (if provided by EC member state)
 
 Stated on the European Commission website:
 > To make an intra-Community supply without charging VAT, you **should ensure** that the person to whom you are supplying the goods is a taxable person in another Member State, and that the goods in question have left, or will leave your Member State to another MS. VAT-number should also be in the invoice.

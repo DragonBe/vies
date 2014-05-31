@@ -1,27 +1,24 @@
 <?php
 namespace DragonBe\Vies;
-
 /**
- * My
- * 
- * This library is an extension for Zend Framework and provides essential
- * components for usage within a full Zend Framework application.
- * 
+ * \DragonBe\Vies
+ *
+ * Component using the European Commission (EC) VAT Information Exchange System (VIES) to verify and validate VAT
+ * registration numbers in the EU, using PHP and Composer.
+ *
  * @author Michelangelo van Dam <dragonbe+github@gmail.com>
- * @license Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)
- * @link http://creativecommons.org/licenses/by-sa/3.0/
+ * @license MIT
  *
  */
 /**
- * My_Service_Vies_CheckVatApproxResponse
+ * CheckVatApproxResponse
  * 
  * This is the response object from the VIES web service for validation of
  * VAT numbers of companies registered in the European Union.
- * 
- * @see Zend_Exception
- * @category My
- * @package My_Service
- * @subpackage My_Service_Vies
+ *
+ * @see \DragonBe\Vies\Exception
+ * @category DragonBe
+ * @package \DragonBe\Vies
  */
 class CheckVatApproxResponse
 {
@@ -100,7 +97,7 @@ class CheckVatApproxResponse
      * Sets the two-character country code for a member of the European Union
      *   
      * @param string $countryCode
-     * @return My_Service_Vies_CheckVatApproxResponse
+     * @return \DragonBe\Vies\CheckVatApproxResponse
      */
     public function setCountryCode($countryCode)
     {
@@ -121,7 +118,7 @@ class CheckVatApproxResponse
      * Sets the VAT number of a company within the European Union
      * 
      * @param string $vatNumber
-     * @return My_Service_Vies_CheckVatApproxResponse
+     * @return \DragonBe\Vies\CheckVatApproxResponse
      */
     public function setVatNumber($vatNumber)
     {
@@ -141,7 +138,7 @@ class CheckVatApproxResponse
      * Sets the date- and timestamp when the VIES service response was created
      * 
      * @param string $requestDate
-     * @return My_Service_Vies_CheckVatApproxResponse
+     * @return \DragonBe\Vies\CheckVatApproxResponse
      */
     public function setRequestDate($requestDate)
     {
@@ -161,7 +158,7 @@ class CheckVatApproxResponse
      * Sets the flag to indicate the provided details were valid or not
      * 
      * @param bool $flag
-     * @return My_Service_Vies_CheckVatApproxResponse
+     * @return \DragonBe\Vies\CheckVatApproxResponse
      */
     public function setValid($flag)
     {
@@ -181,7 +178,7 @@ class CheckVatApproxResponse
      * Sets optionally the registered name of the company
      * 
      * @param string $traderName
-     * @return My_Service_Vies_CheckVatApproxResponse
+     * @return \DragonBe\Vies\CheckVatApproxResponse
      */
     public function setTraderName($traderName)
     {

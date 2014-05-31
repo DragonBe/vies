@@ -1,26 +1,24 @@
 <?php
 namespace DragonBe\Vies;
 /**
- * My
+ * \DragonBe\Vies
  * 
- * This library is an extension for Zend Framework and provides essential
- * components for usage within a full Zend Framework application.
+ * Component using the European Commission (EC) VAT Information Exchange System (VIES) to verify and validate VAT
+ * registration numbers in the EU, using PHP and Composer.
  * 
  * @author Michelangelo van Dam <dragonbe+github@gmail.com>
- * @license Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)
- * @link http://creativecommons.org/licenses/by-sa/3.0/
+ * @license MIT
  *
  */
 /**
- * My_Service_Vies_CheckVatResponse
+ * CheckVatResponse
  * 
  * This is the response object from the VIES web service for validation of
  * VAT numbers of companies registered in the European Union.
  * 
- * @see Zend_Exception
- * @category My
- * @package My_Service
- * @subpackage My_Service_Vies
+ * @see \DragonBe\Vies\Exception
+ * @category DragonBe
+ * @package \DragonBe\Vies
  */
 class CheckVatResponse
 {
@@ -33,7 +31,7 @@ class CheckVatResponse
      */
     protected $_vatNumber;
     /**
-     * @var string The date of the request
+     * @var \DateTime The date of the request
      */
     protected $_requestDate;
     /**
@@ -48,6 +46,12 @@ class CheckVatResponse
      * @var string The registered address of a validated company (optional)
      */
     protected $_address;
+
+    /**
+     * Constructor for this response object
+     *
+     * @param null|StdClass $params
+     */
     public function __construct($params = null)
     {
         if (null !== $params) {
@@ -103,16 +107,22 @@ class CheckVatResponse
      */
     public function setRequestDate($requestDate)
     {
-        $this->_requestDate = (string) $requestDate;
+        if (!$requestDate instanceof \DateTime) {
+            $requestDate = new \DateTime($requestDate);
+        }
+        $this->_requestDate = $requestDate;
         return $this;
     }
     /**
      * Retrieves the date- and timestamp the VIES service response was created
      * 
-     * @return string
+     * @return \DateTime
      */
     public function getRequestDate()
     {
+        if (null === $this->_requestDate) {
+            $this->_requestDate = new \DateTime();
+        }
         return $this->_requestDate;
     }
     /**
@@ -178,7 +188,7 @@ class CheckVatResponse
     /**
      * Populates this response object with external data
      * 
-     * @param array|Zend_Db_Table $row
+     * @param array|\SdtClass $row
      */
     public function populate($row)
     {
@@ -192,19 +202,20 @@ class CheckVatResponse
              ->setValid($row->valid);
              
         // optional parameters
-        if (isset ($row->name)) {
-            $this->setName($row->name);
-        }
-        if (isset ($row->address)) {
-            $this->setAddress($row->address);
-        }
+        isset ($row->name) ?
+            $this->setName($row->name) :
+            $this->setName('---');
+
+        isset ($row->address)
+            ? $this->setAddress($row->address)
+            : $this->setAddress('---');
     }
     public function toArray()
     {
         return array (
             'countryCode' => $this->getCountryCode(),
             'vatNumber'   => $this->getVatNumber(),
-            'requestDate' => $this->getRequestDate(),
+            'requestDate' => $this->getRequestDate()->format('Y-m-d'),
             'valid'       => $this->isValid(),
             'name'        => $this->getName(),
             'address'     => $this->getAddress(),
