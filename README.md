@@ -24,34 +24,40 @@ This project is on [Packagist](https://packagist.org/packages/dragonbe/vies)!
 
 To install the latest from master, just add to your `composer.json` the following:
 
-    "require-dev": {
-        "dragonbe/vies": "dev-master"
-    }
+```json
+"require-dev": {
+    "dragonbe/vies": "dev-master"
+}
+```
 
 To install the a specific version (e.g. 1.0.0), just add to your `composer.json` the following:
 
-    "require": {
-        "dragonbe/vies": "1.0.0"
-    }
+```json
+"require": {
+    "dragonbe/vies": "1.0.0"
+}
+```
 
 
 # Usage
 
-     <?php
+```php
+<?php
 
-     use \DragonBe\Vies\Vies;
+use \DragonBe\Vies\Vies;
 
-     require_once dirname(__DIR__) . '/vendor/autoload.php';
+require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-     $vies = new Vies();
+$vies = new Vies();
 
-     // Using my own VAT to verify, should be valid
-     $result = $vies->validateVat('BE', '0811231190');
-     var_dump($result->isValid());
+// Using my own VAT to verify, should be valid
+$result = $vies->validateVat('BE', '0811231190');
+var_dump($result->isValid());
 
-     // Using bogus VAT to verify, should be invalid
-     $result = $vies->validateVat('BE', '1234567890');
-     var_dump($result->isValid());
+// Using bogus VAT to verify, should be invalid
+$result = $vies->validateVat('BE', '1234567890');
+var_dump($result->isValid());
+```
 
 # Roadmap
 
