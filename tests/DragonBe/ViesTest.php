@@ -46,6 +46,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
         $response = $vies->validateVat('BE', '0123.456.789');
         $this->assertInstanceOf('\DragonBe\Vies\CheckVatResponse', $response);
         $this->assertTrue($response->isValid());
+        return $response;
     }
     public function testFailureVatNumberValidation()
     {
@@ -60,5 +61,19 @@ class ViestTest extends \PHPUnit_Framework_TestCase
         $response = $vies->validateVat('BE', '0123.ABC.789');
         $this->assertInstanceOf('\DragonBe\Vies\CheckVatResponse', $response);
         $this->assertFalse($response->isValid());
+    }
+
+    /**
+     * @depends testSuccessVatNumberValidation
+     */
+    public function testConvertObjectIntoArray($response)
+    {
+        $array = $response->toArray();
+        $this->assertSame('BE', $array['countryCode']);
+        $this->assertSame('0123.456.789', $array['vatNumber']);
+        $this->assertSame('1983-06-24', $array['requestDate']);
+        $this->assertTrue($array['valid']);
+        $this->assertEmpty($array['name']);
+        $this->assertEmpty($array['address']);
     }
 }
