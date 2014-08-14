@@ -55,35 +55,6 @@ class Vies extends \Zend_Soap_Client
         return new CheckVatResponse($response);
     }
     /**
-     * Validates a company with additional information for more precise
-     * lookup and validation.
-     * 
-     * @param string $countryCode
-     * @param string $vatNumber
-     * @param string $traderName
-     * @param string $traderCompanyType
-     * @param string $traderStreet
-     * @param string $traderPostcode
-     * @param string $traderCity
-     * @param string $requesterCountryCode
-     * @param string $requesterVatNumber
-     * @return CheckVatApproxResponse
-     */
-    public function validateVatApprox($countryCode,$vatNumber,
-        $traderName = null,$traderCompanyType = null,$traderStreet = null,
-        $traderPostcode = null, $traderCity = null, 
-        $requesterCountryCode = null,$requesterVatNumber = null)
-    {
-        $vatNumber = self::filterVat($vatNumber);
-        $response = $this->_soapClient->checkVatApprox(array (
-            'countryCode' => $countryCode,'vatNumber' => $vatNumber,
-            'traderName' => $traderName,'traderCompanyType' => $traderCompanyType,
-            'traderStreet' => $traderStreet,'traderPostcode' => $traderPostcode,
-            'traderCity' => $traderCity,'requesterCountryCode' => $requesterCountryCode,
-            'requesterVatNumber' => $requesterVatNumber));
-        return new CheckVatApproxResponse($response);
-    }
-    /**
      * Filters a VAT number and normalizes it to an alfanumeric string
      * 
      * @param string $vatNumber
