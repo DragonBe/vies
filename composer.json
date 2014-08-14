@@ -16,7 +16,7 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "zendframework/zendframework1": "1.12.6"
+        "zendframework/zendframework1": "1.12.7"
     },
     "autoload": {
         "psr-0": {
