@@ -1,6 +1,8 @@
 <?php
 namespace DragonBe\Test\Vies;
 
+use DragonBe\Vies\Vies;
+
 class ViestTest extends \PHPUnit_Framework_TestCase
 {
     public function vatNumberProvider()
@@ -25,8 +27,9 @@ class ViestTest extends \PHPUnit_Framework_TestCase
         $stub = $this->getMockFromWsdl(
             dirname(__FILE__) . '/_files/checkVatService.wsdl');
         $stub->expects($this->any())
-             ->method('checkVat')
+             ->method('__soapCall')
              ->will($this->returnValue($response));
+
         $vies = new Vies();
         $vies->setSoapClient($stub);
         return $vies;
@@ -44,7 +47,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
         $vies = $this->_createdStubbedViesClient($response);
         
         $response = $vies->validateVat('BE', '0123.456.789');
-        $this->assertInstanceOf('\DragonBe\Vies\CheckVatResponse', $response);
+        $this->assertInstanceOf('\\DragonBe\\Vies\\CheckVatResponse', $response);
         $this->assertTrue($response->isValid());
         return $response;
     }
@@ -59,7 +62,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
         $vies = $this->_createdStubbedViesClient($response);
 
         $response = $vies->validateVat('BE', '0123.ABC.789');
-        $this->assertInstanceOf('\DragonBe\Vies\CheckVatResponse', $response);
+        $this->assertInstanceOf('\\DragonBe\\Vies\\CheckVatResponse', $response);
         $this->assertFalse($response->isValid());
     }
 
