@@ -22,21 +22,96 @@ namespace DragonBe\Vies;
  * @package \DragonBe\Vies
  * @link http://ec.europa.eu/taxation_customs/vies/faqvies.do#item16
  */
-class Vies extends \Zend_Soap_Client
+class Vies
 {
     const VIES_WSDL = 'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
-    const VIES_SOAP_VERSION = '1.1';
+
+    /**
+     * @var \SoapClient
+     */
+    protected $soapClient;
+
+    /**
+     * @var string The WSDL for VIES service
+     */
+    protected $wsdl;
+
+    /**
+     * @var array Options for the SOAP client
+     */
+    protected $options;
+
+    /**
+     * @return \SoapClient
+     */
+    public function getSoapClient()
+    {
+        if (null === $this->soapClient) {
+            $this->soapClient = new \SoapClient(
+                $this->getWsdl(),
+                $this->getOptions()
+            );
+        }
+        return $this->soapClient;
+    }
+
+    /**
+     * @param \SoapClient $soapClient
+     * @return Vies
+     */
+    public function setSoapClient($soapClient)
+    {
+        $this->soapClient = $soapClient;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWsdl()
+    {
+        if (null === $this->wsdl) {
+            $this->wsdl = self::VIES_WSDL;
+        }
+        return $this->wsdl;
+    }
 
     /**
      * @param string $wsdl
-     * @param null $options
+     * @return Vies
      */
-    public function __construct($wsdl = self::VIES_WSDL, $options = null)
+    public function setWsdl($wsdl)
     {
-        parent::__construct($wsdl, $options);
-        $this->setSoapVersion(SOAP_1_1);
+        $this->wsdl = $wsdl;
+        return $this;
     }
-    
+
+    /**
+     * @return array
+     */
+    public function getOptions()
+    {
+        if (null === $this->options) {
+            $this->options = [];
+        }
+        return $this->options;
+    }
+
+    /**
+     * Set options for the native PHP Soap Client
+     *
+     * @param array $options
+     * @return Vies
+     * @link http://php.net/manual/en/soapclient.soapclient.php
+     */
+    public function setOptions($options)
+    {
+        $this->options = $options;
+        return $this;
+    }
+
+
+
     /**
      * Validates a given country code and VAT number and returns a
      * \DragonBe\Vies\CheckVatResponse object
@@ -50,8 +125,13 @@ class Vies extends \Zend_Soap_Client
     public function validateVat($countryCode,$vatNumber)
     {
         $vatNumber = self::filterVat($vatNumber);
-        $response = $this->getSoapClient()->checkVat(array (
-            'countryCode' => $countryCode, 'vatNumber' => $vatNumber));
+        $response = $this->getSoapClient()->__soapCall(
+            'checkVat',
+            array (
+                'countryCode' => $countryCode,
+                'vatNumber' => $vatNumber
+            )
+        );
         return new CheckVatResponse($response);
     }
     /**
