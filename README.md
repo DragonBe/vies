@@ -34,7 +34,7 @@ To install the a specific version (e.g. 1.0.0), just add to your `composer.json`
 
 ```json
 "require": {
-    "dragonbe/vies": "1.0.0"
+    "dragonbe/vies": "1.0.2"
 }
 ```
 
