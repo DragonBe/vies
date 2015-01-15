@@ -20,7 +20,7 @@
     },
     "autoload": {
         "psr-4": {
-            "DragonBe\\Vies": "src/"
+            "DragonBe\\Vies\\": "src/"
         }
     },
     "require-dev": {
