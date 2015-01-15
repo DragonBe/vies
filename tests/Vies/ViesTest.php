@@ -1,5 +1,5 @@
 <?php
-namespace DragonBe\Vies;
+namespace DragonBe\Test\Vies;
 
 class ViestTest extends \PHPUnit_Framework_TestCase
 {

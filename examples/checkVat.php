@@ -1,10 +1,7 @@
 <?php
-
-use \DragonBe\Vies\Vies;
-
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-$vies = new Vies();
+$vies = new \DragonBe\Vies\Vies();
 
 // Using my own VAT to verify, should be valid
 $result = $vies->validateVat('BE', '0811231190');

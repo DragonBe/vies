@@ -128,8 +128,10 @@ class Vies
         $response = $this->getSoapClient()->__soapCall(
             'checkVat',
             array (
-                'countryCode' => $countryCode,
-                'vatNumber' => $vatNumber
+                array (
+                    'countryCode' => $countryCode,
+                    'vatNumber' => $vatNumber
+                )
             )
         );
         return new CheckVatResponse($response);
