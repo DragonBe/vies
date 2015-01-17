@@ -22,13 +22,7 @@ More information at http://ec.europa.eu/taxation_customs/vies/faqvies.do#item16
 
 This project is on [Packagist](https://packagist.org/packages/dragonbe/vies)!
 
-To install the latest from master, just add to your `composer.json` the following:
-
-```json
-"require-dev": {
-    "dragonbe/vies": "dev-master"
-}
-```
+To install the latest stable version use `composer require dragonbe/vies`.
 
 To install the a specific version (e.g. 1.0.0), just add to your `composer.json` the following:
 
