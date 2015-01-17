@@ -70,7 +70,7 @@ class HeartBeatTest extends \PHPUnit_Framework_TestCase
         $host = '127.0.0.1';
         $port = -1;
         HeartBeat::$testingEnabled = true;
-        HeartBeat::$testingServiceIsAlive = true;
+        HeartBeat::$testingServiceIsUp = true;
         $hb = new HeartBeat($host, $port);
         $result = $hb->isAlive();
         $this->assertTrue($result);
@@ -85,7 +85,7 @@ class HeartBeatTest extends \PHPUnit_Framework_TestCase
         $host = '127.0.0.1';
         $port = -1;
         HeartBeat::$testingEnabled = true;
-        HeartBeat::$testingServiceIsAlive = false;
+        HeartBeat::$testingServiceIsUp = false;
         $hb = new HeartBeat($host, $port);
         $result = $hb->isAlive();
         $this->assertFalse($result);

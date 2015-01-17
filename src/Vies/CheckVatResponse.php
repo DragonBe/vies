@@ -1,15 +1,15 @@
 <?php
-namespace DragonBe\Vies;
 /**
  * \DragonBe\Vies
- * 
+ *
  * Component using the European Commission (EC) VAT Information Exchange System (VIES) to verify and validate VAT
  * registration numbers in the EU, using PHP and Composer.
- * 
+ *
  * @author Michelangelo van Dam <dragonbe+github@gmail.com>
  * @license MIT
  *
  */
+namespace DragonBe\Vies;
 /**
  * CheckVatResponse
  * 
@@ -25,27 +25,27 @@ class CheckVatResponse
     /**
      * @var string The country code for a member of the European Union
      */
-    protected $_countryCode;
+    protected $countryCode;
     /**
      * @var string The VAT number of a registered European company
      */
-    protected $_vatNumber;
+    protected $vatNumber;
     /**
      * @var \DateTime The date of the request
      */
-    protected $_requestDate;
+    protected $requestDate;
     /**
      * @var bool Flag indicating the VAT number is valid
      */
-    protected $_valid;
+    protected $valid;
     /**
      * @var string The registered name of a validated company (optional)
      */
-    protected $_name;
+    protected $name;
     /**
      * @var string The registered address of a validated company (optional)
      */
-    protected $_address;
+    protected $address;
 
     /**
      * Constructor for this response object
@@ -66,7 +66,7 @@ class CheckVatResponse
      */
     public function setCountryCode($countryCode)
     {
-        $this->_countryCode = (string) $countryCode;
+        $this->countryCode = (string) $countryCode;
         return $this;
     }
     /**
@@ -77,7 +77,7 @@ class CheckVatResponse
      */
     public function getCountryCode()
     {
-        return $this->_countryCode;
+        return $this->countryCode;
     }
     /**
      * Sets the VAT number of a company within the European Union
@@ -87,7 +87,7 @@ class CheckVatResponse
      */
     public function setVatNumber($vatNumber)
     {
-        $this->_vatNumber = (string) $vatNumber;
+        $this->vatNumber = (string) $vatNumber;
         return $this;
     }
     /**
@@ -97,7 +97,7 @@ class CheckVatResponse
      */
     public function getVatNumber()
     {
-        return $this->_vatNumber;
+        return $this->vatNumber;
     }
     /**
      * Sets the date- and timestamp when the VIES service response was created
@@ -110,7 +110,7 @@ class CheckVatResponse
         if (!$requestDate instanceof \DateTime) {
             $requestDate = new \DateTime($requestDate);
         }
-        $this->_requestDate = $requestDate;
+        $this->requestDate = $requestDate;
         return $this;
     }
     /**
@@ -120,10 +120,10 @@ class CheckVatResponse
      */
     public function getRequestDate()
     {
-        if (null === $this->_requestDate) {
-            $this->_requestDate = new \DateTime();
+        if (null === $this->requestDate) {
+            $this->requestDate = new \DateTime();
         }
-        return $this->_requestDate;
+        return $this->requestDate;
     }
     /**
      * Sets the flag to indicate the provided details were valid or not
@@ -133,7 +133,7 @@ class CheckVatResponse
      */
     public function setValid($flag)
     {
-        $this->_valid = (boolean) $flag;
+        $this->valid = (boolean) $flag;
         return $this;
     }
     /**
@@ -143,7 +143,7 @@ class CheckVatResponse
      */
     public function isValid()
     {
-        return $this->_valid;
+        return $this->valid;
     }
     /**
      * Sets optionally the registered name of the company
@@ -153,7 +153,7 @@ class CheckVatResponse
      */
     public function setName($name)
     {
-        $this->_name = (string) $name;
+        $this->name = (string) $name;
         return $this;
     }
     /**
@@ -163,7 +163,7 @@ class CheckVatResponse
      */
     public function getName()
     {
-        return $this->_name;
+        return $this->name;
     }
     /**
      * Sets the registered address of a company
@@ -173,7 +173,7 @@ class CheckVatResponse
      */
     public function setAddress($address)
     {
-        $this->_address = (string) $address;
+        $this->address = (string) $address;
         return $this;
     }
     /**
@@ -183,7 +183,7 @@ class CheckVatResponse
      */
     public function getAddress()
     {
-        return $this->_address;
+        return $this->address;
     }
     /**
      * Populates this response object with external data

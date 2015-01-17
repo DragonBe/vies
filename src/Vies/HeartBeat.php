@@ -39,7 +39,7 @@ class HeartBeat
     /**
      * @var bool Allow to define the validation return setting
      */
-    public static $testingServiceIsAlive = true;
+    public static $testingServiceIsUp = true;
 
     /**
      * @param string|null $host
@@ -105,12 +105,20 @@ class HeartBeat
         return true;
     }
 
+    /**
+     * Make a connection outwards to test an online service
+     *
+     * @param $host
+     * @param $port
+     * @return bool|resource
+     * @private
+     */
     private function connect($host, $port)
     {
-        $fp = HeartBeat::$testingServiceIsAlive;
+        $status = HeartBeat::$testingServiceIsUp;
         if (false === HeartBeat::$testingEnabled) {
-            $fp = fsockopen($host, $port);
+            $status = fsockopen($host, $port);
         }
-        return $fp;
+        return $status;
     }
 }
