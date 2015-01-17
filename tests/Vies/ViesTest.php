@@ -22,6 +22,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($filteredNumber,
             Vies::filterVat($vatNumber));
     }
+
     protected function _createdStubbedViesClient($response)
     {
         $stub = $this->getMockFromWsdl(
@@ -34,6 +35,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
         $vies->setSoapClient($stub);
         return $vies;
     }
+
     public function testSuccessVatNumberValidation()
     {
         $response = new \StdClass();
@@ -51,6 +53,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($response->isValid());
         return $response;
     }
+
     public function testFailureVatNumberValidation()
     {
         $response = new \StdClass();
@@ -78,5 +81,37 @@ class ViestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($array['valid']);
         $this->assertEmpty($array['name']);
         $this->assertEmpty($array['address']);
+    }
+
+    private function createHeartBeatMock($bool)
+    {
+        $heartBeatMock = $this->getMock(
+            '\\DragonBe\\Vies\\HeartBeat',
+            array ('isAlive')
+        );
+        $heartBeatMock->expects($this->once())
+            ->method('isAlive')
+            ->will($this->returnValue($bool));
+        return $heartBeatMock;
+    }
+
+    public function testServiceIsAlive()
+    {
+        $vies = new Vies();
+        $hb = $this->createHeartBeatMock(true);
+        $vies->setHeartBeat($hb);
+        $this->assertTrue(
+            $vies->getHeartBeat()->isAlive()
+        );
+    }
+
+    public function testServiceIsDown()
+    {
+        $vies = new Vies();
+        $hb = $this->createHeartBeatMock(false);
+        $vies->setHeartBeat($hb);
+        $this->assertFalse(
+            $vies->getHeartBeat()->isAlive()
+        );
     }
 }

@@ -11,20 +11,21 @@ namespace DragonBe\Vies;
  *
  */
 /**
- * Vies
+ * Class Vies
  * 
  * This class provides a soap client for usage of the VIES web service
  * provided by the European Commission to validate VAT numbers of companies
  * registered within the European Union
  * 
- * @see \Zend_Soap_Client
  * @category DragonBe
  * @package \DragonBe\Vies
  * @link http://ec.europa.eu/taxation_customs/vies/faqvies.do#item16
  */
 class Vies
 {
-    const VIES_WSDL = 'http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl';
+    const VIES_PROTO = 'http';
+    const VIES_DOMAIN = 'ec.europa.eu';
+    const VIES_WSDL = '/taxation_customs/vies/checkVatService.wsdl';
 
     /**
      * @var \SoapClient
@@ -42,6 +43,14 @@ class Vies
     protected $options;
 
     /**
+     * @var HeartBeat A heartbeat checker to verify if the VIES service is available
+     */
+    protected $heartBeat;
+
+    /**
+     * Retrieves the SOAP client that will be used to communicate with the VIES
+     * SOAP service.
+     *
      * @return \SoapClient
      */
     public function getSoapClient()
@@ -56,6 +65,10 @@ class Vies
     }
 
     /**
+     * Sets the PHP SOAP Client and allows you to override the use of the native
+     * PHP SoapClient for testing purposes or for better integration in your own
+     * application.
+     *
      * @param \SoapClient $soapClient
      * @return Vies
      */
@@ -66,19 +79,28 @@ class Vies
     }
 
     /**
+     * Retrieves the location of the WSDL for the VIES SOAP service
+     *
      * @return string
      */
     public function getWsdl()
     {
         if (null === $this->wsdl) {
-            $this->wsdl = self::VIES_WSDL;
+            $this->wsdl = sprintf('%s://%s%s',
+                self::VIES_PROTO,
+                self::VIES_DOMAIN,
+                self::VIES_WSDL
+            );
         }
         return $this->wsdl;
     }
 
     /**
+     * Sets the location of the WSDL for the VIES SOAP Service
+     *
      * @param string $wsdl
      * @return Vies
+     * @example http://ec.europa.eu//taxation_customs/vies/checkVatService.wsdl
      */
     public function setWsdl($wsdl)
     {
@@ -87,6 +109,8 @@ class Vies
     }
 
     /**
+     * Retrieves the options for the PHP SOAP service
+     *
      * @return array
      */
     public function getOptions()
@@ -110,7 +134,35 @@ class Vies
         return $this;
     }
 
+    /**
+     * Retrieves the heartbeat class that offers the option to check if the VIES
+     * service is up-and-running.
+     *
+     * @return HeartBeat
+     */
+    public function getHeartBeat()
+    {
+        if (null === $this->heartBeat) {
+            $this->setHeartBeat(
+                new HeartBeat(
+                    'tcp://' . self::VIES_DOMAIN,
+                    80
+                )
+            );
+        }
+        return $this->heartBeat;
+    }
 
+    /**
+     * Sets the heartbeat functionality to verify if the VIES service is alive or not,
+     * especially since this service tends to have a bad reputation of its availability.
+     *
+     * @param HeartBeat $heartBeat
+     */
+    public function setHeartBeat(HeartBeat $heartBeat)
+    {
+        $this->heartBeat = $heartBeat;
+    }
 
     /**
      * Validates a given country code and VAT number and returns a
@@ -146,5 +198,15 @@ class Vies
     public static function filterVat($vatNumber)
     {
         return str_replace(array (' ', '.', '-'), '', $vatNumber);
+    }
+
+    /**
+     * Checks if the VIES service is up and available for usage
+     *
+     * @return bool
+     */
+    public function isAlive()
+    {
+        return false;
     }
 }
