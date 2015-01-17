@@ -1,5 +1,4 @@
 <?php
-namespace DragonBe\Vies;
 /**
  * \DragonBe\Vies
  *
@@ -10,6 +9,7 @@ namespace DragonBe\Vies;
  * @license MIT
  *
  */
+namespace DragonBe\Vies;
 /**
  * Class Vies
  * 

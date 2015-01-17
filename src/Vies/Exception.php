@@ -1,5 +1,4 @@
 <?php
-namespace DragonBe\Vies;
 /**
  * My
  * 
@@ -11,6 +10,8 @@ namespace DragonBe\Vies;
  * @link http://creativecommons.org/licenses/by-sa/3.0/
  *
  */
+namespace DragonBe\Vies;
+
 use Symfony\Component\Yaml\Exception\RuntimeException;
 
 /**
