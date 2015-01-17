@@ -1,4 +1,9 @@
-<phpunit bootstrap="vendor/autoload.php" colors="true">
+<phpunit
+    strict="true"
+    colors="true"
+    stopOnError="true"
+    stopOnFailure="true"
+    bootstrap="./vendor/autoload.php">
 
     <testsuite name="Unit test suite">
         <directory>./tests</directory>
@@ -7,7 +12,20 @@
     <filter>
         <whitelist>
             <directory suffix=".php">./src</directory>
+            <!-- no need to test the autoloading -->
+            <exclude>
+                <file>./src/autoload.php</file>
+            </exclude>
         </whitelist>
     </filter>
+
+    <logging>
+        <log type="coverage-html" target="./build/coverage" charset="UTF-8"
+             highlight="false" lowUpperBound="35" highLowerBound="70"/>
+        <log type="coverage-clover" target="./build/logs/clover.xml"/>
+        <log type="junit" target="./build/logs/junit.xml" logIncompleteSkipped="false"/>
+        <log type="testdox-html" target="./build/logs/testdox.html"/>
+        <log type="testdox-text" target="./build/logs/testdox.txt"/>
+    </logging>
 
 </phpunit>
