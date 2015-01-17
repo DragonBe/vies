@@ -16,6 +16,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
     }
     /**
      * @dataProvider vatNumberProvider
+     * @covers \DragonBe\Vies\Vies::filterVat
      */
     public function testVatNumberFilter($vatNumber, $filteredNumber)
     {
@@ -36,6 +37,9 @@ class ViestTest extends \PHPUnit_Framework_TestCase
         return $vies;
     }
 
+    /**
+     * @covers \DragonBe\Vies\Vies::validateVat
+     */
     public function testSuccessVatNumberValidation()
     {
         $response = new \StdClass();
@@ -54,6 +58,9 @@ class ViestTest extends \PHPUnit_Framework_TestCase
         return $response;
     }
 
+    /**
+     * @covers \DragonBe\Vies\Vies::validateVat
+     */
     public function testFailureVatNumberValidation()
     {
         $response = new \StdClass();
@@ -70,7 +77,9 @@ class ViestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param \DragonBe\Vies\CheckVatResponse $response
      * @depends testSuccessVatNumberValidation
+     * @covers \DragonBe\Vies\CheckVatResponse::toArray
      */
     public function testConvertObjectIntoArray($response)
     {
@@ -95,6 +104,9 @@ class ViestTest extends \PHPUnit_Framework_TestCase
         return $heartBeatMock;
     }
 
+    /**
+     * @covers \DragonBe\Vies\Vies::getHeartBeat
+     */
     public function testServiceIsAlive()
     {
         $vies = new Vies();
@@ -105,6 +117,9 @@ class ViestTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @covers \DragonBe\Vies\Vies::getHeartBeat
+     */
     public function testServiceIsDown()
     {
         $vies = new Vies();
@@ -113,5 +128,85 @@ class ViestTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(
             $vies->getHeartBeat()->isAlive()
         );
+    }
+
+    /**
+     * @covers \DragonBe\Vies\Vies::getSoapClient
+     */
+    public function testGettingDefaultSoapClient()
+    {
+        $vies = new Vies();
+        $soapClient = $vies->getSoapClient();
+        $expected = '\\SoapClient';
+        $this->assertInstanceOf($expected, $soapClient);
+    }
+
+    /**
+     * @covers \DragonBe\Vies\Vies::getWsdl
+     */
+    public function testGettingDefaultWsdl()
+    {
+        $vies = new Vies();
+        $wsdl = $vies->getWsdl();
+        $expected = sprintf(
+            '%s://%s%s',
+            Vies::VIES_PROTO,
+            Vies::VIES_DOMAIN,
+            Vies::VIES_WSDL
+        );
+        $this->assertSame($expected, $wsdl);
+    }
+
+    /**
+     * @covers \DragonBe\Vies\Vies::setWsdl
+     */
+    public function testSettingCustomWsdl()
+    {
+        $wsdl = 'http://www.example.com/?wsdl';
+        $vies = new Vies();
+        $vies->setWsdl($wsdl);
+        $actual = $vies->getWsdl();
+        $this->assertSame($wsdl, $actual);
+    }
+
+    /**
+     * @covers \DragonBe\Vies\Vies::setOptions
+     * @covers \DragonBe\Vies\Vies::getOptions
+     */
+    public function testSettingSoapOptions()
+    {
+        $options = array (
+            'soap_version' => SOAP_1_2,
+        );
+        $vies = new Vies();
+        $vies->setOptions($options);
+        $soapClient = $vies->getSoapClient();
+        $actual = $soapClient->_soap_version;
+        $this->assertSame($options['soap_version'], $actual);
+        $this->assertSame($options, $vies->getOptions());
+    }
+
+    /**
+     * @covers \DragonBe\Vies\Vies::getOptions
+     */
+    public function testDefaultOptionsAreEmpty()
+    {
+        $vies = new Vies();
+        $options = $vies->getOptions();
+        $this->assertInternalType('array', $options);
+        $this->assertEmpty($options);
+    }
+
+    /**
+     * @covers \DragonBe\Vies\Vies::getHeartBeat
+     */
+    public function testGetDefaultHeartBeatWhenNoneSpecified()
+    {
+        $vies = new Vies();
+        $hb = $vies->getHeartBeat();
+        $this->assertInstanceOf('\\DragonBe\\Vies\\HeartBeat', $hb);
+
+        $this->assertSame('tcp://' . Vies::VIES_DOMAIN, $hb->getHost());
+        $this->assertSame(80, $hb->getPort());
     }
 }

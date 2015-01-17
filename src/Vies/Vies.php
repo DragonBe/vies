@@ -1,12 +1,12 @@
 <?php
 /**
- * \DragonBe\Vies
+ * Vies
  *
  * Component using the European Commission (EC) VAT Information Exchange System (VIES) to verify and validate VAT
  * registration numbers in the EU, using PHP and Composer.
  *
- * @author Michelangelo van Dam <dragonbe+github@gmail.com>
- * @license MIT
+ * @author  Michelangelo van Dam <dragonbe+github@gmail.com>
+ * @license  MIT
  *
  */
 namespace DragonBe\Vies;
@@ -86,7 +86,8 @@ class Vies
     public function getWsdl()
     {
         if (null === $this->wsdl) {
-            $this->wsdl = sprintf('%s://%s%s',
+            $this->wsdl = sprintf(
+                '%s://%s%s',
                 self::VIES_PROTO,
                 self::VIES_DOMAIN,
                 self::VIES_WSDL
@@ -198,15 +199,5 @@ class Vies
     public static function filterVat($vatNumber)
     {
         return str_replace(array (' ', '.', '-'), '', $vatNumber);
-    }
-
-    /**
-     * Checks if the VIES service is up and available for usage
-     *
-     * @return bool
-     */
-    public function isAlive()
-    {
-        return false;
     }
 }
