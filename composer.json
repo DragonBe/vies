@@ -14,10 +14,6 @@
             "role": "Developer"
         }
     ],
-    "require": {
-        "php": ">=5.4",
-        "ext-soap": "*"
-    },
     "autoload": {
         "psr-4": {
             "DragonBe\\Vies\\": "src/Vies"
@@ -28,8 +24,18 @@
             "DragonBe\\Tests\\Vies\\": "tests/Vies"
         }
     },
+    "require": {
+        "php": ">=5.4",
+        "ext-soap": "*",
+        "ext-pcntl": "*"
+    },
     "require-dev": {
         "phpunit/phpunit": "3.7.37",
-        "phpunit/php-invoker": "1.1.3"
+        "phpunit/php-invoker": "1.1.3",
+        "phploc/phploc": "2.0.6",
+        "phpmd/phpmd": "2.1.3",
+        "sebastian/phpcpd": "2.0.1",
+        "pdepend/pdepend": "2.0.4",
+        "squizlabs/php_codesniffer": "2.1.0"
     }
 }
