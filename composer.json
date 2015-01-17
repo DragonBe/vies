@@ -36,6 +36,7 @@
         "phpmd/phpmd": "2.1.3",
         "sebastian/phpcpd": "2.0.1",
         "pdepend/pdepend": "2.0.4",
-        "squizlabs/php_codesniffer": "2.1.0"
+        "squizlabs/php_codesniffer": "2.1.0",
+        "phing/phing": "2.*"
     }
 }
