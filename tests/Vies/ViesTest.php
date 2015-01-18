@@ -179,6 +179,9 @@ class ViestTest extends \PHPUnit_Framework_TestCase
      */
     public function testSettingSoapOptions()
     {
+        if (0 <= strpos(phpversion(), 'HipHop')) {
+            $this->markTestSkipped('This test does not work for HipHop VM');
+        }
         $options = array (
             'soap_version' => SOAP_1_2,
         );
