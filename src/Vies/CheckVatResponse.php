@@ -22,6 +22,8 @@ namespace DragonBe\Vies;
  */
 class CheckVatResponse
 {
+    const VIES_DATETIME_FORMAT = 'Y-m-d+H:i';
+
     /**
      * @var string The country code for a member of the European Union
      */
@@ -108,6 +110,8 @@ class CheckVatResponse
     public function setRequestDate($requestDate)
     {
         if (!$requestDate instanceof \DateTime) {
+            // converting Y-m-d+H:i into Y-m-d H:i:s
+            $requestDate = str_replace('+', ' ', $requestDate) . ':00';
             $requestDate = new \DateTime($requestDate);
         }
         $this->requestDate = $requestDate;

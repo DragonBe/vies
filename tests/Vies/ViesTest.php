@@ -39,13 +39,14 @@ class ViestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \DragonBe\Vies\Vies::validateVat
+     * @covers \DragonBe\Vies\Vies::setSoapClient
      */
     public function testSuccessVatNumberValidation()
     {
         $response = new \StdClass();
         $response->countryCode = 'BE';
         $response->vatNumber = '0123.456.789';
-        $response->requestDate = '1983-06-24';
+        $response->requestDate = '1983-06-24+23:59';
         $response->valid = true;
         $response->name = '';
         $response->address = '';
@@ -60,13 +61,14 @@ class ViestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \DragonBe\Vies\Vies::validateVat
+     * @covers \DragonBe\Vies\Vies::setSoapClient
      */
     public function testFailureVatNumberValidation()
     {
         $response = new \StdClass();
         $response->countryCode = 'BE';
         $response->vatNumber = '0123.ABC.789';
-        $response->requestDate = '1983-06-24';
+        $response->requestDate = '1983-06-24+23:59';
         $response->valid = false;
         
         $vies = $this->_createdStubbedViesClient($response);
@@ -106,6 +108,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \DragonBe\Vies\Vies::getHeartBeat
+     * @covers \DragonBe\Vies\Vies::setHeartBeat
      */
     public function testServiceIsAlive()
     {
@@ -119,6 +122,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \DragonBe\Vies\Vies::getHeartBeat
+     * @covers \DragonBe\Vies\Vies::setHeartBeat
      */
     public function testServiceIsDown()
     {
