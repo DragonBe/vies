@@ -136,10 +136,15 @@ class ViestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \DragonBe\Vies\Vies::getSoapClient
+     * @todo: SoapClient connects to european commision VIES service at initialisation
      */
     public function testGettingDefaultSoapClient()
     {
+        if (false !== (strpos(phpversion(), 'HipHop')) && !extension_loaded('soap')) {
+            $this->markTestSkipped('SOAP not installed');
+        }
         $vies = new Vies();
+        $vies->setSoapClient($this->_createdStubbedViesClient('blabla')->getSoapClient());
         $soapClient = $vies->getSoapClient();
         $expected = '\\SoapClient';
         $this->assertInstanceOf($expected, $soapClient);
@@ -179,7 +184,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
      */
     public function testSettingSoapOptions()
     {
-        if (0 <= strpos(phpversion(), 'HipHop')) {
+        if (false !== (strpos(phpversion(), 'HipHop'))) {
             $this->markTestSkipped('This test does not work for HipHop VM');
         }
         $options = array (
