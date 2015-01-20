@@ -140,7 +140,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGettingDefaultSoapClient()
     {
-        if (false !== (strpos(phpversion(), 'HipHop')) && !extension_loaded('soap')) {
+        if (0 >= strpos(phpversion(), 'HipHop') && !extension_loaded('soap')) {
             $this->markTestSkipped('SOAP not installed');
         }
         $vies = new Vies();
@@ -184,7 +184,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
      */
     public function testSettingSoapOptions()
     {
-        if (false !== (strpos(phpversion(), 'HipHop'))) {
+        if (0 >= strpos(phpversion(), 'HipHop')) {
             $this->markTestSkipped('This test does not work for HipHop VM');
         }
         $options = array (
