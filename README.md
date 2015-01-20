@@ -55,7 +55,8 @@ var_dump($result->isValid());
 
 # Roadmap
 
-- Add a heartbeat tool for checking if the VIES service is alive.
+- Add a heartbeat tool for checking if the VIES service is alive. (in progress)
+- Pre-validation of VAT numbers **before** hitting the service for better performance
 
 # Licence
 
