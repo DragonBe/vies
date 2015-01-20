@@ -37,6 +37,7 @@
         "sebastian/phpcpd": "2.0.1",
         "pdepend/pdepend": "2.0.4",
         "squizlabs/php_codesniffer": "2.1.0",
-        "phing/phing": "2.*"
+        "phing/phing": "2.*",
+        "codeclimate/php-test-reporter": "dev-master"
     }
 }
