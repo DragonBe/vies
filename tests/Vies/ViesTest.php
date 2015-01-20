@@ -191,6 +191,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
             'soap_version' => SOAP_1_2,
         );
         $vies = new Vies();
+        $vies->setSoapClient($this->_createdStubbedViesClient('blabla')->getSoapClient());
         $vies->setOptions($options);
         $soapClient = $vies->getSoapClient();
         $actual = $soapClient->_soap_version;
