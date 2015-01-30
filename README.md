@@ -28,7 +28,7 @@ To install the a specific version (e.g. 1.0.0), just add to your `composer.json`
 
 ```json
 "require": {
-    "dragonbe/vies": "1.0.2"
+    "dragonbe/vies": "1.0.3"
 }
 ```
 
@@ -55,7 +55,6 @@ var_dump($result->isValid());
 
 # Roadmap
 
-- Add a heartbeat tool for checking if the VIES service is alive. (in progress)
 - Pre-validation of VAT numbers **before** hitting the service for better performance
 
 # Licence
