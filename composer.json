@@ -38,6 +38,7 @@
         "pdepend/pdepend": "2.0.4",
         "squizlabs/php_codesniffer": "2.1.0",
         "phing/phing": "2.*",
-        "codeclimate/php-test-reporter": "dev-master"
+        "codeclimate/php-test-reporter": "dev-master",
+        "phpdocumentor/phpdocumentor": "2.*"
     }
 }
