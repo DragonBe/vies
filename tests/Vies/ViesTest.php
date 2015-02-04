@@ -78,6 +78,29 @@ class ViestTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($response->isValid());
     }
 
+    public function badCountryCodeProvider()
+    {
+        return [
+            ['AA'],
+            ['TK'],
+            ['PH'],
+            ['FS'],
+        ];
+    }
+    /**
+     * Test to see the country code is rejected if not existing in the EU
+     *
+     * @dataProvider badCountryCodeProvider
+     * @covers \DragonBe\Vies\Vies::validateVat
+     * @expectedException \DragonBe\Vies\ViesException
+     * @param $code
+     */
+    public function testExceptionIsRaisedForNonEuropeanUnionCountryCodes($code)
+    {
+        $vies = new Vies();
+        $vies->validateVat($code, 'does not matter');
+    }
+
     /**
      * @param \DragonBe\Vies\CheckVatResponse $response
      * @depends testSuccessVatNumberValidation
@@ -136,7 +159,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \DragonBe\Vies\Vies::getSoapClient
-     * @todo: SoapClient connects to european commision VIES service at initialisation
+     * @todo: SoapClient connects to european commission VIES service at initialisation
      */
     public function testGettingDefaultSoapClient()
     {

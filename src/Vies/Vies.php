@@ -174,9 +174,13 @@ class Vies
      * @param string $vatNumber The VAT number (without the country 
      * identification) of a registered company
      * @return \DragonBe\Vies\CheckVatResponse
+     * @throws \DragonBe\Vies\ViesException
      */
-    public function validateVat($countryCode,$vatNumber)
+    public function validateVat($countryCode, $vatNumber)
     {
+        if (!array_key_exists($countryCode, self::listEuropeanCountries())) {
+            throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
+        }
         $vatNumber = self::filterVat($vatNumber);
         $response = $this->getSoapClient()->__soapCall(
             'checkVat',
@@ -199,5 +203,43 @@ class Vies
     public static function filterVat($vatNumber)
     {
         return str_replace(array (' ', '.', '-'), '', $vatNumber);
+    }
+
+    /**
+     * A list of European Union countries as of January 2015
+     *
+     * @return array
+     */
+    public static function listEuropeanCountries()
+    {
+        return [
+            'AT' => 'Austria',
+            'BE' => 'Belgium',
+            'BG' => 'Bulgaria',
+            'CY' => 'Cyprus',
+            'CZ' => 'Czech Republic',
+            'DE' => 'Germany',
+            'DK' => 'Danmark',
+            'EE' => 'Estonia',
+            'EL' => 'Greece',
+            'ES' => 'Spain',
+            'FI' => 'Finland',
+            'FR' => 'France',
+            'HR' => 'Hungary',
+            'IE' => 'Ireland',
+            'IT' => 'Italy',
+            'LU' => 'Luxembourg',
+            'LV' => 'Latvia',
+            'LT' => 'Lithuania',
+            'MT' => 'Malta',
+            'NL' => 'Netherlands',
+            'PL' => 'Poland',
+            'PT' => 'Portugal',
+            'RO' => 'Romania',
+            'SE' => 'Sweden',
+            'SI' => 'Slovenia',
+            'SK' => 'Slovakia',
+            'UK' => 'United Kingdom',
+        ];
     }
 }
