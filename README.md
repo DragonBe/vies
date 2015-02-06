@@ -24,33 +24,39 @@ This project is on [Packagist](https://packagist.org/packages/dragonbe/vies)!
 
 To install the latest stable version use `composer require dragonbe/vies`.
 
-To install the a specific version (e.g. 1.0.0), just add to your `composer.json` the following:
-
-```json
-"require": {
-    "dragonbe/vies": "1.0.3"
-}
-```
-
+To install specifically a version (e.g. 1.0.3), just add it to the command above, for example `composer require dragonbe/vies:1.0.3`
 
 # Usage
 
 ```php
 <?php
-
 use \DragonBe\Vies\Vies;
+use \DragonBe\Vies\ViesException;
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 $vies = new Vies();
+if (false === $vies->getHeartBeat()->isAlive()) {
 
-// Using my own VAT to verify, should be valid
-$result = $vies->validateVat('BE', '0811231190');
-var_dump($result->isValid());
+    echo 'Service is not available at the moment, please try again later.' . PHP_EOL;
 
-// Using bogus VAT to verify, should be invalid
-$result = $vies->validateVat('BE', '1234567890');
-var_dump($result->isValid());
+} else {
+
+//  Using my own VAT to verify, should be valid
+    $result = $vies->validateVat('BE', '0811231190');
+    echo ($result->isValid() ? 'VALID' : 'INVALID') . ' VAT number' . PHP_EOL;
+
+//  Using bogus VAT to verify, should be invalid
+    $result = $vies->validateVat('BE', '1234567890');
+    echo ($result->isValid() ? 'VALID' : 'INVALID') . ' VAT number' . PHP_EOL;
+
+//  Catching exceptions for invalid country codes
+    try {
+        $result = $vies->validateVat('AA', '1234567890');
+    } catch (ViesException $exception) {
+        echo 'Invalid arguments provided' . PHP_EOL;
+    }
+}
 ```
 
 # Roadmap
