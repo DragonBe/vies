@@ -26,6 +26,7 @@ class Vies
     const VIES_PROTO = 'http';
     const VIES_DOMAIN = 'ec.europa.eu';
     const VIES_WSDL = '/taxation_customs/vies/checkVatService.wsdl';
+    const VIES_EU_COUNTRY_TOTAL = 27;
 
     /**
      * @var \SoapClient

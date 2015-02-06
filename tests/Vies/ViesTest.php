@@ -174,6 +174,32 @@ class ViestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \DragonBe\Vies\Vies::getSoapClient
+     */
+    public function testDefaultSoapClientIsLazyLoaded()
+    {
+        if (0 >= strpos(phpversion(), 'HipHop') && !extension_loaded('soap')) {
+            $this->markTestSkipped('SOAP not installed');
+        }
+        $wsdl = dirname(__FILE__) . '/_files/checkVatService.wsdl';
+        $vies = new Vies();
+        $vies->setWsdl($wsdl);
+        $this->assertInstanceOf('\\SoapClient', $vies->getSoapClient());
+    }
+
+    /**
+     * @covers \DragonBe\Vies\Vies::setOptions
+     * @covers \DragonBe\Vies\Vies::getOptions
+     */
+    public function testOptionsCanBeSet()
+    {
+        $options = ['foo' => 'bar'];
+        $vies = new Vies();
+        $vies->setOptions($options);
+        $this->assertSame($options, $vies->getOptions());
+    }
+
+    /**
      * @covers \DragonBe\Vies\Vies::getWsdl
      */
     public function testGettingDefaultWsdl()
@@ -244,5 +270,14 @@ class ViestTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame('tcp://' . Vies::VIES_DOMAIN, $hb->getHost());
         $this->assertSame(80, $hb->getPort());
+    }
+
+    /**
+     * @covers \DragonBe\Vies\Vies::listEuropeanCountries
+     */
+    public function testRetrievingListOfEuropeanCountriesStatically()
+    {
+        $countryList = Vies::listEuropeanCountries();
+        $this->assertCount(Vies::VIES_EU_COUNTRY_TOTAL, $countryList);
     }
 }
