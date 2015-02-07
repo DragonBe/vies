@@ -26,7 +26,7 @@
 
     <target name="phpcs" description="Run PHP code sniffer">
         <exec
-            command="./vendor/bin/phpcs --report-checkstyle=./build/logs/checkstyle.xml src/Vies"
+            command="./vendor/bin/phpcs --standard=PSR2 --report-checkstyle=./build/logs/checkstyle.xml src/Vies"
             dir="${project.basedir}"
             passthru="${passthru}"/>
     </target>
