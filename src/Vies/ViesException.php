@@ -10,6 +10,7 @@
  *
  */
 namespace DragonBe\Vies;
+
 /**
  * My_Service_Vies_Exception
  * 

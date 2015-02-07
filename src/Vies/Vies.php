@@ -10,6 +10,7 @@
  *
  */
 namespace DragonBe\Vies;
+
 /**
  * Class Vies
  * 
