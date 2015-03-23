@@ -241,7 +241,7 @@ class Vies
             'SE' => 'Sweden',
             'SI' => 'Slovenia',
             'SK' => 'Slovakia',
-            'UK' => 'United Kingdom',
+            'GB' => 'United Kingdom',
         ];
     }
 }
