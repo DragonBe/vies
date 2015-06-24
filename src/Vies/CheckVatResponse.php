@@ -53,7 +53,7 @@ class CheckVatResponse
     /**
      * Constructor for this response object
      *
-     * @param null|StdClass $params
+     * @param null|\StdClass $params
      */
     public function __construct($params = null)
     {
