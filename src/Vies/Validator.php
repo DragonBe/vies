@@ -54,7 +54,7 @@ class Validator
     protected function validateBE($vatNumber)
     {
         if (strlen($vatNumber) == 9) {
-            $vatNumber = "0".$vatNumber;
+            $vatNumber = "0" . $vatNumber;
         }
 
         if (strlen($vatNumber) != 10) {
@@ -178,16 +178,20 @@ class Validator
         if (strlen($vatNumber) != 9) {
             return false;
         }
-        $allowed = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'Q');
+
+        if (!is_numeric(substr($vatNumber, 1, 6))) {
+            return false;
+        }
+
+        $allowed = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'N', 'P', 'Q', 'R', 'S', 'W');
         $checkval = false;
-        for ($i = 0; $i < count($allowed); $i++) {
-            if (strtoupper($vatNumber[0]) == $allowed[$i]) {
-                $checkval = true;
-            }
+        if (in_array($vatNumber[0], $allowed)) {
+            $checkval = true;
         }
         if (!$checkval) {
             return false;
         }
+
         $checksum = (int)$vatNumber[8];
         $checkval = 0;
         for ($i = 2; $i <= 8; $i++) {
