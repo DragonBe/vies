@@ -311,16 +311,16 @@ class Validator
         }
 
         $checksum = (int)substr($vatNumber, -1);
-        $S1 = $S2 = 0;
+        $Sum1 = $Sum2 = 0;
         for ($i = 1; $i <= 10; $i++) {
             if (!$this->isEven($i)) {
-                $S1 += $vatNumber[$i - 1];
+                $Sum1 += $vatNumber[$i - 1];
             } else {
-                $S2 += (int)($vatNumber[$i - 1] / 5) + ((2 * $vatNumber[$i - 1]) % 10);
+                $Sum2 += (int)($vatNumber[$i - 1] / 5) + ((2 * $vatNumber[$i - 1]) % 10);
             }
         }
 
-        $checkval = (10 - ($S1 + $S2) % 10) % 10;
+        $checkval = (10 - ($Sum1 + $Sum2) % 10) % 10;
 
         if ($checksum != $checkval) {
             return false;
@@ -565,17 +565,20 @@ class Validator
     {
         //This format applies to Government departments and Health authorities
         if (strlen($vatNumber) == 5) {
-            if ((substr($vatNumber, 0, 2) != "GD") && (substr($vatNumber, 0, 2) != "HA")) {
-                return false;
+            $stringPart = substr($vatNumber, 0, 2);
+            if ($stringPart != "GD") {
+                if ($stringPart != "HA") {
+                    return false;
+                }
             }
 
-            if ((substr($vatNumber, 0, 2) == "GD")) {
+            if ($stringPart == "GD") {
                 if ((int)substr($vatNumber, 2, 3) > 499) {
                     return false;
                 }
             }
 
-            if ((substr($vatNumber, 0, 2) == "HA")) {
+            if ($stringPart == "HA") {
                 if ((int)substr($vatNumber, 2, 3) < 500) {
                     return false;
                 }
@@ -593,10 +596,10 @@ class Validator
         }
         $checkval += (int)substr($vatNumber, 7, 2);
 
-        $R1 = $checkval % 97;
-        $R2 = ($R1 + 55) % 97;
+        $Result1 = $checkval % 97;
+        $Result2 = ($Result1 + 55) % 97;
 
-        if ($R1 * $R2) {
+        if ($Result1 * $Result2) {
             return false;
         }
 
