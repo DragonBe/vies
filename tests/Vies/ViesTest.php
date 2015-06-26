@@ -202,7 +202,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGettingDefaultSoapClient()
     {
-        if (false !== strpos(phpversion(), 'HipHop') && !extension_loaded('soap')) {
+        if (defined('HHVM_VERSION') && !extension_loaded('soap')) {
             $this->markTestSkipped('SOAP not installed');
         }
         $vies = new Vies();
@@ -217,7 +217,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
      */
     public function testDefaultSoapClientIsLazyLoaded()
     {
-        if (false !== strpos(phpversion(), 'HipHop') && !extension_loaded('soap')) {
+        if (defined('HHVM_VERSION') && !extension_loaded('soap')) {
             $this->markTestSkipped('SOAP not installed');
         }
         $wsdl = dirname(__FILE__) . '/_files/checkVatService.wsdl';
@@ -272,7 +272,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
      */
     public function testSettingSoapOptions()
     {
-        if (false !== strpos(phpversion(), 'HipHop')) {
+        if(defined('HHVM_VERSION')) {
             $this->markTestSkipped('This test does not work for HipHop VM');
         }
         $options = array (
