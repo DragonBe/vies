@@ -16,8 +16,9 @@ class CheckVatResponseTest extends \PHPUnit_Framework_TestCase
         $response->vatNumber = '123456789';
         $response->requestDate = date('Y-m-d+H:i');
         $response->valid = $isValid;
-        $response->name = 'Testing Corp N.V.';
-        $response->address = 'MARKT 1' . PHP_EOL . '1000  BRUSSEL';
+        $response->traderName = 'Testing Corp N.V.';
+        $response->traderAddress = 'MARKT 1' . PHP_EOL . '1000  BRUSSEL';
+        $response->requestIdentifier = 'XYZ1234567890';
         return $response;
     }
     /**
@@ -31,8 +32,9 @@ class CheckVatResponseTest extends \PHPUnit_Framework_TestCase
             'vatNumber'   => '123456789',
             'requestDate' => date('Y-m-d+H:i'),
             'valid'       => $isValid,
-            'name'        => 'Testing Corp N.V.',
-            'address'     => 'MARKT 1' . PHP_EOL . '1000  BRUSSEL',
+            'traderName'        => 'Testing Corp N.V.',
+            'traderAddress'     => 'MARKT 1' . PHP_EOL . '1000  BRUSSEL',
+            'requestIdentifier' => 'XYZ1234567890'
         ];
     }
 
@@ -55,8 +57,9 @@ class CheckVatResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($response->vatNumber, $checkVatResponse->getVatNumber());
         $this->assertSame($response->requestDate, $checkVatResponse->getRequestDate()->format(CheckVatResponse::VIES_DATETIME_FORMAT));
         $this->assertSame($response->valid, $checkVatResponse->isValid());
-        $this->assertSame($response->name, $checkVatResponse->getName());
-        $this->assertSame($response->address, $checkVatResponse->getAddress());
+        $this->assertSame($response->traderName, $checkVatResponse->getName());
+        $this->assertSame($response->traderAddress, $checkVatResponse->getAddress());
+        $this->assertSame($response->requestIdentifier, $checkVatResponse->getIdentifier());
     }
 
     /**
@@ -65,12 +68,13 @@ class CheckVatResponseTest extends \PHPUnit_Framework_TestCase
     public function testCanCreateResponseWithoutNameAndAddressAtConstruct($validCheck)
     {
         $response = $this->createViesResponse($validCheck);
-        unset ($response->name, $response->address);
+        unset ($response->traderName, $response->traderAddress);
         $checkVatResponse = new CheckVatResponse($response);
         $this->assertSame($response->countryCode, $checkVatResponse->getCountryCode());
         $this->assertSame($response->vatNumber, $checkVatResponse->getVatNumber());
         $this->assertSame($response->requestDate, $checkVatResponse->getRequestDate()->format(CheckVatResponse::VIES_DATETIME_FORMAT));
         $this->assertSame($response->valid, $checkVatResponse->isValid());
+        $this->assertSame($response->requestIdentifier, $checkVatResponse->getIdentifier());
         $this->assertSame('---', $checkVatResponse->getName());
         $this->assertSame('---', $checkVatResponse->getAddress());
     }
@@ -86,8 +90,9 @@ class CheckVatResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($response['vatNumber'], $checkVatResponse->getVatNumber());
         $this->assertSame($response['requestDate'], $checkVatResponse->getRequestDate()->format(CheckVatResponse::VIES_DATETIME_FORMAT));
         $this->assertSame($response['valid'], $checkVatResponse->isValid());
-        $this->assertSame($response['name'], $checkVatResponse->getName());
-        $this->assertSame($response['address'], $checkVatResponse->getAddress());
+        $this->assertSame($response['traderName'], $checkVatResponse->getName());
+        $this->assertSame($response['traderAddress'], $checkVatResponse->getAddress());
+        $this->assertSame($response['requestIdentifier'], $checkVatResponse->getIdentifier());
     }
 
     public function testDefaultDateIsNow()

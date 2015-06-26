@@ -253,6 +253,7 @@ class CheckVatResponse
             'valid'       => $this->isValid(),
             'name'        => $this->getName(),
             'address'     => $this->getAddress(),
+            'identifier'  => $this->getIdentifier()
         );
     }
 }
