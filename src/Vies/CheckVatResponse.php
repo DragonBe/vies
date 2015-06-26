@@ -13,10 +13,10 @@ namespace DragonBe\Vies;
 
 /**
  * CheckVatResponse
- * 
+ *
  * This is the response object from the VIES web service for validation of
  * VAT numbers of companies registered in the European Union.
- * 
+ *
  * @see \DragonBe\Vies\Exception
  * @category DragonBe
  * @package \DragonBe\Vies
@@ -49,6 +49,10 @@ class CheckVatResponse
      * @var string The registered address of a validated company (optional)
      */
     protected $address;
+    /**
+     * @var string The request Identifier (optional)
+     */
+    protected $identifier;
 
     /**
      * Constructor for this response object
@@ -63,7 +67,7 @@ class CheckVatResponse
     }
     /**
      * Sets the two-character country code for a member of the European Union
-     *   
+     *
      * @param string $countryCode
      * @return \DragonBe\Vies\CheckVatResponse
      */
@@ -75,7 +79,7 @@ class CheckVatResponse
     /**
      * Retrieves the two-character country code from a member of the European
      * Union.
-     * 
+     *
      * @return string
      */
     public function getCountryCode()
@@ -84,7 +88,7 @@ class CheckVatResponse
     }
     /**
      * Sets the VAT number of a company within the European Union
-     * 
+     *
      * @param string $vatNumber
      * @return \DragonBe\Vies\CheckVatResponse
      */
@@ -95,7 +99,7 @@ class CheckVatResponse
     }
     /**
      * Retrieves the VAT number from a company within the European Union
-     * 
+     *
      * @return string
      */
     public function getVatNumber()
@@ -104,7 +108,7 @@ class CheckVatResponse
     }
     /**
      * Sets the date- and timestamp when the VIES service response was created
-     * 
+     *
      * @param string $requestDate
      * @return \DragonBe\Vies\CheckVatResponse
      */
@@ -120,7 +124,7 @@ class CheckVatResponse
     }
     /**
      * Retrieves the date- and timestamp the VIES service response was created
-     * 
+     *
      * @return \DateTime
      */
     public function getRequestDate()
@@ -132,7 +136,7 @@ class CheckVatResponse
     }
     /**
      * Sets the flag to indicate the provided details were valid or not
-     * 
+     *
      * @param bool $flag
      * @return \DragonBe\Vies\CheckVatResponse
      */
@@ -143,7 +147,7 @@ class CheckVatResponse
     }
     /**
      * Checks to see if a request is valid with given parameters
-     * 
+     *
      * @return bool
      */
     public function isValid()
@@ -152,7 +156,7 @@ class CheckVatResponse
     }
     /**
      * Sets optionally the registered name of the company
-     * 
+     *
      * @param string $name
      * @return \DragonBe\Vies\CheckVatResponse
      */
@@ -163,7 +167,7 @@ class CheckVatResponse
     }
     /**
      * Retrieves the registered name of the company
-     * 
+     *
      * @return string
      */
     public function getName()
@@ -172,7 +176,7 @@ class CheckVatResponse
     }
     /**
      * Sets the registered address of a company
-     * 
+     *
      * @param string $address
      * @return \DragonBe\Vies\CheckVatResponse
      */
@@ -183,16 +187,37 @@ class CheckVatResponse
     }
     /**
      * Retrieves the registered address of a company
-     * 
+     *
      * @return string
      */
     public function getAddress()
     {
         return $this->address;
     }
+
+    /**
+     * Sets request Identifier
+     *
+     * @param $identifier
+     * @return \DragonBe\Vies\CheckVatResponse
+     */
+    public function setIdentifier($identifier)
+    {
+        $this->identifier = (string)$identifier;
+        return $this;
+    }
+    /**
+     * get requerst Identifier
+     *
+     * @return mixed
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
+    }
     /**
      * Populates this response object with external data
-     * 
+     *
      * @param array|\stdClass $row
      */
     public function populate($row)
@@ -205,15 +230,19 @@ class CheckVatResponse
              ->setVatNumber($row->vatNumber)
              ->setRequestDate($row->requestDate)
              ->setValid($row->valid);
-             
+
         // optional parameters
-        isset ($row->name) ?
-            $this->setName($row->name) :
+        isset($row->traderName) ?
+            $this->setName($row->traderName) :
             $this->setName('---');
 
-        isset ($row->address)
-            ? $this->setAddress($row->address)
+        isset($row->traderAddress)
+            ? $this->setAddress($row->traderAddress)
             : $this->setAddress('---');
+
+        isset($row->requestIdentifier)
+            ? $this->setIdentifier($row->requestIdentifier)
+            : $this->setIdentifier('');
     }
     public function toArray()
     {

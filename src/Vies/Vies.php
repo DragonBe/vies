@@ -13,11 +13,11 @@ namespace DragonBe\Vies;
 
 /**
  * Class Vies
- * 
+ *
  * This class provides a soap client for usage of the VIES web service
  * provided by the European Commission to validate VAT numbers of companies
  * registered within the European Union
- * 
+ *
  * @category DragonBe
  * @package \DragonBe\Vies
  * @link http://ec.europa.eu/taxation_customs/vies/faqvies.do#item16
@@ -68,6 +68,7 @@ class Vies
                 $this->getOptions()
             );
         }
+
         return $this->soapClient;
     }
 
@@ -82,6 +83,7 @@ class Vies
     public function setSoapClient($soapClient)
     {
         $this->soapClient = $soapClient;
+
         return $this;
     }
 
@@ -100,6 +102,7 @@ class Vies
                 self::VIES_WSDL
             );
         }
+
         return $this->wsdl;
     }
 
@@ -113,6 +116,7 @@ class Vies
     public function setWsdl($wsdl)
     {
         $this->wsdl = $wsdl;
+
         return $this;
     }
 
@@ -126,6 +130,7 @@ class Vies
         if (null === $this->options) {
             $this->options = [];
         }
+
         return $this->options;
     }
 
@@ -139,6 +144,7 @@ class Vies
     public function setOptions($options)
     {
         $this->options = $options;
+
         return $this;
     }
 
@@ -158,6 +164,7 @@ class Vies
                 )
             );
         }
+
         return $this->heartBeat;
     }
 
@@ -182,6 +189,7 @@ class Vies
         if (null == $this->validator) {
             $this->validator = new Validator();
         }
+
         return $this->validator;
     }
 
@@ -193,10 +201,14 @@ class Vies
      * member country
      * @param string $vatNumber The VAT number (without the country
      * identification) of a registered company
-     * @return \DragonBe\Vies\CheckVatResponse
-     * @throws \DragonBe\Vies\ViesException
+     * @param string $requesterCountryCode The two-character country code of a European
+     * member country
+     * @param string $requesterVatNumber The VAT number (without the country
+     * identification) of a registered company
+     * @return CheckVatResponse
+     * @throws ViesException
      */
-    public function validateVat($countryCode, $vatNumber)
+    public function validateVat($countryCode, $vatNumber, $requesterCountryCode = null, $requesterVatNumber = null)
     {
         if (!array_key_exists($countryCode, self::listEuropeanCountries())) {
             throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
@@ -213,15 +225,28 @@ class Vies
             return new CheckVatResponse($params);
         }
 
+        $requestParams = array(
+            'countryCode' => $countryCode,
+            'vatNumber' => $vatNumber
+        );
+
+        if ($requesterCountryCode && $requesterVatNumber) {
+            if (!array_key_exists($requesterCountryCode, self::listEuropeanCountries())) {
+                throw new ViesException(sprintf('Invalid requestor country code "%s" provided', $requesterCountryCode));
+            }
+            $requesterVatNumber = self::filterVat($requesterVatNumber);
+
+            $requestParams['requesterCountryCode'] = $requesterCountryCode;
+            $requestParams['requesterVatNumber'] = $requesterVatNumber;
+        }
+
         $response = $this->getSoapClient()->__soapCall(
-            'checkVat',
-            array (
-                array (
-                    'countryCode' => $countryCode,
-                    'vatNumber' => $vatNumber
-                )
+            'checkVatApprox',
+            array(
+                $requestParams
             )
         );
+
         return new CheckVatResponse($response);
     }
 
@@ -241,14 +266,14 @@ class Vies
 
     /**
      * Filters a VAT number and normalizes it to an alfanumeric string
-     * 
+     *
      * @param string $vatNumber
      * @return string
      * @static
      */
     public static function filterVat($vatNumber)
     {
-        return str_replace(array (' ', '.', '-'), '', $vatNumber);
+        return str_replace(array(' ', '.', '-'), '', $vatNumber);
     }
 
     /**
