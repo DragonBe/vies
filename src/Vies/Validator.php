@@ -523,7 +523,7 @@ class Validator
         if (strlen($vatNumber) != 8) {
             return false;
         }
-        if ((int)$vatNumber[0] == 0) {
+        if (intval($vatNumber[0]) == 0) {
             return false;
         }
         $checksum = (int)$vatNumber[7];
@@ -544,7 +544,7 @@ class Validator
         if (strlen($vatNumber) != 10) {
             return false;
         }
-        if ((int)$vatNumber[0] == 0) {
+        if (intval($vatNumber[0]) == 0) {
             return false;
         }
         if (((int)$vatNumber[2] == 0) ||
