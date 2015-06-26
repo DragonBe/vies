@@ -13,8 +13,8 @@ class CheckVatResponseTest extends \PHPUnit_Framework_TestCase
     {
         $response = new \stdClass();
         $response->countryCode = 'BE';
-        $response->vatNumber = '123456789';
-        $response->requestDate = date('Y-m-d+H:i');
+        $response->vatNumber = '123456749';
+        $response->requestDate = date('Y-m-dP');
         $response->valid = $isValid;
         $response->name = 'Testing Corp N.V.';
         $response->address = 'MARKT 1' . PHP_EOL . '1000  BRUSSEL';
@@ -28,8 +28,8 @@ class CheckVatResponseTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'countryCode' => 'BE',
-            'vatNumber'   => '123456789',
-            'requestDate' => date('Y-m-d+H:i'),
+            'vatNumber'   => '123456749',
+            'requestDate' => date('Y-m-dP'),
             'valid'       => $isValid,
             'name'        => 'Testing Corp N.V.',
             'address'     => 'MARKT 1' . PHP_EOL . '1000  BRUSSEL',
@@ -94,6 +94,6 @@ class CheckVatResponseTest extends \PHPUnit_Framework_TestCase
     {
         $vatResponse = new CheckVatResponse();
         $this->assertInstanceOf('\\DateTime', $vatResponse->getRequestDate());
-        $this->assertSame(date('Y-m-d H:i'), $vatResponse->getRequestDate()->format('Y-m-d H:i'));
+        $this->assertSame(date('Y-m-dP'), $vatResponse->getRequestDate()->format('Y-m-dP'));
     }
 }
