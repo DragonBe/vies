@@ -23,7 +23,7 @@ namespace DragonBe\Vies;
  */
 class CheckVatResponse
 {
-    const VIES_DATETIME_FORMAT = 'Y-m-d+H:i';
+    const VIES_DATETIME_FORMAT = 'Y-m-dP';
 
     /**
      * @var string The country code for a member of the European Union
@@ -111,9 +111,9 @@ class CheckVatResponse
     public function setRequestDate($requestDate)
     {
         if (!$requestDate instanceof \DateTime) {
-            // converting Y-m-d+H:i into Y-m-d H:i:s
-            $requestDate = str_replace('+', ' ', $requestDate) . ':00';
-            $requestDate = new \DateTime($requestDate);
+            $date = substr($requestDate, 0, 10);
+            $timezone = substr($requestDate, -6);
+            $requestDate = new \DateTime($date, \DateTime::createFromFormat('O', $timezone)->getTimezone());
         }
         $this->requestDate = $requestDate;
         return $this;
@@ -193,7 +193,7 @@ class CheckVatResponse
     /**
      * Populates this response object with external data
      * 
-     * @param array|\SdtClass $row
+     * @param array|\stdClass $row
      */
     public function populate($row)
     {
