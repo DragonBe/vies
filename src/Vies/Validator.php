@@ -583,6 +583,8 @@ class Validator
                     return false;
                 }
             }
+
+            return true;
         }
 
         if (strlen($vatNumber) != 9 && strlen($vatNumber) != 12) {
