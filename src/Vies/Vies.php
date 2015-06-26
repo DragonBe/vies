@@ -13,11 +13,11 @@ namespace DragonBe\Vies;
 
 /**
  * Class Vies
- * 
+ *
  * This class provides a soap client for usage of the VIES web service
  * provided by the European Commission to validate VAT numbers of companies
  * registered within the European Union
- * 
+ *
  * @category DragonBe
  * @package \DragonBe\Vies
  * @link http://ec.europa.eu/taxation_customs/vies/faqvies.do#item16
@@ -48,11 +48,6 @@ class Vies
      * @var HeartBeat A heartbeat checker to verify if the VIES service is available
      */
     protected $heartBeat;
-
-    /**
-     * @var Validator a class to check Vat number control sum
-     */
-    protected $validator;
 
     /**
      * Retrieves the SOAP client that will be used to communicate with the VIES
@@ -173,19 +168,6 @@ class Vies
     }
 
     /**
-     * Sets the validator
-     *
-     * @return Validator
-     */
-    public function getValidator()
-    {
-        if (null == $this->validator) {
-            $this->validator = new Validator();
-        }
-        return $this->validator;
-    }
-
-    /**
      * Validates a given country code and VAT number and returns a
      * \DragonBe\Vies\CheckVatResponse object
      *
@@ -236,12 +218,16 @@ class Vies
      */
     public function validateVatSum($countryCode, $vatNumber)
     {
-        return $this->getValidator()->validate($countryCode, $vatNumber);
+        $className = __NAMESPACE__ . '\\Validator\\Validator' . $countryCode;
+        /** @var Validator\ValidatorInterface $instance */
+        $instance = new $className();
+
+        return $instance->validate($vatNumber);
     }
 
     /**
      * Filters a VAT number and normalizes it to an alfanumeric string
-     * 
+     *
      * @param string $vatNumber
      * @return string
      * @static
