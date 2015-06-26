@@ -8,10 +8,10 @@ class ViestTest extends \PHPUnit_Framework_TestCase
     public function vatNumberProvider()
     {
         return array (
-            array ('0123456789','0123456789'),
-            array ('0123 456 789','0123456789'),
-            array ('0123.456.789','0123456789'),
-            array ('0123-456-789','0123456789'),
+            array ('0123456749','0123456749'),
+            array ('0123 456 749','0123456749'),
+            array ('0123.456.749','0123456749'),
+            array ('0123-456-749','0123456749'),
         );
     }
     /**
@@ -45,7 +45,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
     {
         $response = new \StdClass();
         $response->countryCode = 'BE';
-        $response->vatNumber = '0123.456.789';
+        $response->vatNumber = '0123.456.749';
         $response->requestDate = '1983-06-24+23:59';
         $response->valid = true;
         $response->name = '';
@@ -53,7 +53,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
         
         $vies = $this->_createdStubbedViesClient($response);
         
-        $response = $vies->validateVat('BE', '0123.456.789');
+        $response = $vies->validateVat('BE', '0123.456.749');
         $this->assertInstanceOf('\\DragonBe\\Vies\\CheckVatResponse', $response);
         $this->assertTrue($response->isValid());
         return $response;
@@ -67,13 +67,13 @@ class ViestTest extends \PHPUnit_Framework_TestCase
     {
         $response = new \StdClass();
         $response->countryCode = 'BE';
-        $response->vatNumber = '0123.ABC.789';
+        $response->vatNumber = '0123.ABC.749';
         $response->requestDate = '1983-06-24+23:59';
         $response->valid = false;
         
         $vies = $this->_createdStubbedViesClient($response);
 
-        $response = $vies->validateVat('BE', '0123.ABC.789');
+        $response = $vies->validateVat('BE', '0123.ABC.749');
         $this->assertInstanceOf('\\DragonBe\\Vies\\CheckVatResponse', $response);
         $this->assertFalse($response->isValid());
     }
@@ -110,7 +110,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
     {
         $array = $response->toArray();
         $this->assertSame('BE', $array['countryCode']);
-        $this->assertSame('0123.456.789', $array['vatNumber']);
+        $this->assertSame('0123.456.749', $array['vatNumber']);
         $this->assertSame('1983-06-24', $array['requestDate']);
         $this->assertTrue($array['valid']);
         $this->assertEmpty($array['name']);

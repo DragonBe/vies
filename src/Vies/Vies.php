@@ -50,6 +50,11 @@ class Vies
     protected $heartBeat;
 
     /**
+     * @var Validator a class to check Vat number control sum
+     */
+    protected $validator;
+
+    /**
      * Retrieves the SOAP client that will be used to communicate with the VIES
      * SOAP service.
      *
@@ -168,12 +173,25 @@ class Vies
     }
 
     /**
+     * Sets the validator
+     *
+     * @return Validator
+     */
+    public function getValidator()
+    {
+        if (null == $this->validator) {
+            $this->validator = new Validator();
+        }
+        return $this->validator;
+    }
+
+    /**
      * Validates a given country code and VAT number and returns a
      * \DragonBe\Vies\CheckVatResponse object
-     * 
+     *
      * @param string $countryCode The two-character country code of a European
      * member country
-     * @param string $vatNumber The VAT number (without the country 
+     * @param string $vatNumber The VAT number (without the country
      * identification) of a registered company
      * @return \DragonBe\Vies\CheckVatResponse
      * @throws \DragonBe\Vies\ViesException
@@ -184,6 +202,17 @@ class Vies
             throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
         }
         $vatNumber = self::filterVat($vatNumber);
+
+        if (!$this->validateVatSum($countryCode, $vatNumber)) {
+            $params = new \StdClass();
+            $params->countryCode = $countryCode;
+            $params->vatNumber = $vatNumber;
+            $params->requestDate = new \DateTime();
+            $params->valid = false;
+
+            return new CheckVatResponse($params);
+        }
+
         $response = $this->getSoapClient()->__soapCall(
             'checkVat',
             array (
@@ -195,6 +224,21 @@ class Vies
         );
         return new CheckVatResponse($response);
     }
+
+    /**
+     * Validate a VAT number control sum
+     *
+     * @param string $countryCode The two-character country code of a European
+     * member country
+     * @param string $vatNumber The VAT number (without the country
+     * identification) of a registered company
+     * @return bool
+     */
+    public function validateVatSum($countryCode, $vatNumber)
+    {
+        return $this->getValidator()->validate($countryCode, $vatNumber);
+    }
+
     /**
      * Filters a VAT number and normalizes it to an alfanumeric string
      * 
