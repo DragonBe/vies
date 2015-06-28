@@ -12,7 +12,8 @@ abstract class ValidatorAbstract implements ValidatorInterface
     {
         $val = (string)$val;
         $sum = 0;
-        for ($i = 0; $i < strlen($val); $i++) {
+        $count = strlen($val);
+        for ($i = 0; $i < $count; $i++) {
             $sum += (int)$val[$i];
         }
 
@@ -31,13 +32,14 @@ abstract class ValidatorAbstract implements ValidatorInterface
     /**
      * @param array $weights
      * @param int $start
-     * @param $vatNumber
+     * @param string $vatNumber
      * @return int
      */
     protected function sumWeights(array $weights, $vatNumber, $start = 0)
     {
         $checkval = 0;
-        for ($i = $start; $i < count($weights); $i++) {
+        $count = count($weights);
+        for ($i = $start; $i < $count; $i++) {
             $checkval += (int)$vatNumber[$i] * $weights[$i];
         }
 
