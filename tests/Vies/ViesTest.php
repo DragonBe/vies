@@ -48,12 +48,36 @@ class ViestTest extends \PHPUnit_Framework_TestCase
         $response->vatNumber = '0123.456.749';
         $response->requestDate = '1983-06-24+23:59';
         $response->valid = true;
-        $response->name = '';
-        $response->address = '';
+        $response->traderName = '';
+        $response->traderAddress = '';
+        $response->requestIdentifier = 'XYZ1234567890';
         
         $vies = $this->_createdStubbedViesClient($response);
         
         $response = $vies->validateVat('BE', '0123.456.749');
+        $this->assertInstanceOf('\\DragonBe\\Vies\\CheckVatResponse', $response);
+        $this->assertTrue($response->isValid());
+        return $response;
+    }
+
+    /**
+     * @covers \DragonBe\Vies\Vies::validateVat
+     * @covers \DragonBe\Vies\Vies::setSoapClient
+     */
+    public function testSuccessVatNumberValidationWithRequester()
+    {
+        $response = new \StdClass();
+        $response->countryCode = 'BE';
+        $response->vatNumber = '0123.456.749';
+        $response->requestDate = '1983-06-24+23:59';
+        $response->valid = true;
+        $response->traderName = '';
+        $response->traderAddress = '';
+        $response->requestIdentifier = 'XYZ1234567890';
+
+        $vies = $this->_createdStubbedViesClient($response);
+
+        $response = $vies->validateVat('BE', '0123.456.749', 'PL', '1234567890');
         $this->assertInstanceOf('\\DragonBe\\Vies\\CheckVatResponse', $response);
         $this->assertTrue($response->isValid());
         return $response;
@@ -102,6 +126,20 @@ class ViestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test to see the country code is rejected if not existing in the EU
+     *
+     * @dataProvider badCountryCodeProvider
+     * @covers \DragonBe\Vies\Vies::validateVat
+     * @expectedException \DragonBe\Vies\ViesException
+     * @param $code
+     */
+    public function testExceptionIsRaisedForNonEuropeanUnionCountryCodesRequester($code)
+    {
+        $vies = new Vies();
+        $vies->validateVat('BE', '0123.456.749', $code, 'does not matter');
+    }
+
+    /**
      * @param \DragonBe\Vies\CheckVatResponse $response
      * @depends testSuccessVatNumberValidation
      * @covers \DragonBe\Vies\CheckVatResponse::toArray
@@ -112,6 +150,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('BE', $array['countryCode']);
         $this->assertSame('0123.456.749', $array['vatNumber']);
         $this->assertSame('1983-06-24', $array['requestDate']);
+        $this->assertSame('XYZ1234567890', $array['identifier']);
         $this->assertTrue($array['valid']);
         $this->assertEmpty($array['name']);
         $this->assertEmpty($array['address']);
@@ -163,7 +202,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGettingDefaultSoapClient()
     {
-        if (0 >= strpos(phpversion(), 'HipHop') && !extension_loaded('soap')) {
+        if (defined('HHVM_VERSION') && !extension_loaded('soap')) {
             $this->markTestSkipped('SOAP not installed');
         }
         $vies = new Vies();
@@ -178,7 +217,7 @@ class ViestTest extends \PHPUnit_Framework_TestCase
      */
     public function testDefaultSoapClientIsLazyLoaded()
     {
-        if (0 >= strpos(phpversion(), 'HipHop') && !extension_loaded('soap')) {
+        if (defined('HHVM_VERSION') && !extension_loaded('soap')) {
             $this->markTestSkipped('SOAP not installed');
         }
         $wsdl = dirname(__FILE__) . '/_files/checkVatService.wsdl';
@@ -233,11 +272,11 @@ class ViestTest extends \PHPUnit_Framework_TestCase
      */
     public function testSettingSoapOptions()
     {
-        if (0 >= strpos(phpversion(), 'HipHop')) {
+        if(defined('HHVM_VERSION')) {
             $this->markTestSkipped('This test does not work for HipHop VM');
         }
         $options = array (
-            'soap_version' => SOAP_1_2,
+            'soap_version' => SOAP_1_1,
         );
         $vies = new Vies();
         $vies->setSoapClient($this->_createdStubbedViesClient('blabla')->getSoapClient());
