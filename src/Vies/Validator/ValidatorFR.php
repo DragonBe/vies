@@ -28,45 +28,8 @@ namespace DragonBe\Vies\Validator;
  */
 class ValidatorFR extends ValidatorAbstract
 {
-    /**
-     * @var array
-     */
-    protected $checkCharacter = [
-        0 => '0',
-        1 => '1',
-        2 => '2',
-        3 => '3',
-        4 => '4',
-        5 => '5',
-        6 => '6',
-        7 => '7',
-        8 => '8',
-        9 => '9',
-        10 => 'A',
-        11 => 'B',
-        12 => 'C',
-        13 => 'D',
-        14 => 'E',
-        15 => 'F',
-        16 => 'G',
-        17 => 'H',
-        18 => 'J',
-        19 => 'K',
-        20 => 'L',
-        21 => 'M',
-        22 => 'N',
-        23 => 'P',
-        24 => 'Q',
-        25 => 'R',
-        26 => 'S',
-        27 => 'T',
-        28 => 'U',
-        29 => 'V',
-        30 => 'W',
-        31 => 'X',
-        32 => 'Y',
-        33 => 'Z'
-    ];
+    # the valid characters for the first two digits (O and I are missing)
+    protected $alphabet = '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ';
 
     /**
      * @param string $vatNumber
@@ -75,6 +38,14 @@ class ValidatorFR extends ValidatorAbstract
     public function validate($vatNumber)
     {
         if (strlen($vatNumber) != 11) {
+            return false;
+        }
+
+        if (strpos($this->alphabet, $vatNumber[0]) === false) {
+            return false;
+        }
+
+        if (strpos($this->alphabet, $vatNumber[1]) === false) {
             return false;
         }
 
@@ -109,11 +80,21 @@ class ValidatorFR extends ValidatorAbstract
     /**
      * @param $vatNumber
      * @return string
-     *
-     * TODO validate new vat number with algo
      */
     private function validateNew($vatNumber)
     {
+        $checkCharacter = array_flip(str_split($this->alphabet));
+
+        if (ctype_digit($vatNumber[0])) {
+            $checkval = ($checkCharacter[$vatNumber[0]] * 24) + $checkCharacter[$vatNumber[1]] - 10;
+        } else {
+            $checkval = ($checkCharacter[$vatNumber[0]] * 34) + $checkCharacter[$vatNumber[1]] - 100;
+        }
+
+        if (((intval(substr($vatNumber, 2)) + ($checkval / 11) + 1) % 11) != $checkval % 11) {
+            return false;
+        }
+
         return true;
     }
 }
