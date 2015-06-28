@@ -63,6 +63,7 @@ class Vies
                 $this->getOptions()
             );
         }
+
         return $this->soapClient;
     }
 
@@ -77,6 +78,7 @@ class Vies
     public function setSoapClient($soapClient)
     {
         $this->soapClient = $soapClient;
+
         return $this;
     }
 
@@ -95,6 +97,7 @@ class Vies
                 self::VIES_WSDL
             );
         }
+
         return $this->wsdl;
     }
 
@@ -108,6 +111,7 @@ class Vies
     public function setWsdl($wsdl)
     {
         $this->wsdl = $wsdl;
+
         return $this;
     }
 
@@ -121,6 +125,7 @@ class Vies
         if (null === $this->options) {
             $this->options = [];
         }
+
         return $this->options;
     }
 
@@ -134,6 +139,7 @@ class Vies
     public function setOptions($options)
     {
         $this->options = $options;
+
         return $this;
     }
 
@@ -153,6 +159,7 @@ class Vies
                 )
             );
         }
+
         return $this->heartBeat;
     }
 
@@ -175,10 +182,14 @@ class Vies
      * member country
      * @param string $vatNumber The VAT number (without the country
      * identification) of a registered company
-     * @return \DragonBe\Vies\CheckVatResponse
-     * @throws \DragonBe\Vies\ViesException
+     * @param string $requesterCountryCode The two-character country code of a European
+     * member country
+     * @param string $requesterVatNumber The VAT number (without the country
+     * identification) of a registered company
+     * @return CheckVatResponse
+     * @throws ViesException
      */
-    public function validateVat($countryCode, $vatNumber)
+    public function validateVat($countryCode, $vatNumber, $requesterCountryCode = null, $requesterVatNumber = null)
     {
         if (!array_key_exists($countryCode, self::listEuropeanCountries())) {
             throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
@@ -195,15 +206,28 @@ class Vies
             return new CheckVatResponse($params);
         }
 
+        $requestParams = array(
+            'countryCode' => $countryCode,
+            'vatNumber' => $vatNumber
+        );
+
+        if ($requesterCountryCode && $requesterVatNumber) {
+            if (!array_key_exists($requesterCountryCode, self::listEuropeanCountries())) {
+                throw new ViesException(sprintf('Invalid requestor country code "%s" provided', $requesterCountryCode));
+            }
+            $requesterVatNumber = self::filterVat($requesterVatNumber);
+
+            $requestParams['requesterCountryCode'] = $requesterCountryCode;
+            $requestParams['requesterVatNumber'] = $requesterVatNumber;
+        }
+
         $response = $this->getSoapClient()->__soapCall(
-            'checkVat',
-            array (
-                array (
-                    'countryCode' => $countryCode,
-                    'vatNumber' => $vatNumber
-                )
+            'checkVatApprox',
+            array(
+                $requestParams
             )
         );
+
         return new CheckVatResponse($response);
     }
 
@@ -234,7 +258,7 @@ class Vies
      */
     public static function filterVat($vatNumber)
     {
-        return str_replace(array (' ', '.', '-'), '', $vatNumber);
+        return str_replace(array(' ', '.', '-'), '', $vatNumber);
     }
 
     /**

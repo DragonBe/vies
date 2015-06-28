@@ -1,5 +1,4 @@
 <phpunit
-    strict="true"
     colors="true"
     stopOnError="true"
     stopOnFailure="true"
