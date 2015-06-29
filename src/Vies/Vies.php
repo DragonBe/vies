@@ -246,6 +246,7 @@ class Vies
         /** @var Validator\ValidatorInterface $instance */
         $instance = new $className();
 
+        $vatNumber = self::filterVat($vatNumber);
         return $instance->validate($vatNumber);
     }
 
