@@ -50,11 +50,6 @@ class Vies
     protected $heartBeat;
 
     /**
-     * @var Validator a class to check Vat number control sum
-     */
-    protected $validator;
-
-    /**
      * Retrieves the SOAP client that will be used to communicate with the VIES
      * SOAP service.
      *
@@ -180,20 +175,6 @@ class Vies
     }
 
     /**
-     * Sets the validator
-     *
-     * @return Validator
-     */
-    public function getValidator()
-    {
-        if (null == $this->validator) {
-            $this->validator = new Validator();
-        }
-
-        return $this->validator;
-    }
-
-    /**
      * Validates a given country code and VAT number and returns a
      * \DragonBe\Vies\CheckVatResponse object
      *
@@ -261,7 +242,12 @@ class Vies
      */
     public function validateVatSum($countryCode, $vatNumber)
     {
-        return $this->getValidator()->validate($countryCode, $vatNumber);
+        $className = __NAMESPACE__ . '\\Validator\\Validator' . $countryCode;
+        /** @var Validator\ValidatorInterface $instance */
+        $instance = new $className();
+
+        $vatNumber = self::filterVat($vatNumber);
+        return $instance->validate($vatNumber);
     }
 
     /**
