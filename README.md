@@ -59,10 +59,6 @@ if (false === $vies->getHeartBeat()->isAlive()) {
 }
 ```
 
-# Roadmap
-
-- Pre-validation of VAT numbers **before** hitting the service for better performance
-
 # Licence
 
 DragonBe\Vies is released under the MIT Licence. See the bundled [LICENSE](LICENSE) file for details.
