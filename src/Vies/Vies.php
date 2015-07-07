@@ -295,7 +295,7 @@ class Vies
             'CY' => 'Cyprus',
             'CZ' => 'Czech Republic',
             'DE' => 'Germany',
-            'DK' => 'Danmark',
+            'DK' => 'Denmark',
             'EE' => 'Estonia',
             'EL' => 'Greece',
             'ES' => 'Spain',
