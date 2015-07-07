@@ -12,6 +12,18 @@
 namespace DragonBe\Vies;
 
 /**
+ * Thrown under certain circumstances by SoapClient, when exchanging data with European Commission (EC) VAT
+ * Information Exchange System (VIES).
+ *
+ * Common SoapFaults include:
+ *
+ * - MS_MAX_CONCURRENT_REQ
+ * - GLOBAL_MAX_CONCURRENT_REQ
+ * - MS_UNAVAILABLE
+ */
+use SoapFault;
+
+/**
  * Class Vies
  *
  * This class provides a soap client for usage of the VIES web service
@@ -221,12 +233,19 @@ class Vies
             $requestParams['requesterVatNumber'] = $requesterVatNumber;
         }
 
-        $response = $this->getSoapClient()->__soapCall(
-            'checkVatApprox',
-            array(
-                $requestParams
-            )
-        );
+        try {
+            $response = $this->getSoapClient()->__soapCall(
+                'checkVatApprox',
+                array(
+                    $requestParams
+                )
+            );
+        } catch (SoapFault $e) {
+            $message = sprintf('The European Commission (EC) VAT Information Exchange System (VIES) cannot validate the VAT number "%s%s" at this moment. '
+                             . 'The service responded with the critical error "%s". This is probably a temporary problem. Please try again later.',
+                               $countryCode, $vatNumber, $e->getMessage());
+            throw new ViesException($message);
+        }
 
         return new CheckVatResponse($response);
     }
