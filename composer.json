@@ -39,7 +39,6 @@
         "squizlabs/php_codesniffer": "^2.3",
         "phing/phing": "^2.11",
         "codeclimate/php-test-reporter": "dev-master",
-        "phpdocumentor/phpdocumentor": "^2.8",
-        "symfony/var-dumper": "dev-master"
+        "phpdocumentor/phpdocumentor": "^2.8"
     }
 }
