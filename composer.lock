@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3634decc8f9813c67df57087886bff39",
+    "hash": "a408e2b2f0768909ee97c0481cbe1108",
     "packages": [],
     "packages-dev": [
         {
@@ -3422,6 +3422,65 @@
             "time": "2015-06-08 09:37:21"
         },
         {
+            "name": "symfony/var-dumper",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/var-dumper.git",
+                "reference": "5e92464760ae3330c424ea69672f40ce0eed4298"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/5e92464760ae3330c424ea69672f40ce0eed4298",
+                "reference": "5e92464760ae3330c424ea69672f40ce0eed4298",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "~2.8|~3.0"
+            },
+            "suggest": {
+                "ext-symfony_debug": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "Resources/functions/dump.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Component\\VarDumper\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony mechanism for exploring and dumping PHP variables",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "debug",
+                "dump"
+            ],
+            "time": "2015-07-02 15:20:21"
+        },
+        {
             "name": "symfony/yaml",
             "version": "v2.7.1",
             "source": {
@@ -4232,7 +4291,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "codeclimate/php-test-reporter": 20
+        "codeclimate/php-test-reporter": 20,
+        "symfony/var-dumper": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
