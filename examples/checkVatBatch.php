@@ -16,13 +16,9 @@ if (false === $vies->getHeartBeat()->isAlive()) {
 
     $splQueue = new SplQueue();
 
-    $vatins = vatinProvider();
-
-    foreach ($vatins as $vatin) {
+    foreach (vatinProvider() as $vatin) {
         $splQueue->enqueue($vatin);
     }
-
-    unset($vatins);
 
     foreach ($splQueue as $item) {
 
@@ -37,11 +33,11 @@ if (false === $vies->getHeartBeat()->isAlive()) {
         try {
             $result = $vies->validateVat($countryCode, $vatNumber);     // Validation routine worked as expected.
             echo ($result->isValid()) ? 'VALID' : 'INVALID';
-        } catch (ViesServiceException $e) {                             // Recoverable exception. Add VATIN back to stack.
-            echo $e->getMessage();                                      // There is probabily a temporary problem with backend VIES service.
+        } catch (ViesServiceException $e) {                             // Recoverable exception. There is probabily a temporary problem
+            echo $e->getMessage();                                      // with backend VIES service. Try again. Add VATIN back to queue.
             $splQueue->enqueue($vatin);
-        } catch (ViesException $e) {                                    // Unrecoverable exception.
-            echo $e->getMessage();                                      // Invalid country code etc.
+        } catch (ViesException $e) {                                    // Unrecoverable exception. Invalid country code etc.
+            echo $e->getMessage();                                      // Do not try again.
         }
 
         echo PHP_EOL;
