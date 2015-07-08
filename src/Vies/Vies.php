@@ -17,9 +17,13 @@ namespace DragonBe\Vies;
  *
  * Common SoapFaults include:
  *
- * - MS_MAX_CONCURRENT_REQ
- * - GLOBAL_MAX_CONCURRENT_REQ
- * - MS_UNAVAILABLE
+ * MS_UNAVAILABLE            : The Member State service is unavailable. Try again later or with another Member State.
+ * SERVER_BUSY               : The service can not process your request. Try again later.
+ * SERVICE_UNAVAILABLE       : The SOAP service is unavailable, try again later.
+ * TIMEOUT                   : The Member State service could not be reach in time, try again later or with another Member State
+ *
+ * GLOBAL_MAX_CONCURRENT_REQ : The number of concurrent requests is more than the VIES service allows.
+ * MS_MAX_CONCURRENT_REQ     : Same as MS_MAX_CONCURRENT_REQ.
  */
 use SoapFault;
 
