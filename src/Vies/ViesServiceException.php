@@ -12,7 +12,7 @@
 namespace DragonBe\Vies;
 
 /**
- * ViesException
+ * ViesServiceException
  *
  * This class provides an exception layer for usage of the VIES web service
  * provided by the European commission to validate VAT numbers of companies
@@ -21,7 +21,7 @@ namespace DragonBe\Vies;
  * @see \Exception
  * @package \DragonBe\Vies
  */
-class ViesException extends \Exception
+class ViesServiceException extends \Exception
 {
 
 }

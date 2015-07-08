@@ -12,6 +12,22 @@
 namespace DragonBe\Vies;
 
 /**
+ * Thrown under certain circumstances by SoapClient, when exchanging data with European Commission (EC) VAT
+ * Information Exchange System (VIES).
+ *
+ * Common SoapFaults include:
+ *
+ * MS_UNAVAILABLE            : The Member State service is unavailable. Try again later or with another Member State.
+ * SERVER_BUSY               : The service can not process your request. Try again later.
+ * SERVICE_UNAVAILABLE       : The SOAP service is unavailable, try again later.
+ * TIMEOUT                   : The Member State service could not be reach in time, try again later or with another Member State
+ *
+ * GLOBAL_MAX_CONCURRENT_REQ : The number of concurrent requests is more than the VIES service allows.
+ * MS_MAX_CONCURRENT_REQ     : Same as MS_MAX_CONCURRENT_REQ.
+ */
+use SoapFault;
+
+/**
  * Class Vies
  *
  * This class provides a soap client for usage of the VIES web service
@@ -221,12 +237,19 @@ class Vies
             $requestParams['requesterVatNumber'] = $requesterVatNumber;
         }
 
-        $response = $this->getSoapClient()->__soapCall(
-            'checkVatApprox',
-            array(
-                $requestParams
-            )
-        );
+        try {
+            $response = $this->getSoapClient()->__soapCall(
+                'checkVatApprox',
+                array(
+                    $requestParams
+                )
+            );
+        } catch (SoapFault $e) {
+            $message = sprintf('The European Commission (EC) VAT Information Exchange System (VIES) cannot validate the VAT number "%s%s" at this moment. '
+                             . 'The service responded with the critical error "%s". This is probably a temporary problem. Please try again later.',
+                               $countryCode, $vatNumber, $e->getMessage());
+            throw new ViesServiceException($message);
+        }
 
         return new CheckVatResponse($response);
     }
@@ -276,7 +299,7 @@ class Vies
             'CY' => 'Cyprus',
             'CZ' => 'Czech Republic',
             'DE' => 'Germany',
-            'DK' => 'Danmark',
+            'DK' => 'Denmark',
             'EE' => 'Estonia',
             'EL' => 'Greece',
             'ES' => 'Spain',
