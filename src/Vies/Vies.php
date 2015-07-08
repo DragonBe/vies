@@ -245,8 +245,9 @@ class Vies
                 )
             );
         } catch (SoapFault $e) {
-            $message = sprintf('The European Commission (EC) VAT Information Exchange System (VIES) cannot validate the VAT number "%s%s" at this moment. '
-                             . 'The service responded with the critical error "%s". This is probably a temporary problem. Please try again later.',
+            $message = sprintf('Back-end VIES service cannot validate the VAT number "%s%s" at this moment. '
+                             . 'The service responded with the critical error "%s". This is probably a temporary problem. '
+                             . 'Please try again later.',
                                $countryCode, $vatNumber, $e->getMessage());
             throw new ViesServiceException($message);
         }

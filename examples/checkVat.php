@@ -10,7 +10,7 @@ $vies = new Vies();
 
 if (false === $vies->getHeartBeat()->isAlive()) {
 
-    echo 'Service is not available at the moment, please try again later.' . PHP_EOL;
+    echo 'Back-end VIES service is not available at the moment, please try again later.' . PHP_EOL;
 
 } else {
 
