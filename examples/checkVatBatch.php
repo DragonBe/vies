@@ -10,7 +10,7 @@ $vies = new Vies();
 
 if (false === $vies->getHeartBeat()->isAlive()) {
 
-    echo 'Service is not available at the moment, please try again later.' . PHP_EOL;
+    echo 'Back-end VIES service is not available at the moment, please try again later.' . PHP_EOL;
 
 } else {
 
@@ -33,8 +33,8 @@ if (false === $vies->getHeartBeat()->isAlive()) {
         try {
             $result = $vies->validateVat($countryCode, $vatNumber);     // Validation routine worked as expected.
             echo ($result->isValid()) ? 'VALID' : 'INVALID';
-        } catch (ViesServiceException $e) {                             // Recoverable exception. There is probabily a temporary problem
-            echo $e->getMessage();                                      // with backend VIES service. Try again. Add VATIN back to queue.
+        } catch (ViesServiceException $e) {                             // Recoverable exception. There is probably a temporary problem
+            echo $e->getMessage();                                      // with back-end VIES service. Try again. Add VATIN back to queue.
             $splQueue->enqueue($vatin);
         } catch (ViesException $e) {                                    // Unrecoverable exception. Invalid country code etc.
             echo $e->getMessage();                                      // Do not try again.
