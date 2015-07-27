@@ -140,6 +140,28 @@ class ViestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test exception ViesServiceException is thrown after SoapFault exception
+     *
+     * @dataProvider vatNumberProvider
+     * @expectedException \DragonBe\Vies\ViesServiceException
+     * @param $vat
+     */
+    public function testExceptionIsRaisedSoapFault($vat)
+    {
+        $soapFault = new \SoapFault("test", "myMessage");
+        $stub = $this->getMockFromWsdl(
+            dirname(__FILE__) . '/_files/checkVatService.wsdl');
+        $stub->expects($this->any())
+            ->method('__soapCall')
+            ->will($this->throwException($soapFault));
+
+        $vies = new Vies();
+        $vies->setSoapClient($stub);
+
+        $vies->validateVat('BE', $vat);
+    }
+
+    /**
      * @param \DragonBe\Vies\CheckVatResponse $response
      * @depends testSuccessVatNumberValidation
      * @covers \DragonBe\Vies\CheckVatResponse::toArray
