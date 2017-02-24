@@ -18,13 +18,15 @@ namespace DragonBe\Vies\Validator;
 class ValidatorIE extends ValidatorAbstract
 {
 
+    protected $alphabet = 'WABCDEFGHIJKLMNOPQRSTUV';
+
     /**
      * @param string $vatNumber
      * @return bool
      */
     public function validate($vatNumber)
     {
-        if (strlen($vatNumber) != 8) {
+        if (strlen($vatNumber) != 8 && strlen($vatNumber) != 9) {
             return false;
         }
 
@@ -53,12 +55,19 @@ class ValidatorIE extends ValidatorAbstract
      */
     private function validateIENew($vatNumber)
     {
-        $checksum = strtoupper(substr($vatNumber, -1));
+        $checksum = strtoupper(substr($vatNumber, 7, 1));
+        $checkNumber = substr($vatNumber, 0, 8);
         $checkval = 0;
         $checkchar = 'A';
+
         for ($i = 2; $i <= 8; $i++) {
-            $checkval += (int)$vatNumber[8 - $i] * $i;
+            $checkval += (int)$checkNumber[8 - $i] * $i;
         }
+
+        if (strlen($vatNumber) == 9) {
+            $checkval += (9 * strpos($this->alphabet, $vatNumber[8]));
+        }
+
         $checkval = ($checkval % 23);
 
         if ($checkval == 0) {
