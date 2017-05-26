@@ -1,9 +1,13 @@
 <?php
+declare (strict_types=1);
+
 namespace DragonBe\Test\Vies;
 
+use DragonBe\Vies\HeartBeat;
 use DragonBe\Vies\Vies;
+use PHPUnit\Framework\TestCase;
 
-class ViestTest extends \PHPUnit_Framework_TestCase
+class ViestTest extends TestCase
 {
     public function vatNumberProvider()
     {
@@ -180,13 +184,14 @@ class ViestTest extends \PHPUnit_Framework_TestCase
 
     private function createHeartBeatMock($bool)
     {
-        $heartBeatMock = $this->getMock(
-            '\\DragonBe\\Vies\\HeartBeat',
-            array ('isAlive')
-        );
+        $heartBeatMock = $this->getMockBuilder(HeartBeat::class)
+            ->setMethods(['isAlive'])
+            ->getMock();
+
         $heartBeatMock->expects($this->once())
             ->method('isAlive')
             ->will($this->returnValue($bool));
+
         return $heartBeatMock;
     }
 

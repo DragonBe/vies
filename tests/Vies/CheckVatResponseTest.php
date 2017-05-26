@@ -1,9 +1,12 @@
 <?php
+declare (strict_types=1);
+
 namespace DragonBe\Test\Vies;
 
 use DragonBe\Vies\CheckVatResponse;
+use PHPUnit\Framework\TestCase;
 
-class CheckVatResponseTest extends \PHPUnit_Framework_TestCase
+class CheckVatResponseTest extends TestCase
 {
     /**
      * @param bool $isValid
