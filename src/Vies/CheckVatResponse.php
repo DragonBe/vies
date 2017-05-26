@@ -225,6 +225,14 @@ class CheckVatResponse
         if (is_array($row)) {
             $row = new \ArrayObject($row, \ArrayObject::ARRAY_AS_PROPS);
         }
+
+        $requiredFields = ['countryCode', 'vatNumber', 'requestDate', 'valid'];
+        foreach ($requiredFields as $requiredField) {
+            if (!isset ($row->$requiredField)) {
+                throw new \InvalidArgumentException('Required field "' . $requiredField . '" is missing');
+            }
+        }
+
         // required parameters
         $this->setCountryCode($row->countryCode)
              ->setVatNumber($row->vatNumber)
