@@ -1,10 +1,12 @@
 <?php
+declare (strict_types=1);
 
 namespace DragonBe\Test\Vies;
 
 use DragonBe\Vies\Vies;
+use PHPUnit\Framework\TestCase;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends TestCase
 {
     public function vatNumberProvider()
     {
