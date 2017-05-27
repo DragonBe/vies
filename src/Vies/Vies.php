@@ -41,10 +41,10 @@ use SoapFault;
  */
 class Vies
 {
-    const VIES_PROTO = 'http';
-    const VIES_DOMAIN = 'ec.europa.eu';
-    const VIES_WSDL = '/taxation_customs/vies/checkVatService.wsdl';
-    const VIES_EU_COUNTRY_TOTAL = 28;
+    public const VIES_PROTO = 'http';
+    public const VIES_DOMAIN = 'ec.europa.eu';
+    public const VIES_WSDL = '/taxation_customs/vies/checkVatService.wsdl';
+    public const VIES_EU_COUNTRY_TOTAL = 28;
 
     /**
      * @var \SoapClient
@@ -72,7 +72,7 @@ class Vies
      *
      * @return \SoapClient
      */
-    public function getSoapClient()
+    public function getSoapClient(): \SoapClient
     {
         if (null === $this->soapClient) {
             $this->soapClient = new \SoapClient(
@@ -92,7 +92,7 @@ class Vies
      * @param \SoapClient $soapClient
      * @return Vies
      */
-    public function setSoapClient($soapClient)
+    public function setSoapClient(\SoapClient $soapClient): Vies
     {
         $this->soapClient = $soapClient;
 
@@ -104,7 +104,7 @@ class Vies
      *
      * @return string
      */
-    public function getWsdl()
+    public function getWsdl(): string
     {
         if (null === $this->wsdl) {
             $this->wsdl = sprintf(
@@ -125,7 +125,7 @@ class Vies
      * @return Vies
      * @example http://ec.europa.eu//taxation_customs/vies/checkVatService.wsdl
      */
-    public function setWsdl($wsdl)
+    public function setWsdl(string $wsdl): Vies
     {
         $this->wsdl = $wsdl;
 
@@ -137,7 +137,7 @@ class Vies
      *
      * @return array
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         if (null === $this->options) {
             $this->options = [];
@@ -153,7 +153,7 @@ class Vies
      * @return Vies
      * @link http://php.net/manual/en/soapclient.soapclient.php
      */
-    public function setOptions($options)
+    public function setOptions(array $options): Vies
     {
         $this->options = $options;
 
@@ -166,7 +166,7 @@ class Vies
      *
      * @return HeartBeat
      */
-    public function getHeartBeat()
+    public function getHeartBeat(): HeartBeat
     {
         if (null === $this->heartBeat) {
             $this->setHeartBeat(
@@ -205,8 +205,9 @@ class Vies
      * identification) of a registered company
      * @return CheckVatResponse
      * @throws ViesException
+     * @throws ViesServiceException
      */
-    public function validateVat($countryCode, $vatNumber, $requesterCountryCode = null, $requesterVatNumber = null)
+    public function validateVat(string $countryCode, string $vatNumber, string $requesterCountryCode = '', string $requesterVatNumber = '')
     {
         if (! array_key_exists($countryCode, self::listEuropeanCountries())) {
             throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
@@ -269,7 +270,7 @@ class Vies
      * identification) of a registered company
      * @return bool
      */
-    public function validateVatSum($countryCode, $vatNumber)
+    public function validateVatSum(string $countryCode, string $vatNumber): bool
     {
         $className = __NAMESPACE__ . '\\Validator\\Validator' . $countryCode;
         /** @var Validator\ValidatorInterface $instance */
@@ -286,7 +287,7 @@ class Vies
      * @return string
      * @static
      */
-    public static function filterVat($vatNumber)
+    public static function filterVat(string $vatNumber): string
     {
         return str_replace([' ', '.', '-'], '', $vatNumber);
     }
@@ -296,7 +297,7 @@ class Vies
      *
      * @return array
      */
-    public static function listEuropeanCountries()
+    public static function listEuropeanCountries(): array
     {
         return [
             'AT' => 'Austria',
