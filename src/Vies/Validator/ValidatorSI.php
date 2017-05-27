@@ -44,7 +44,7 @@ class ValidatorSI extends ValidatorAbstract
         }
 
         $checksum = (int)$vatNumber[7];
-        $weights = array(8, 7, 6, 5, 4, 3, 2);
+        $weights = [8, 7, 6, 5, 4, 3, 2];
         $checkval = $this->sumWeights($weights, $vatNumber);
         $checkval = ($checkval % 11) == 10 ? 0 : 11 - ($checkval % 11);
 

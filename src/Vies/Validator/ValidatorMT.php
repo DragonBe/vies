@@ -42,11 +42,11 @@ class ValidatorMT extends ValidatorAbstract
             return false;
         }
 
-        $weights = array(3, 4, 6, 7, 8, 9);
+        $weights = [3, 4, 6, 7, 8, 9];
         $checksum = (int)substr($vatNumber, -2, 2);
         $checkval = $this->sumWeights($weights, $vatNumber);
         $checkval = intval(37 - ($checkval % 37));
-        
+
         if ($checkval != $checksum) {
             return false;
         }

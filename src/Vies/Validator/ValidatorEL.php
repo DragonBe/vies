@@ -37,7 +37,7 @@ class ValidatorEL extends ValidatorAbstract
         }
 
         $checksum = $vatNumber[8];
-        $weights = array(256, 128, 64, 32, 16, 8, 4, 2);
+        $weights = [256, 128, 64, 32, 16, 8, 4, 2];
         $checkval = $this->sumWeights($weights, $vatNumber);
         $checkval = ($checkval % 11) > 9 ? 0 : ($checkval % 11);
 

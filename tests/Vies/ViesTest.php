@@ -11,12 +11,12 @@ class ViestTest extends TestCase
 {
     public function vatNumberProvider()
     {
-        return array (
-            array ('0123456749','0123456749'),
-            array ('0123 456 749','0123456749'),
-            array ('0123.456.749','0123456749'),
-            array ('0123-456-749','0123456749'),
-        );
+        return  [
+             ['0123456749','0123456749'],
+             ['0123 456 749','0123456749'],
+             ['0123.456.749','0123456749'],
+             ['0123-456-749','0123456749'],
+        ];
     }
     /**
      * @dataProvider vatNumberProvider
@@ -28,7 +28,7 @@ class ViestTest extends TestCase
             Vies::filterVat($vatNumber));
     }
 
-    protected function _createdStubbedViesClient($response)
+    protected function createdStubbedViesClient($response)
     {
         $stub = $this->getMockFromWsdl(
             dirname(__FILE__) . '/_files/checkVatService.wsdl');
@@ -55,9 +55,9 @@ class ViestTest extends TestCase
         $response->traderName = '';
         $response->traderAddress = '';
         $response->requestIdentifier = 'XYZ1234567890';
-        
-        $vies = $this->_createdStubbedViesClient($response);
-        
+
+        $vies = $this->createdStubbedViesClient($response);
+
         $response = $vies->validateVat('BE', '0123.456.749');
         $this->assertInstanceOf('\\DragonBe\\Vies\\CheckVatResponse', $response);
         $this->assertTrue($response->isValid());
@@ -79,7 +79,7 @@ class ViestTest extends TestCase
         $response->traderAddress = '';
         $response->requestIdentifier = 'XYZ1234567890';
 
-        $vies = $this->_createdStubbedViesClient($response);
+        $vies = $this->createdStubbedViesClient($response);
 
         $response = $vies->validateVat('BE', '0123.456.749', 'PL', '1234567890');
         $this->assertInstanceOf('\\DragonBe\\Vies\\CheckVatResponse', $response);
@@ -98,8 +98,8 @@ class ViestTest extends TestCase
         $response->vatNumber = '0123.ABC.749';
         $response->requestDate = '1983-06-24+23:59';
         $response->valid = false;
-        
-        $vies = $this->_createdStubbedViesClient($response);
+
+        $vies = $this->createdStubbedViesClient($response);
 
         $response = $vies->validateVat('BE', '0123.ABC.749');
         $this->assertInstanceOf('\\DragonBe\\Vies\\CheckVatResponse', $response);
@@ -229,11 +229,11 @@ class ViestTest extends TestCase
      */
     public function testGettingDefaultSoapClient()
     {
-        if (defined('HHVM_VERSION') && !extension_loaded('soap')) {
+        if (defined('HHVM_VERSION') && ! extension_loaded('soap')) {
             $this->markTestSkipped('SOAP not installed');
         }
         $vies = new Vies();
-        $vies->setSoapClient($this->_createdStubbedViesClient('blabla')->getSoapClient());
+        $vies->setSoapClient($this->createdStubbedViesClient('blabla')->getSoapClient());
         $soapClient = $vies->getSoapClient();
         $expected = '\\SoapClient';
         $this->assertInstanceOf($expected, $soapClient);
@@ -244,7 +244,7 @@ class ViestTest extends TestCase
      */
     public function testDefaultSoapClientIsLazyLoaded()
     {
-        if (defined('HHVM_VERSION') && !extension_loaded('soap')) {
+        if (defined('HHVM_VERSION') && ! extension_loaded('soap')) {
             $this->markTestSkipped('SOAP not installed');
         }
         $wsdl = dirname(__FILE__) . '/_files/checkVatService.wsdl';
@@ -299,14 +299,14 @@ class ViestTest extends TestCase
      */
     public function testSettingSoapOptions()
     {
-        if(defined('HHVM_VERSION')) {
+        if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('This test does not work for HipHop VM');
         }
-        $options = array (
+        $options = [
             'soap_version' => SOAP_1_1,
-        );
+        ];
         $vies = new Vies();
-        $vies->setSoapClient($this->_createdStubbedViesClient('blabla')->getSoapClient());
+        $vies->setSoapClient($this->createdStubbedViesClient('blabla')->getSoapClient());
         $vies->setOptions($options);
         $soapClient = $vies->getSoapClient();
         $actual = $soapClient->_soap_version;

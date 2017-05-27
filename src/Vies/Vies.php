@@ -20,7 +20,8 @@ namespace DragonBe\Vies;
  * MS_UNAVAILABLE            : The Member State service is unavailable. Try again later or with another Member State.
  * SERVER_BUSY               : The service can not process your request. Try again later.
  * SERVICE_UNAVAILABLE       : The SOAP service is unavailable, try again later.
- * TIMEOUT                   : The Member State service could not be reach in time, try again later or with another Member State
+ * TIMEOUT                   : The Member State service could not be reach in time, try again later or with another
+ *                             Member State
  *
  * GLOBAL_MAX_CONCURRENT_REQ : The number of concurrent requests is more than the VIES service allows.
  * MS_MAX_CONCURRENT_REQ     : Same as MS_MAX_CONCURRENT_REQ.
@@ -207,12 +208,12 @@ class Vies
      */
     public function validateVat($countryCode, $vatNumber, $requesterCountryCode = null, $requesterVatNumber = null)
     {
-        if (!array_key_exists($countryCode, self::listEuropeanCountries())) {
+        if (! array_key_exists($countryCode, self::listEuropeanCountries())) {
             throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
         }
         $vatNumber = self::filterVat($vatNumber);
 
-        if (!$this->validateVatSum($countryCode, $vatNumber)) {
+        if (! $this->validateVatSum($countryCode, $vatNumber)) {
             $params = new \StdClass();
             $params->countryCode = $countryCode;
             $params->vatNumber = $vatNumber;
@@ -222,14 +223,16 @@ class Vies
             return new CheckVatResponse($params);
         }
 
-        $requestParams = array(
+        $requestParams = [
             'countryCode' => $countryCode,
             'vatNumber' => $vatNumber
-        );
+        ];
 
         if ($requesterCountryCode && $requesterVatNumber) {
-            if (!array_key_exists($requesterCountryCode, self::listEuropeanCountries())) {
-                throw new ViesException(sprintf('Invalid requestor country code "%s" provided', $requesterCountryCode));
+            if (! array_key_exists($requesterCountryCode, self::listEuropeanCountries())) {
+                throw new ViesException(
+                    sprintf('Invalid requestor country code "%s" provided', $requesterCountryCode)
+                );
             }
             $requesterVatNumber = self::filterVat($requesterVatNumber);
 
@@ -240,14 +243,14 @@ class Vies
         try {
             $response = $this->getSoapClient()->__soapCall(
                 'checkVatApprox',
-                array(
+                [
                     $requestParams
-                )
+                ]
             );
         } catch (SoapFault $e) {
             $message = sprintf('Back-end VIES service cannot validate the VAT number "%s%s" at this moment. '
-                             . 'The service responded with the critical error "%s". This is probably a temporary problem. '
-                             . 'Please try again later.',
+                             . 'The service responded with the critical error "%s". This is probably a temporary '
+                             . 'problem. Please try again later.',
                                $countryCode, $vatNumber, $e->getMessage());
             throw new ViesServiceException($message);
         }
@@ -285,7 +288,7 @@ class Vies
      */
     public static function filterVat($vatNumber)
     {
-        return str_replace(array(' ', '.', '-'), '', $vatNumber);
+        return str_replace([' ', '.', '-'], '', $vatNumber);
     }
 
     /**

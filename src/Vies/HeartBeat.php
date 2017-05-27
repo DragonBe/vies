@@ -46,7 +46,7 @@ class HeartBeat
      * @param string|null $host
      * @param int $port
      */
-    function __construct($host = null, $port = 80)
+    public function __construct($host = null, $port = 80)
     {
         if (null !== $host) {
             $this->setHost($host);

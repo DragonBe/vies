@@ -48,10 +48,10 @@ class CheckVatResponseTest extends TestCase
 
     public function validationProvider()
     {
-        return array (
-            array (true),
-            array (false)
-        );
+        return  [
+             [true],
+             [false]
+        ];
     }
 
     /**
@@ -201,8 +201,13 @@ class CheckVatResponseTest extends TestCase
      * @covers \DragonBe\Vies\CheckVatResponse::setIdentifier
      * @covers \DragonBe\Vies\CheckVatResponse::getIdentifier
      */
-    public function testResponseContainsEmptyValuesWithOnlyRequiredArguments($countryCode, $vatNumber, $requestDate, $valid)
-    {
+    public function testResponseContainsEmptyValuesWithOnlyRequiredArguments(
+        $countryCode,
+        $vatNumber,
+        $requestDate,
+        $valid
+    ) {
+
         $expectedResult = [
             'countryCode' => $countryCode,
             'vatNumber' => $vatNumber,
