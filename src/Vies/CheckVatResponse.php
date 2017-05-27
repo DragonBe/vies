@@ -57,7 +57,7 @@ class CheckVatResponse
     /**
      * Constructor for this response object
      *
-     * @param null|\StdClass $params
+     * @param null|array|\StdClass $params
      */
     public function __construct($params = null)
     {
@@ -71,7 +71,7 @@ class CheckVatResponse
      * @param string $countryCode
      * @return \DragonBe\Vies\CheckVatResponse
      */
-    public function setCountryCode($countryCode)
+    public function setCountryCode(string $countryCode): CheckVatResponse
     {
         $this->countryCode = (string) $countryCode;
         return $this;
@@ -82,7 +82,7 @@ class CheckVatResponse
      *
      * @return string
      */
-    public function getCountryCode()
+    public function getCountryCode(): string
     {
         return $this->countryCode;
     }
@@ -92,7 +92,7 @@ class CheckVatResponse
      * @param string $vatNumber
      * @return \DragonBe\Vies\CheckVatResponse
      */
-    public function setVatNumber($vatNumber)
+    public function setVatNumber(string $vatNumber): CheckVatResponse
     {
         $this->vatNumber = (string) $vatNumber;
         return $this;
@@ -102,17 +102,17 @@ class CheckVatResponse
      *
      * @return string
      */
-    public function getVatNumber()
+    public function getVatNumber(): string
     {
         return $this->vatNumber;
     }
     /**
      * Sets the date- and timestamp when the VIES service response was created
      *
-     * @param string $requestDate
+     * @param \DateTime $requestDate
      * @return \DragonBe\Vies\CheckVatResponse
      */
-    public function setRequestDate($requestDate)
+    public function setRequestDate(\DateTime $requestDate): CheckVatResponse
     {
         if (!$requestDate instanceof \DateTime) {
             $date = substr($requestDate, 0, 10);
@@ -127,7 +127,7 @@ class CheckVatResponse
      *
      * @return \DateTime
      */
-    public function getRequestDate()
+    public function getRequestDate(): \DateTime
     {
         if (null === $this->requestDate) {
             $this->requestDate = new \DateTime();
@@ -140,7 +140,7 @@ class CheckVatResponse
      * @param bool $flag
      * @return \DragonBe\Vies\CheckVatResponse
      */
-    public function setValid($flag)
+    public function setValid(bool $flag): CheckVatResponse
     {
         $this->valid = (boolean) $flag;
         return $this;
@@ -150,7 +150,7 @@ class CheckVatResponse
      *
      * @return bool
      */
-    public function isValid()
+    public function isValid(): bool
     {
         return $this->valid;
     }
@@ -160,7 +160,7 @@ class CheckVatResponse
      * @param string $name
      * @return \DragonBe\Vies\CheckVatResponse
      */
-    public function setName($name)
+    public function setName(string $name): CheckVatResponse
     {
         $this->name = (string) $name;
         return $this;
@@ -170,7 +170,7 @@ class CheckVatResponse
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -180,7 +180,7 @@ class CheckVatResponse
      * @param string $address
      * @return \DragonBe\Vies\CheckVatResponse
      */
-    public function setAddress($address)
+    public function setAddress(string $address): CheckVatResponse
     {
         $this->address = (string) $address;
         return $this;
@@ -190,7 +190,7 @@ class CheckVatResponse
      *
      * @return string
      */
-    public function getAddress()
+    public function getAddress(): string
     {
         return $this->address;
     }
@@ -198,10 +198,10 @@ class CheckVatResponse
     /**
      * Sets request Identifier
      *
-     * @param $identifier
+     * @param string $identifier
      * @return \DragonBe\Vies\CheckVatResponse
      */
-    public function setIdentifier($identifier)
+    public function setIdentifier(string $identifier): CheckVatResponse
     {
         $this->identifier = (string)$identifier;
         return $this;
@@ -209,9 +209,9 @@ class CheckVatResponse
     /**
      * get requerst Identifier
      *
-     * @return mixed
+     * @return string
      */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->identifier;
     }
@@ -252,7 +252,13 @@ class CheckVatResponse
             ? $this->setIdentifier($row->requestIdentifier)
             : $this->setIdentifier('');
     }
-    public function toArray()
+
+    /**
+     * Return this object as an array
+     *
+     * @return array
+     */
+    public function toArray(): array
     {
         return array (
             'countryCode' => $this->getCountryCode(),
