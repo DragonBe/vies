@@ -49,7 +49,7 @@ class ValidatorCZ extends ValidatorAbstract
             return false;
         }
 
-        $weights = array(8, 7, 6, 5, 4, 3, 2);
+        $weights = [8, 7, 6, 5, 4, 3, 2];
         $checksum = (int)$vatNumber[7];
         $checkbase = $this->sumWeights($weights, $vatNumber);
 

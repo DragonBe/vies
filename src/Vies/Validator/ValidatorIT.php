@@ -45,7 +45,7 @@ class ValidatorIT extends ValidatorAbstract
         $checksum = (int)substr($vatNumber, -1);
         $Sum1 = $Sum2 = 0;
         for ($i = 1; $i <= 10; $i++) {
-            if (!$this->isEven($i)) {
+            if (! $this->isEven($i)) {
                 $Sum1 += $vatNumber[$i - 1];
             } else {
                 $Sum2 += (int)($vatNumber[$i - 1] / 5) + ((2 * $vatNumber[$i - 1]) % 10);

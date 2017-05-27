@@ -38,7 +38,7 @@ class ValidatorFI extends ValidatorAbstract
         }
 
         $checksum = (int)$vatNumber[7];
-        $weights = array(7, 9, 10, 5, 8, 4, 2);
+        $weights = [7, 9, 10, 5, 8, 4, 2];
         $checkval = $this->sumWeights($weights, $vatNumber);
 
         if (11 - ($checkval % 11) != $checksum) {

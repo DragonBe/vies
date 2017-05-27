@@ -114,7 +114,7 @@ class CheckVatResponse
      */
     public function setRequestDate(\DateTime $requestDate): CheckVatResponse
     {
-        if (!$requestDate instanceof \DateTime) {
+        if (! $requestDate instanceof \DateTime) {
             $date = substr($requestDate, 0, 10);
             $timezone = substr($requestDate, -6);
             $requestDate = new \DateTime($date, \DateTime::createFromFormat('O', $timezone)->getTimezone());
@@ -228,7 +228,7 @@ class CheckVatResponse
 
         $requiredFields = ['countryCode', 'vatNumber', 'requestDate', 'valid'];
         foreach ($requiredFields as $requiredField) {
-            if (!isset ($row->$requiredField)) {
+            if (! isset ($row->$requiredField)) {
                 throw new \InvalidArgumentException('Required field "' . $requiredField . '" is missing');
             }
         }
@@ -260,7 +260,7 @@ class CheckVatResponse
      */
     public function toArray(): array
     {
-        return array (
+        return  [
             'countryCode' => $this->getCountryCode(),
             'vatNumber'   => $this->getVatNumber(),
             'requestDate' => $this->getRequestDate()->format('Y-m-d'),
@@ -268,6 +268,6 @@ class CheckVatResponse
             'name'        => $this->getName(),
             'address'     => $this->getAddress(),
             'identifier'  => $this->getIdentifier()
-        );
+        ];
     }
 }
