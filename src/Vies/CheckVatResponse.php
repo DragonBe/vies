@@ -23,7 +23,7 @@ namespace DragonBe\Vies;
  */
 class CheckVatResponse
 {
-    const VIES_DATETIME_FORMAT = 'Y-m-dP';
+    public const VIES_DATETIME_FORMAT = 'Y-m-dP';
 
     /**
      * @var string The country code for a member of the European Union
