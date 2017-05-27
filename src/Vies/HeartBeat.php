@@ -46,7 +46,7 @@ class HeartBeat
      * @param string|null $host
      * @param int $port
      */
-    public function __construct($host = null, $port = 80)
+    public function __construct(? string $host = null, int $port = 80)
     {
         if (null !== $host) {
             $this->setHost($host);
@@ -57,7 +57,7 @@ class HeartBeat
     /**
      * @return string
      */
-    public function getHost()
+    public function getHost(): string
     {
         if (null === $this->host) {
             throw new \DomainException('A host is required');
@@ -69,7 +69,7 @@ class HeartBeat
      * @param string $host
      * @return HeartBeat
      */
-    public function setHost($host)
+    public function setHost(string $host): HeartBeat
     {
         $this->host = $host;
         return $this;
@@ -78,7 +78,7 @@ class HeartBeat
     /**
      * @return int
      */
-    public function getPort()
+    public function getPort(): int
     {
         return $this->port;
     }
@@ -87,7 +87,7 @@ class HeartBeat
      * @param int $port
      * @return HeartBeat
      */
-    public function setPort($port)
+    public function setPort(int $port): heartbeat
     {
         $this->port = $port;
         return $this;
@@ -95,8 +95,10 @@ class HeartBeat
 
     /**
      * Checks if the VIES service is online and available
+     *
+     * @return bool
      */
-    public function isAlive()
+    public function isAlive(): bool
     {
 
         $status = $this->connect($this->getHost(), $this->getPort());
@@ -109,16 +111,17 @@ class HeartBeat
     /**
      * Make a connection outwards to test an online service
      *
-     * @param $host
-     * @param $port
-     * @return bool|resource
+     * @param string $host
+     * @param int $port
+     * @return bool
      * @private
      */
-    private function connect($host, $port)
+    private function connect(string $host, int $port): bool
     {
         $status = HeartBeat::$testingServiceIsUp;
         if (false === HeartBeat::$testingEnabled) {
-            $status = fsockopen($host, $port);
+            $resource = fsockopen($host, $port);
+            return (false !== $resource);
         }
         return $status;
     }
