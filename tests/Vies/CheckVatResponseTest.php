@@ -22,7 +22,7 @@ class CheckVatResponseTest extends TestCase
         $response = new \stdClass();
         $response->countryCode = 'BE';
         $response->vatNumber = '123456749';
-        $response->requestDate = date('Y-m-dP');
+        $response->requestDate = new \DateTime(date('Y-m-dP'));
         $response->valid = $isValid;
         $response->traderName = 'Testing Corp N.V.';
         $response->traderAddress = 'MARKT 1' . PHP_EOL . '1000  BRUSSEL';
@@ -38,7 +38,7 @@ class CheckVatResponseTest extends TestCase
         return [
             'countryCode' => 'BE',
             'vatNumber'   => '123456749',
-            'requestDate' => date('Y-m-dP'),
+            'requestDate' => new \DateTime(date('Y-m-dP')),
             'valid'       => $isValid,
             'traderName'        => 'Testing Corp N.V.',
             'traderAddress'     => 'MARKT 1' . PHP_EOL . '1000  BRUSSEL',
@@ -81,7 +81,7 @@ class CheckVatResponseTest extends TestCase
         $checkVatResponse = new CheckVatResponse($response);
         $this->assertSame($response->countryCode, $checkVatResponse->getCountryCode());
         $this->assertSame($response->vatNumber, $checkVatResponse->getVatNumber());
-        $this->assertSame($response->requestDate, $checkVatResponse->getRequestDate()->format(CheckVatResponse::VIES_DATETIME_FORMAT));
+        $this->assertSame($response->requestDate, $checkVatResponse->getRequestDate());
         $this->assertSame($response->valid, $checkVatResponse->isValid());
         $this->assertSame($response->traderName, $checkVatResponse->getName());
         $this->assertSame($response->traderAddress, $checkVatResponse->getAddress());
@@ -114,7 +114,7 @@ class CheckVatResponseTest extends TestCase
         $checkVatResponse = new CheckVatResponse($response);
         $this->assertSame($response->countryCode, $checkVatResponse->getCountryCode());
         $this->assertSame($response->vatNumber, $checkVatResponse->getVatNumber());
-        $this->assertSame($response->requestDate, $checkVatResponse->getRequestDate()->format(CheckVatResponse::VIES_DATETIME_FORMAT));
+        $this->assertSame($response->requestDate, $checkVatResponse->getRequestDate());
         $this->assertSame($response->valid, $checkVatResponse->isValid());
         $this->assertSame($response->requestIdentifier, $checkVatResponse->getIdentifier());
         $this->assertSame('---', $checkVatResponse->getName());
@@ -146,7 +146,7 @@ class CheckVatResponseTest extends TestCase
         $checkVatResponse = new CheckVatResponse($response);
         $this->assertSame($response['countryCode'], $checkVatResponse->getCountryCode());
         $this->assertSame($response['vatNumber'], $checkVatResponse->getVatNumber());
-        $this->assertSame($response['requestDate'], $checkVatResponse->getRequestDate()->format(CheckVatResponse::VIES_DATETIME_FORMAT));
+        $this->assertSame($response['requestDate'], $checkVatResponse->getRequestDate());
         $this->assertSame($response['valid'], $checkVatResponse->isValid());
         $this->assertSame($response['traderName'], $checkVatResponse->getName());
         $this->assertSame($response['traderAddress'], $checkVatResponse->getAddress());
@@ -215,7 +215,7 @@ class CheckVatResponseTest extends TestCase
         $vatResponse = new CheckVatResponse([
             'countryCode' => $countryCode,
             'vatNumber' => $vatNumber,
-            'requestDate' => $requestDate,
+            'requestDate' => new \DateTime($requestDate),
             'valid' => $valid,
         ]);
 

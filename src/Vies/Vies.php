@@ -251,6 +251,8 @@ class Vies
                                $countryCode, $vatNumber, $e->getMessage());
             throw new ViesServiceException($message);
         }
+        // Soap returns "yyyy-mm-dd+hh:mm" so we need to convert it
+        $response->requestDate = new \DateTime(str_replace('+', ' ', $response->requestDate));
 
         return new CheckVatResponse($response);
     }
