@@ -207,8 +207,13 @@ class Vies
      * @throws ViesException
      * @throws ViesServiceException
      */
-    public function validateVat(string $countryCode, string $vatNumber, string $requesterCountryCode = '', string $requesterVatNumber = '')
-    {
+    public function validateVat(
+        string $countryCode,
+        string $vatNumber,
+        string $requesterCountryCode = '',
+        string $requesterVatNumber = ''
+    ) {
+
         if (! array_key_exists($countryCode, self::listEuropeanCountries())) {
             throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
         }
