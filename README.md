@@ -20,7 +20,7 @@ More information at http://ec.europa.eu/taxation_customs/vies/faqvies.do#item16
 
 ## Requirements
 
-[![PHP 7.1 Approved](http://blob.in2itvof.com/php/php-7.1/approved.png)](http://blob.in2itvof.com/php/php-7.1/approved.png)
+[![PHP 7.1 Approved](http://blob.in2itvof.com/php/php-7.1/approved_small.png)](http://blob.in2itvof.com/php/php-7.1/approved.png)
 
 - ~~Min PHP version: 5.4~~ (EOL 3 Sep 2015)
 - ~~Min PHP version: 5.5~~ (EOL 21 Jul 2016)
