@@ -115,7 +115,7 @@ class CheckVatResponse
     public function setRequestDate(\DateTimeInterface $requestDate): CheckVatResponse
     {
         if ($requestDate instanceof \DateTime) {
-            $requestDate = DateTimeImmutable::createFromMutable($requestDate);
+            $requestDate = \DateTimeImmutable::createFromMutable($requestDate);
         }
 
         $this->requestDate = $requestDate;
