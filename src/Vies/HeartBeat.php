@@ -100,12 +100,7 @@ class HeartBeat
      */
     public function isAlive(): bool
     {
-
-        $status = $this->connect($this->getHost(), $this->getPort());
-        if (false === $status) {
-            return false;
-        }
-        return true;
+        return false !== $this->connect($this->getHost(), $this->getPort());
     }
 
     /**
@@ -120,8 +115,7 @@ class HeartBeat
     {
         $status = HeartBeat::$testingServiceIsUp;
         if (false === HeartBeat::$testingEnabled) {
-            $resource = fsockopen($host, $port);
-            return (false !== $resource);
+            return false !== fsockopen($host, $port);
         }
         return $status;
     }

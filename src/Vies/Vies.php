@@ -223,7 +223,7 @@ class Vies
             $params = new \StdClass();
             $params->countryCode = $countryCode;
             $params->vatNumber = $vatNumber;
-            $params->requestDate = new \DateTime();
+            $params->requestDate = new \DateTimeImmutable();
             $params->valid = false;
 
             return new CheckVatResponse($params);
@@ -261,7 +261,7 @@ class Vies
             throw new ViesServiceException($message);
         }
         // Soap returns "yyyy-mm-dd+hh:mm" so we need to convert it
-        $response->requestDate = new \DateTime(str_replace('+', ' ', $response->requestDate));
+        $response->requestDate = new \DateTimeImmutable(str_replace('+', ' ', $response->requestDate));
 
         return new CheckVatResponse($response);
     }

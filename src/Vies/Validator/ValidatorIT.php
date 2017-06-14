@@ -32,7 +32,7 @@ class ValidatorIT extends ValidatorAbstract
      * @param string $vatNumber
      * @return bool
      */
-    public function validate($vatNumber)
+    public function validate($vatNumber): bool
     {
         if (strlen($vatNumber) != 11) {
             return false;

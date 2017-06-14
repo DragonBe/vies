@@ -31,7 +31,7 @@ class ValidatorSK extends ValidatorAbstract
      * @param string $vatNumber
      * @return bool
      */
-    public function validate($vatNumber)
+    public function validate($vatNumber): bool
     {
         if (strlen($vatNumber) != 10) {
             return false;
