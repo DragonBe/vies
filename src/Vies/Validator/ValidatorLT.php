@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types=1);
+
 /**
  * \DragonBe\Vies
  *
@@ -34,12 +37,10 @@ namespace DragonBe\Vies\Validator;
  */
 class ValidatorLT extends ValidatorAbstract
 {
-
     /**
-     * @param string $vatNumber
-     * @return bool
+     * @inheritdoc
      */
-    public function validate($vatNumber)
+    public function validate(string $vatNumber): bool
     {
         if (strlen($vatNumber) == 12) {
             return $this->validateTemporaryTaxpayer($vatNumber);
@@ -52,7 +53,14 @@ class ValidatorLT extends ValidatorAbstract
         return false;
     }
 
-    private function validateTemporaryTaxpayer($vatNumber)
+    /**
+     * Validate Temporary Tax Payer
+     *
+     * @param string $vatNumber
+     *
+     * @return bool
+     */
+    private function validateTemporaryTaxpayer(string $vatNumber): bool
     {
         if ($vatNumber[10] != 1) {
             return false;
@@ -67,20 +75,27 @@ class ValidatorLT extends ValidatorAbstract
             $checkval = $this->sumWeights($weights, $vatNumber);
             $checkval = ($checkval % 11 == 10) ? 0 : $checkval % 11;
 
-            return ($checkval == $checksum) ? true : false;
-        } else {
-            return ($checkval % 11 == $checksum) ? true : false;
+            return $checkval == $checksum;
         }
+
+        return $checkval % 11 == $checksum;
     }
 
-    private function validateLegal($vatNumber)
+    /**
+     * Validate Legal
+     *
+     * @param string $vatNumber
+     *
+     * @return bool
+     */
+    private function validateLegal(string $vatNumber): bool
     {
         if ($vatNumber[7] != 1) {
             return false;
         }
 
         $weights = [1, 2, 3, 4, 5, 6, 7, 8];
-        $checksum = (int)$vatNumber[8];
+        $checksum = (int) $vatNumber[8];
         $checkval = $this->sumWeights($weights, $vatNumber);
 
         if (($checkval % 11) == 10) {
@@ -88,9 +103,9 @@ class ValidatorLT extends ValidatorAbstract
             $checkval = $this->sumWeights($weights, $vatNumber);
             $checkval = ($checkval % 11 == 10) ? 0 : $checkval % 11;
 
-            return ($checkval == $checksum) ? true : false;
-        } else {
-            return ($checkval % 11 == $checksum) ? true : false;
+            return $checkval == $checksum;
         }
+
+        return $checkval % 11 == $checksum;
     }
 }

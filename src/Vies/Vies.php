@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types=1);
+
 /**
  * Vies
  *
@@ -26,6 +29,7 @@ namespace DragonBe\Vies;
  * GLOBAL_MAX_CONCURRENT_REQ : The number of concurrent requests is more than the VIES service allows.
  * MS_MAX_CONCURRENT_REQ     : Same as MS_MAX_CONCURRENT_REQ.
  */
+use SoapClient;
 use SoapFault;
 
 /**
@@ -47,7 +51,7 @@ class Vies
     public const VIES_EU_COUNTRY_TOTAL = 28;
 
     /**
-     * @var \SoapClient
+     * @var SoapClient
      */
     protected $soapClient;
 
@@ -70,16 +74,11 @@ class Vies
      * Retrieves the SOAP client that will be used to communicate with the VIES
      * SOAP service.
      *
-     * @return \SoapClient
+     * @return SoapClient
      */
-    public function getSoapClient(): \SoapClient
+    public function getSoapClient(): SoapClient
     {
-        if (null === $this->soapClient) {
-            $this->soapClient = new \SoapClient(
-                $this->getWsdl(),
-                $this->getOptions()
-            );
-        }
+        $this->soapClient = $this->soapClient ?? new SoapClient($this->getWsdl(), $this->getOptions());
 
         return $this->soapClient;
     }
@@ -89,10 +88,10 @@ class Vies
      * PHP SoapClient for testing purposes or for better integration in your own
      * application.
      *
-     * @param \SoapClient $soapClient
-     * @return Vies
+     * @param SoapClient $soapClient
+     * @return self
      */
-    public function setSoapClient(\SoapClient $soapClient): Vies
+    public function setSoapClient(SoapClient $soapClient): self
     {
         $this->soapClient = $soapClient;
 
@@ -106,14 +105,7 @@ class Vies
      */
     public function getWsdl(): string
     {
-        if (null === $this->wsdl) {
-            $this->wsdl = sprintf(
-                '%s://%s%s',
-                self::VIES_PROTO,
-                self::VIES_DOMAIN,
-                self::VIES_WSDL
-            );
-        }
+        $this->wsdl = $this->wsdl ?? sprintf('%s://%s%s', self::VIES_PROTO, self::VIES_DOMAIN, self::VIES_WSDL);
 
         return $this->wsdl;
     }
@@ -122,10 +114,12 @@ class Vies
      * Sets the location of the WSDL for the VIES SOAP Service
      *
      * @param string $wsdl
-     * @return Vies
+     *
+     * @return self
+     *
      * @example http://ec.europa.eu//taxation_customs/vies/checkVatService.wsdl
      */
-    public function setWsdl(string $wsdl): Vies
+    public function setWsdl(string $wsdl): self
     {
         $this->wsdl = $wsdl;
 
@@ -139,21 +133,17 @@ class Vies
      */
     public function getOptions(): array
     {
-        if (null === $this->options) {
-            $this->options = [];
-        }
-
-        return $this->options;
+        return $this->options ?? [];
     }
 
     /**
      * Set options for the native PHP Soap Client
      *
      * @param array $options
-     * @return Vies
+     * @return self
      * @link http://php.net/manual/en/soapclient.soapclient.php
      */
-    public function setOptions(array $options): Vies
+    public function setOptions(array $options): self
     {
         $this->options = $options;
 
@@ -168,14 +158,7 @@ class Vies
      */
     public function getHeartBeat(): HeartBeat
     {
-        if (null === $this->heartBeat) {
-            $this->setHeartBeat(
-                new HeartBeat(
-                    'tcp://' . self::VIES_DOMAIN,
-                    80
-                )
-            );
-        }
+        $this->heartBeat = $this->heartBeat ?? new HeartBeat('tcp://' . self::VIES_DOMAIN, 80);
 
         return $this->heartBeat;
     }
@@ -185,10 +168,13 @@ class Vies
      * especially since this service tends to have a bad reputation of its availability.
      *
      * @param HeartBeat $heartBeat
+     * @return self
      */
-    public function setHeartBeat(HeartBeat $heartBeat)
+    public function setHeartBeat(HeartBeat $heartBeat): self
     {
         $this->heartBeat = $heartBeat;
+
+        return $this;
     }
 
     /**
@@ -212,7 +198,7 @@ class Vies
         string $vatNumber,
         string $requesterCountryCode = '',
         string $requesterVatNumber = ''
-    ) {
+    ): CheckVatResponse {
 
         if (! array_key_exists($countryCode, self::listEuropeanCountries())) {
             throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
@@ -220,10 +206,10 @@ class Vies
         $vatNumber = self::filterVat($vatNumber);
 
         if (! $this->validateVatSum($countryCode, $vatNumber)) {
-            $params = new \StdClass();
+            $params = (object) [];
             $params->countryCode = $countryCode;
             $params->vatNumber = $vatNumber;
-            $params->requestDate = new \DateTime();
+            $params->requestDate = date_create();
             $params->valid = false;
 
             return new CheckVatResponse($params);
@@ -247,12 +233,11 @@ class Vies
         }
 
         try {
-            $response = $this->getSoapClient()->__soapCall(
-                'checkVatApprox',
-                [
-                    $requestParams
-                ]
-            );
+            $response = $this->getSoapClient()->__soapCall('checkVatApprox', [$requestParams]);
+            // Soap returns "yyyy-mm-dd+hh:mm" so we need to convert it
+            $response->requestDate = date_create(str_replace('+', ' ', $response->requestDate));
+
+            return new CheckVatResponse($response);
         } catch (SoapFault $e) {
             $message = sprintf('Back-end VIES service cannot validate the VAT number "%s%s" at this moment. '
                              . 'The service responded with the critical error "%s". This is probably a temporary '
@@ -260,10 +245,6 @@ class Vies
                                $countryCode, $vatNumber, $e->getMessage());
             throw new ViesServiceException($message);
         }
-        // Soap returns "yyyy-mm-dd+hh:mm" so we need to convert it
-        $response->requestDate = new \DateTime(str_replace('+', ' ', $response->requestDate));
-
-        return new CheckVatResponse($response);
     }
 
     /**
@@ -277,11 +258,13 @@ class Vies
      */
     public function validateVatSum(string $countryCode, string $vatNumber): bool
     {
+
         $className = __NAMESPACE__ . '\\Validator\\Validator' . $countryCode;
         /** @var Validator\ValidatorInterface $instance */
         $instance = new $className();
 
         $vatNumber = self::filterVat($vatNumber);
+
         return $instance->validate($vatNumber);
     }
 

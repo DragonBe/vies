@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types=1);
+
 /**
  * \DragonBe\Vies
  *
@@ -27,24 +30,18 @@ class ValidatorEL extends ValidatorAbstract
 {
 
     /**
-     * @param string $vatNumber
-     * @return bool
+     * @inheritdoc
      */
-    public function validate($vatNumber)
+    public function validate(string $vatNumber): bool
     {
         if (strlen($vatNumber) != 9) {
             return false;
         }
 
-        $checksum = $vatNumber[8];
         $weights = [256, 128, 64, 32, 16, 8, 4, 2];
         $checkval = $this->sumWeights($weights, $vatNumber);
         $checkval = ($checkval % 11) > 9 ? 0 : ($checkval % 11);
 
-        if ($checkval != $checksum) {
-            return false;
-        }
-
-        return true;
+        return $checkval === (int) $vatNumber[8];
     }
 }

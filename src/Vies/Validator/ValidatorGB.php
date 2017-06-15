@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types=1);
+
 /**
  * \DragonBe\Vies
  *
@@ -45,10 +48,9 @@ namespace DragonBe\Vies\Validator;
 class ValidatorGB extends ValidatorAbstract
 {
     /**
-     * @param string $vatNumber
-     * @return bool
+     * @inheritdoc
      */
-    public function validate($vatNumber)
+    public function validate(string $vatNumber): bool
     {
         if (strlen($vatNumber) == 5) {
             return $this->validateGovernment($vatNumber);
@@ -65,26 +67,29 @@ class ValidatorGB extends ValidatorAbstract
         $Result1 = $checkval % 97;
         $Result2 = ($Result1 + 55) % 97;
 
-        if ($Result1 * $Result2) {
-            return false;
-        }
-
-        return true;
+        return !($Result1 * $Result2);
     }
 
-    private function validateGovernment($vatNumber)
+    /**
+     * Validate Government VAT
+     *
+     * @param  string $vatNumber
+     *
+     * @return bool
+     */
+    private function validateGovernment(string $vatNumber): bool
     {
         $prefix = strtoupper(substr($vatNumber, 0, 2));
-        $number = (int)substr($vatNumber, 2, 3);
+        $number = (int) substr($vatNumber, 2, 3);
 
         // Government departments
         if ($prefix == 'GD') {
-            return ($number < 500) ? true : false;
+            return $number < 500;
         }
 
         // Health authorities
         if ($prefix == 'HA') {
-            return ($number > 499) ? true : false;
+            return $number > 499;
         }
 
         return false;

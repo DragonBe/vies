@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types=1);
+
 /**
  * \DragonBe\Vies
  *
@@ -49,10 +52,9 @@ class ValidatorFR extends ValidatorAbstract
     protected $alphabet = '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ';
 
     /**
-     * @param string $vatNumber
-     * @return bool
+     * @inheritdoc
      */
-    public function validate($vatNumber)
+    public function validate(string $vatNumber): bool
     {
         if (strlen($vatNumber) != 11) {
             return false;
@@ -69,49 +71,43 @@ class ValidatorFR extends ValidatorAbstract
         $checksum = substr($vatNumber, 0, 2);
 
         if (ctype_digit($checksum)) {
-            $checkval = $this->validateOld($vatNumber);
-        } else {
-            $checkval = $this->validateNew($vatNumber);
+            return $checksum == $this->validateOld($vatNumber);
         }
 
-        if ($checksum != $checkval) {
-            return false;
-        }
-
-        return true;
+        return $checksum == $this->validateNew($vatNumber);
     }
 
     /**
-     * @param $vatNumber
+     * @param string $vatNumber
+     *
      * @return string
      */
-    private function validateOld($vatNumber)
+    private function validateOld(string $vatNumber): string
     {
         $checkval = substr($vatNumber, 2);
         $checkval .= "12";
         $checkval = intval($checkval) % 97;
 
-        return ($checkval == 0) ? "00" : $checkval;
+        return $checkval == 0 ? "00" : (string) $checkval;
     }
 
     /**
-     * @param $vatNumber
-     * @return string
+     * @param string $vatNumber
+     *
+     * @return bool
      */
-    private function validateNew($vatNumber)
+    private function validateNew(string $vatNumber): bool
     {
-        $checkCharacter = array_flip(str_split($this->alphabet));
-
+        $multiplier = 34;
+        $substractor = 100;
         if (ctype_digit($vatNumber[0])) {
-            $checkval = ($checkCharacter[$vatNumber[0]] * 24) + $checkCharacter[$vatNumber[1]] - 10;
-        } else {
-            $checkval = ($checkCharacter[$vatNumber[0]] * 34) + $checkCharacter[$vatNumber[1]] - 100;
+            $multiplier = 24;
+            $substractor = 10;
         }
 
-        if (((intval(substr($vatNumber, 2)) + ($checkval / 11) + 1) % 11) != $checkval % 11) {
-            return false;
-        }
+        $checkCharacter = array_flip(str_split($this->alphabet));
+        $checkval = ($checkCharacter[$vatNumber[0]] * $multiplier) + $checkCharacter[$vatNumber[1]] - $substractor;
 
-        return true;
+        return (((intval(substr($vatNumber, 2)) + ($checkval / 11) + 1) % 11) == $checkval % 11);
     }
 }

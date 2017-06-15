@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types=1);
+
 /**
  * \DragonBe\Vies
  *
@@ -21,27 +24,24 @@ class ValidatorIE extends ValidatorAbstract
     protected $alphabet = 'WABCDEFGHIJKLMNOPQRSTUV';
 
     /**
-     * @param string $vatNumber
-     * @return bool
+     * @inheritdoc
      */
-    public function validate($vatNumber)
+    public function validate(string $vatNumber): bool
     {
         if (strlen($vatNumber) != 8 && strlen($vatNumber) != 9) {
             return false;
         }
 
-        if (! $this->validateIENew($vatNumber) && ! $this->validateIEOld($vatNumber)) {
-            return false;
-        }
-
-        return true;
+        return $this->validateIENew($vatNumber)
+            || $this->validateIEOld($vatNumber);
     }
 
     /**
-     * @param $vatNumber
+     * @param string $vatNumber
+     *
      * @return bool
      */
-    private function validateIEOld($vatNumber)
+    private function validateIEOld(string $vatNumber): bool
     {
         $transform = ['0', substr($vatNumber, 2, 5), $vatNumber[0], $vatNumber[7]];
         $vat_id = join('', $transform);
@@ -50,15 +50,15 @@ class ValidatorIE extends ValidatorAbstract
     }
 
     /**
-     * @param $vatNumber
+     * @param string $vatNumber
+     *
      * @return bool
      */
-    private function validateIENew($vatNumber)
+    private function validateIENew(string $vatNumber): bool
     {
         $checksum = strtoupper(substr($vatNumber, 7, 1));
         $checkNumber = substr($vatNumber, 0, 8);
         $checkval = 0;
-        $checkchar = 'A';
 
         for ($i = 2; $i <= 8; $i++) {
             $checkval += (int)$checkNumber[8 - $i] * $i;
@@ -71,16 +71,14 @@ class ValidatorIE extends ValidatorAbstract
         $checkval = ($checkval % 23);
 
         if ($checkval == 0) {
-            $checkchar = 'W';
-        } else {
-            for ($i = $checkval - 1; $i > 0; $i--) {
-                $checkchar++;
-            }
-        }
-        if ($checkchar != $checksum) {
-            return false;
+            return $checksum == 'W';
         }
 
-        return true;
+        $checkchar = 'A';
+        for ($i = $checkval - 1; $i > 0; $i--) {
+            $checkchar++;
+        }
+
+        return $checkchar == $checksum;
     }
 }

@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types=1);
+
 /**
  * \DragonBe\Vies
  *
@@ -16,10 +19,9 @@ class ValidatorHR extends ValidatorAbstract
 {
 
     /**
-     * @param string $vatNumber
-     * @return bool
+     * @inheritdoc
      */
-    public function validate($vatNumber)
+    public function validate(string $vatNumber): bool
     {
         if (strlen($vatNumber) != 11) {
             return false;
@@ -33,6 +35,6 @@ class ValidatorHR extends ValidatorAbstract
             $product = (2 * $sum) % 11;
         }
 
-        return (($product + (int)$vatNumber[10]) % 10 == 1) ? true : false;
+        return ($product + (int) $vatNumber[10]) % 10 == 1;
     }
 }

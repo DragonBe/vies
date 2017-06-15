@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types=1);
+
 /**
  * \DragonBe\Vies
  *
@@ -29,10 +32,9 @@ class ValidatorIT extends ValidatorAbstract
 {
 
     /**
-     * @param string $vatNumber
-     * @return bool
+     * @inheritdoc
      */
-    public function validate($vatNumber)
+    public function validate(string $vatNumber): bool
     {
         if (strlen($vatNumber) != 11) {
             return false;
@@ -42,8 +44,9 @@ class ValidatorIT extends ValidatorAbstract
             return false;
         }
 
-        $checksum = (int)substr($vatNumber, -1);
-        $Sum1 = $Sum2 = 0;
+        $checksum = (int) substr($vatNumber, -1);
+        $Sum1 = 0;
+        $Sum2 = 0;
         for ($i = 1; $i <= 10; $i++) {
             if (! $this->isEven($i)) {
                 $Sum1 += $vatNumber[$i - 1];
@@ -54,10 +57,6 @@ class ValidatorIT extends ValidatorAbstract
 
         $checkval = (10 - ($Sum1 + $Sum2) % 10) % 10;
 
-        if ($checksum != $checkval) {
-            return false;
-        }
-
-        return true;
+        return $checksum == $checkval;
     }
 }

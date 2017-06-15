@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types=1);
+
 /**
  * \DragonBe\Vies
  *
@@ -74,10 +77,9 @@ class ValidatorES extends ValidatorAbstract
     ];
 
     /**
-     * @param string $vatNumber
-     * @return bool
+     * @inheritdoc
      */
-    public function validate($vatNumber)
+    public function validate(string $vatNumber): bool
     {
         if (strlen($vatNumber) != 9) {
             return false;
@@ -90,28 +92,25 @@ class ValidatorES extends ValidatorAbstract
         $checksum = $vatNumber[8];
         $fieldC1 = $vatNumber[0];
 
+        // Juridical entities other than national ones
         if (ctype_alpha($checksum) && in_array($fieldC1, $this->allowedC1Alphabetic)) {
-            // Juridical entities other than national ones
-            $checkval = $this->validateJuridical($vatNumber);
-        } elseif (ctype_digit($checksum) && in_array($fieldC1, $this->allowedC1Numeric)) {
-            // National juridical entities
-            $checkval = $this->validateNational($vatNumber);
-        } else {
-            return false;
+            return $checksum === $this->validateJuridical($vatNumber);
         }
 
-        if ($checksum != $checkval) {
-            return false;
+        // National juridical entities
+        if (ctype_digit($checksum) && in_array($fieldC1, $this->allowedC1Numeric)) {
+            return (int) $checksum === $this->validateNational($vatNumber);
         }
 
-        return true;
+        return false;
     }
 
     /**
-     * @param $vatNumber
+     * @param string $vatNumber
+     *
      * @return string
      */
-    private function validateJuridical($vatNumber)
+    private function validateJuridical(string $vatNumber): string
     {
         $checkval = 0;
 
@@ -120,14 +119,16 @@ class ValidatorES extends ValidatorAbstract
         }
 
         $checkval = 10 - ($checkval % 10);
+
         return $this->checkCharacter[$checkval];
     }
 
     /**
-     * @param $vatNumber
-     * @return string
+     * @param string $vatNumber
+     *
+     * @return int
      */
-    private function validateNational($vatNumber)
+    private function validateNational(string $vatNumber): int
     {
         $checkval = 0;
 
@@ -136,6 +137,7 @@ class ValidatorES extends ValidatorAbstract
         }
 
         $checkval = 10 - ($checkval % 10);
+
         return $checkval % 10;
     }
 }

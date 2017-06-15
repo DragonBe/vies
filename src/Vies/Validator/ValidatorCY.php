@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types=1);
+
 /**
  * \DragonBe\Vies
  *
@@ -25,13 +28,10 @@ namespace DragonBe\Vies\Validator;
  */
 class ValidatorCY extends ValidatorAbstract
 {
-    protected $allowedC1 = [0, 1, 3, 4, 5, 9];
-
     /**
-     * @param string $vatNumber
-     * @return bool
+     * @inheritdoc
      */
-    public function validate($vatNumber)
+    public function validate(string $vatNumber): bool
     {
         if (strlen($vatNumber) != 9) {
             return false;
@@ -41,14 +41,7 @@ class ValidatorCY extends ValidatorAbstract
             return false;
         }
 
-        if (! in_array($vatNumber[0], $this->allowedC1)) {
-            return false;
-        }
-
-        if (! ctype_alpha($vatNumber[8])) {
-            return false;
-        }
-
-        return true;
+        return in_array($vatNumber[0], [0, 1, 3, 4, 5, 9])
+            && ctype_alpha($vatNumber[8]);
     }
 }
