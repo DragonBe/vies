@@ -71,7 +71,6 @@ class HeartBeatTest extends TestCase
 
     /**
      * @covers ::isAlive
-     * @covers ::connect
      */
     public function testVerifyServicesIsAlive()
     {
@@ -85,7 +84,6 @@ class HeartBeatTest extends TestCase
 
     /**
      * @covers ::isAlive
-     * @covers ::connect
      */
     public function testVerifyServicesIsDown()
     {

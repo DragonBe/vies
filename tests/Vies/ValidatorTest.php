@@ -21,6 +21,9 @@ class ValidatorTest extends TestCase
     }
 
     /**
+     * @covers \DragonBe\Vies\Validator\ValidatorAbstract<extended>
+     * @covers \DragonBe\Vies\Vies::validateVatSum
+     *
      * @dataProvider vatNumberValid
      *
      * @param string $country
@@ -79,6 +82,9 @@ class ValidatorTest extends TestCase
     }
 
     /**
+     * @covers \DragonBe\Vies\Validator\ValidatorAbstract<extended>
+     * @covers \DragonBe\Vies\Vies::validateVatSum
+     *
      * @dataProvider vatNumberInValid
      *
      * @param string $country

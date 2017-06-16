@@ -29,6 +29,7 @@ namespace DragonBe\Vies;
  * GLOBAL_MAX_CONCURRENT_REQ : The number of concurrent requests is more than the VIES service allows.
  * MS_MAX_CONCURRENT_REQ     : Same as MS_MAX_CONCURRENT_REQ.
  */
+use DragonBe\Vies\Validator;
 use SoapClient;
 use SoapFault;
 
@@ -49,6 +50,37 @@ class Vies
     public const VIES_DOMAIN = 'ec.europa.eu';
     public const VIES_WSDL = '/taxation_customs/vies/checkVatService.wsdl';
     public const VIES_EU_COUNTRY_TOTAL = 28;
+
+    protected const VIES_EU_COUNTRY_LIST = [
+        'AT' => ['name' => 'Austria', 'validator' => Validator\ValidatorAT::class],
+        'BE' => ['name' => 'Belgium', 'validator' => Validator\ValidatorBE::class],
+        'BG' => ['name' => 'Bulgaria', 'validator' => Validator\ValidatorBG::class],
+        'CY' => ['name' => 'Cyprus', 'validator' => Validator\ValidatorCY::class],
+        'CZ' => ['name' => 'Czech Republic', 'validator' => Validator\ValidatorCZ::class],
+        'DE' => ['name' => 'Germany', 'validator' => Validator\ValidatorDE::class],
+        'DK' => ['name' => 'Denmark', 'validator' => Validator\ValidatorDK::class],
+        'EE' => ['name' => 'Estonia', 'validator' => Validator\ValidatorEE::class],
+        'EL' => ['name' => 'Greece', 'validator' => Validator\ValidatorEL::class],
+        'ES' => ['name' => 'Spain', 'validator' => Validator\ValidatorES::class],
+        'FI' => ['name' => 'Finland', 'validator' => Validator\ValidatorFI::class],
+        'FR' => ['name' => 'France', 'validator' => Validator\ValidatorFR::class],
+        'HR' => ['name' => 'Croatia', 'validator' => Validator\ValidatorHR::class],
+        'HU' => ['name' => 'Hungary', 'validator' => Validator\ValidatorHU::class],
+        'IE' => ['name' => 'Ireland', 'validator' => Validator\ValidatorIE::class],
+        'IT' => ['name' => 'Italy', 'validator' => Validator\ValidatorIT::class],
+        'LU' => ['name' => 'Luxembourg', 'validator' => Validator\ValidatorLU::class],
+        'LV' => ['name' => 'Latvia', 'validator' => Validator\ValidatorLV::class],
+        'LT' => ['name' => 'Lithuania', 'validator' => Validator\ValidatorLT::class],
+        'MT' => ['name' => 'Malta', 'validator' => Validator\ValidatorMT::class],
+        'NL' => ['name' => 'Netherlands', 'validator' => Validator\ValidatorNL::class],
+        'PL' => ['name' => 'Poland', 'validator' => Validator\ValidatorPL::class],
+        'PT' => ['name' => 'Portugal', 'validator' => Validator\ValidatorPT::class],
+        'RO' => ['name' => 'Romania', 'validator' => Validator\ValidatorRO::class],
+        'SE' => ['name' => 'Sweden', 'validator' => Validator\ValidatorSE::class],
+        'SI' => ['name' => 'Slovenia', 'validator' => Validator\ValidatorSI::class],
+        'SK' => ['name' => 'Slovakia', 'validator' => Validator\ValidatorSK::class],
+        'GB' => ['name' => 'United Kingdom', 'validator' => Validator\ValidatorGB::class],
+    ];
 
     /**
      * @var SoapClient
@@ -133,7 +165,9 @@ class Vies
      */
     public function getOptions(): array
     {
-        return $this->options ?? [];
+        $this->options = $this->options ?? [];
+
+        return $this->options;
     }
 
     /**
@@ -200,7 +234,7 @@ class Vies
         string $requesterVatNumber = ''
     ): CheckVatResponse {
 
-        if (! array_key_exists($countryCode, self::listEuropeanCountries())) {
+        if (! isset(self::VIES_EU_COUNTRY_LIST[$countryCode])) {
             throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
         }
         $vatNumber = self::filterVat($vatNumber);
@@ -221,7 +255,7 @@ class Vies
         ];
 
         if ($requesterCountryCode && $requesterVatNumber) {
-            if (! array_key_exists($requesterCountryCode, self::listEuropeanCountries())) {
+            if (! isset(self::VIES_EU_COUNTRY_LIST[$requesterCountryCode])) {
                 throw new ViesException(
                     sprintf('Invalid requestor country code "%s" provided', $requesterCountryCode)
                 );
@@ -255,17 +289,16 @@ class Vies
      * @param string $vatNumber The VAT number (without the country
      * identification) of a registered company
      * @return bool
+     * @throws ViesException
      */
     public function validateVatSum(string $countryCode, string $vatNumber): bool
     {
+        if (! isset(self::VIES_EU_COUNTRY_LIST[$countryCode])) {
+            throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
+        }
+        $className = self::VIES_EU_COUNTRY_LIST[$countryCode]['validator'];
 
-        $className = __NAMESPACE__ . '\\Validator\\Validator' . $countryCode;
-        /** @var Validator\ValidatorInterface $instance */
-        $instance = new $className();
-
-        $vatNumber = self::filterVat($vatNumber);
-
-        return $instance->validate($vatNumber);
+        return (new $className())->validate(self::filterVat($vatNumber));
     }
 
     /**
@@ -287,35 +320,15 @@ class Vies
      */
     public static function listEuropeanCountries(): array
     {
-        return [
-            'AT' => 'Austria',
-            'BE' => 'Belgium',
-            'BG' => 'Bulgaria',
-            'CY' => 'Cyprus',
-            'CZ' => 'Czech Republic',
-            'DE' => 'Germany',
-            'DK' => 'Denmark',
-            'EE' => 'Estonia',
-            'EL' => 'Greece',
-            'ES' => 'Spain',
-            'FI' => 'Finland',
-            'FR' => 'France',
-            'HR' => 'Croatia',
-            'HU' => 'Hungary',
-            'IE' => 'Ireland',
-            'IT' => 'Italy',
-            'LU' => 'Luxembourg',
-            'LV' => 'Latvia',
-            'LT' => 'Lithuania',
-            'MT' => 'Malta',
-            'NL' => 'Netherlands',
-            'PL' => 'Poland',
-            'PT' => 'Portugal',
-            'RO' => 'Romania',
-            'SE' => 'Sweden',
-            'SI' => 'Slovenia',
-            'SK' => 'Slovakia',
-            'GB' => 'United Kingdom',
-        ];
+        static $list;
+
+        if (null === $list) {
+            $list = array_combine(
+                array_keys(self::VIES_EU_COUNTRY_LIST),
+                array_column(self::VIES_EU_COUNTRY_LIST, 'name')
+            );
+        }
+
+        return $list;
     }
 }

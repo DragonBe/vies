@@ -19,6 +19,7 @@ class CheckVatResponseTest extends TestCase
 {
     /**
      * @param bool $isValid
+     *
      * @return array
      */
     protected function createViesResponseArray($isValid = true)
@@ -36,6 +37,7 @@ class CheckVatResponseTest extends TestCase
 
     /**
      * @param bool $isValid
+     *
      * @return stdClass
      */
     protected function createViesResponse($isValid = true)
@@ -46,15 +48,14 @@ class CheckVatResponseTest extends TestCase
     public function validationProvider()
     {
         return  [
-             [true],
-             [false]
+            [true],
+            [false]
         ];
     }
 
     /**
      * Test that a VAT response can be created
      *
-     * @dataProvider validationProvider
      * @covers ::__construct
      * @covers ::populate
      * @covers ::setCountryCode
@@ -71,6 +72,8 @@ class CheckVatResponseTest extends TestCase
      * @covers ::getAddress
      * @covers ::setIdentifier
      * @covers ::getIdentifier
+     *
+     * @dataProvider validationProvider
      */
     public function testCanCreateResponseAtConstruct($validCheck)
     {
@@ -86,7 +89,6 @@ class CheckVatResponseTest extends TestCase
     }
 
     /**
-     * @dataProvider validationProvider
      * @covers ::__construct
      * @covers ::populate
      * @covers ::setCountryCode
@@ -103,6 +105,8 @@ class CheckVatResponseTest extends TestCase
      * @covers ::getAddress
      * @covers ::setIdentifier
      * @covers ::getIdentifier
+     *
+     * @dataProvider validationProvider
      */
     public function testCanCreateResponseWithoutNameAndAddressAtConstruct($validCheck)
     {
@@ -119,7 +123,6 @@ class CheckVatResponseTest extends TestCase
     }
 
     /**
-     * @dataProvider validationProvider
      * @covers ::__construct
      * @covers ::populate
      * @covers ::setCountryCode
@@ -136,6 +139,8 @@ class CheckVatResponseTest extends TestCase
      * @covers ::getAddress
      * @covers ::setIdentifier
      * @covers ::getIdentifier
+     *
+     * @dataProvider validationProvider
      */
     public function testCanCreateResponseWithArrayAtConstruct($validCheck)
     {
@@ -180,7 +185,6 @@ class CheckVatResponseTest extends TestCase
     }
 
     /**
-     * @dataProvider requiredDataProvider
      * @covers ::__construct
      * @covers ::populate
      * @covers ::setCountryCode
@@ -197,6 +201,8 @@ class CheckVatResponseTest extends TestCase
      * @covers ::getAddress
      * @covers ::setIdentifier
      * @covers ::getIdentifier
+     *
+     * @dataProvider requiredDataProvider
      */
     public function testResponseContainsEmptyValuesWithOnlyRequiredArguments(
         $countryCode,

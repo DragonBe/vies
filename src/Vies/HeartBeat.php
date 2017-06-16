@@ -109,24 +109,10 @@ class HeartBeat
      */
     public function isAlive(): bool
     {
-        return false !== $this->connect($this->getHost(), $this->getPort());
-    }
-
-    /**
-     * Make a connection outwards to test an online service
-     *
-     * @private
-     * @param string $host
-     * @param int $port
-     *
-     * @return bool
-     */
-    private function connect(string $host, int $port): bool
-    {
-        if (false === HeartBeat::$testingEnabled) {
-            return false !== fsockopen($host, $port);
+        if (false === static::$testingEnabled) {
+            return false !== fsockopen($this->getHost(), $this->getPort());
         }
 
-        return HeartBeat::$testingServiceIsUp;
+        return static::$testingServiceIsUp;
     }
 }
