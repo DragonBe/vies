@@ -81,7 +81,7 @@ class CheckVatResponse
      */
     public function setCountryCode(string $countryCode): self
     {
-        $this->countryCode = (string) $countryCode;
+        $this->countryCode = $countryCode;
 
         return $this;
     }
@@ -104,7 +104,7 @@ class CheckVatResponse
      */
     public function setVatNumber(string $vatNumber): self
     {
-        $this->vatNumber = (string) $vatNumber;
+        $this->vatNumber = $vatNumber;
 
         return $this;
     }
