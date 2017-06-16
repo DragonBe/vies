@@ -117,7 +117,7 @@ class Vies
      *
      * @return self
      *
-     * @example http://ec.europa.eu//taxation_customs/vies/checkVatService.wsdl
+     * @example http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl
      */
     public function setWsdl(string $wsdl): self
     {
@@ -235,7 +235,7 @@ class Vies
         try {
             $response = $this->getSoapClient()->__soapCall('checkVatApprox', [$requestParams]);
             // Soap returns "yyyy-mm-dd+hh:mm" so we need to convert it
-            $response->requestDate = date_create(str_replace('+', ' ', $response->requestDate));
+            $response->requestDate = date_create_from_format('Y-m-d\+H:i', $response->requestDate);
 
             return new CheckVatResponse($response);
         } catch (SoapFault $e) {
@@ -243,7 +243,7 @@ class Vies
                              . 'The service responded with the critical error "%s". This is probably a temporary '
                              . 'problem. Please try again later.',
                                $countryCode, $vatNumber, $e->getMessage());
-            throw new ViesServiceException($message);
+            throw new ViesServiceException($message, 0 , $e);
         }
     }
 

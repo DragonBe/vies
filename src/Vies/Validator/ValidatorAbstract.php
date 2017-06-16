@@ -19,8 +19,8 @@ abstract class ValidatorAbstract implements ValidatorInterface
      */
     protected function crossSum(int $val): int
     {
-        $reducer = function (int $sum, string $val): int {
-            return  $sum + (int) $val;
+        $reducer = function (int $sum, string $char): int {
+            return  $sum + (int) $char;
         };
 
         return array_reduce(str_split((string) $val), $reducer, 0);
