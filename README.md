@@ -98,6 +98,14 @@ if (false === $vies->getHeartBeat()->isAlive()) {
 }
 ```
 
+## Community involvement
+
+Here's a list of products or projects that have included this VIES package
+
+- [Symfony bundle](https://github.com/MyOnlineStore/ViesBundle) by [MyOnlineStore](https://www.myonlinestore.com)
+
+If you have a product or a project that's using this package and you want some attribution for your work, send me an [email](mailto://dragonbe+github@gmail.com) or ping me on [Twitter](https://www.twitter.com/DragonBe) or [Facebook](https://www.facebook.com/dragonbe).
+
 ## Licence
 
 DragonBe\Vies is released under the MIT Licence. See the bundled [LICENSE](LICENSE) file for details.
