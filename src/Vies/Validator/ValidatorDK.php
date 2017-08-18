@@ -35,7 +35,7 @@ class ValidatorDK extends ValidatorAbstract
         if (strlen($vatNumber) != 8) {
             return false;
         }
-        $weights = array(2, 7, 6, 5, 4, 3, 2, 1);
+        $weights = [2, 7, 6, 5, 4, 3, 2, 1];
         $checksum = $this->sumWeights($weights, $vatNumber);
 
         if (($checksum % 11) > 0) {

@@ -1,14 +1,16 @@
 <?php
+declare (strict_types=1);
 
 namespace DragonBe\Test\Vies;
 
 use DragonBe\Vies\Vies;
+use PHPUnit\Framework\TestCase;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends TestCase
 {
     public function vatNumberProvider()
     {
-        return array(
+        return [
             'AT' => ['U10223006', ['U1022300', 'A10223006', 'U10223005']],
             'BE' => ['776091951', ['0776091952', '07760919']],
             'BG' => ['301004503', ['10100450', '301004502']],
@@ -43,7 +45,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             'SE' => ['556188840401', ['556188840400', '1234567890', '556181140401']],
             'SI' => ['15012557', ['15012556', '12345670', '01234567', '1234567']],
             'SK' => ['4030000007', ['4030000006', '123456789', '0123456789', '4060000007']]
-        );
+        ];
     }
 
     public function testVatNumberChecksumSuccess()
@@ -51,7 +53,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $vies = new Vies();
 
         foreach ($this->vatNumberProvider() as $country => $numbers) {
-            if (!is_array($numbers[0])) {
+            if (! is_array($numbers[0])) {
                 $numbers[0] = [$numbers[0]];
             }
             foreach ($numbers[0] as $number) {

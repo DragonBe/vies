@@ -18,15 +18,31 @@ More information at http://ec.europa.eu/taxation_customs/vies/faqvies.do#item16
 
 [![Travis-CI Build status](https://api.travis-ci.org/DragonBe/vies.png)](https://travis-ci.org/DragonBe/vies) [![SensioLabs Insights](https://insight.sensiolabs.com/projects/21b019ce-dd1d-4d16-8b74-880b9ee5e795/mini.png)](https://insight.sensiolabs.com/projects/21b019ce-dd1d-4d16-8b74-880b9ee5e795) [![CodeClimate Analysis](https://d3s6mut3hikguw.cloudfront.net/github/DragonBe/vies/badges/gpa.svg)](https://codeclimate.com/github/DragonBe/vies) [![CodeClimate CodeCoverage](https://d3s6mut3hikguw.cloudfront.net/github/DragonBe/vies/badges/coverage.svg)](https://codeclimate.com/github/DragonBe/vies) [![CodeShip CI](https://codeship.com/projects/304718e0-8d01-0132-6960-7671d147512f/status?branch=master)](https://codeship.com/projects/60548) [![Build Status](https://status.continuousphp.com/git-hub/DragonBe/vies?token=e8721fe8-0619-4789-9691-33021709f42f)](https://continuousphp.com/git-hub/DragonBe/vies)
 
-# Installation
+## Requirements
+
+[![PHP 7.1 Approved](http://blob.in2itvof.com/php/php-7.1/approved_small.png)](http://blob.in2itvof.com/php/php-7.1/approved.png)
+
+- ~~Min PHP version: 5.4~~ (EOL 3 Sep 2015)
+- ~~Min PHP version: 5.5~~ (EOL 21 Jul 2016)
+- Min supported PHP version: 5.6 (EOL 19 Jan 2017, Security updates **31 Dec 2018**) -&gt; only v1.0.x
+- Supported PHP version: 7.0 (EOL 3 Dec 2017, Security updates **3 Dec 2018**) -&gt; only v1.0.x
+- Recommended PHP version: 7.1 [**CURRENT**] (EOL 1 Dec 2018, Security updates **1 Dec 2019**
+- Extension: soap
+- Extension: pcntl
+
+Please read the [release notes](https://github.com/DragonBe/vies/releases) for details.
+
+## Installation
 
 This project is on [Packagist](https://packagist.org/packages/dragonbe/vies)!
 
 To install the latest stable version use `composer require dragonbe/vies`.
 
+**WARNING:** The latest version 2.0.0 will have no support for PHP 5 and PHP 7.0! Only PHP 7.1 and higher!
+
 To install specifically a version (e.g. 1.0.4), just add it to the command above, for example `composer require dragonbe/vies:1.0.4`
 
-# Usage
+## Usage
 
 ```php
 <?php
@@ -82,6 +98,14 @@ if (false === $vies->getHeartBeat()->isAlive()) {
 }
 ```
 
-# Licence
+## Community involvement
+
+Here's a list of products or projects that have included this VIES package
+
+- [Symfony bundle](https://github.com/MyOnlineStore/ViesBundle) by [MyOnlineStore](https://www.myonlinestore.com)
+
+If you have a product or a project that's using this package and you want some attribution for your work, send me an [email](mailto://dragonbe+github@gmail.com) or ping me on [Twitter](https://www.twitter.com/DragonBe) or [Facebook](https://www.facebook.com/dragonbe).
+
+## Licence
 
 DragonBe\Vies is released under the MIT Licence. See the bundled [LICENSE](LICENSE) file for details.

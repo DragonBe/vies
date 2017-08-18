@@ -41,11 +41,11 @@ class ValidatorCY extends ValidatorAbstract
             return false;
         }
 
-        if (!in_array($vatNumber[0], $this->allowedC1)) {
+        if (! in_array($vatNumber[0], $this->allowedC1)) {
             return false;
         }
 
-        if (!ctype_alpha($vatNumber[8])) {
+        if (! ctype_alpha($vatNumber[8])) {
             return false;
         }
 

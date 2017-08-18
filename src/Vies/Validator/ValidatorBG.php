@@ -42,12 +42,12 @@ class ValidatorBG extends ValidatorAbstract
             return false;
         }
 
-        $weights = array(1, 2, 3, 4, 5, 6, 7, 8);
+        $weights = [1, 2, 3, 4, 5, 6, 7, 8];
         $checksum = (int)$vatNumber[8];
         $checkval = $this->sumWeights($weights, $vatNumber);
 
         if ($checkval % 11 == 10) {
-            $weights = array(3, 4, 5, 6, 7, 8, 9, 10);
+            $weights = [3, 4, 5, 6, 7, 8, 9, 10];
             $checkval = $this->sumWeights($weights, $vatNumber);
 
             $checkval = ($checkval % 11) == 10 ? 0 : ($checkval % 11);
