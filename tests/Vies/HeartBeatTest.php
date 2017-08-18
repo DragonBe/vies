@@ -1,9 +1,12 @@
 <?php
+declare (strict_types=1);
+
 namespace DragonBe\Test\Vies;
 
 use DragonBe\Vies\HeartBeat;
+use PHPUnit\Framework\TestCase;
 
-class HeartBeatTest extends \PHPUnit_Framework_TestCase
+class HeartBeatTest extends TestCase
 {
     /**
      * @expectedException \DomainException

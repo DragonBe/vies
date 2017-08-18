@@ -43,7 +43,7 @@ class ValidatorRO extends ValidatorAbstract
         $vatNumber = str_pad($vatNumber, 10, "0", STR_PAD_LEFT);
 
         $checksum = (int)$vatNumber[9];
-        $weights = array(7, 5, 3, 2, 1, 7, 5, 3, 2);
+        $weights = [7, 5, 3, 2, 1, 7, 5, 3, 2];
         $checkval = $this->sumWeights($weights, $vatNumber);
 
         $checkval = ($checkval * 10) % 11;

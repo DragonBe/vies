@@ -37,7 +37,7 @@ class ValidatorHU extends ValidatorAbstract
             return false;
         }
 
-        $weights = array(9, 7, 3, 1, 9, 7, 3);
+        $weights = [9, 7, 3, 1, 9, 7, 3];
         $checksum = (int)$vatNumber[7];
         $checkval = $this->sumWeights($weights, $vatNumber);
 

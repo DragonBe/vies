@@ -58,7 +58,7 @@ class ValidatorGB extends ValidatorAbstract
             return false;
         }
 
-        $weights = array(8, 7, 6, 5, 4, 3, 2);
+        $weights = [8, 7, 6, 5, 4, 3, 2];
         $checkval = $this->sumWeights($weights, $vatNumber);
         $checkval += (int)substr($vatNumber, 7, 2);
 

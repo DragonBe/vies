@@ -30,7 +30,7 @@ class ValidatorIE extends ValidatorAbstract
             return false;
         }
 
-        if (!$this->validateIENew($vatNumber) && !$this->validateIEOld($vatNumber)) {
+        if (! $this->validateIENew($vatNumber) && ! $this->validateIEOld($vatNumber)) {
             return false;
         }
 
@@ -43,7 +43,7 @@ class ValidatorIE extends ValidatorAbstract
      */
     private function validateIEOld($vatNumber)
     {
-        $transform = array('0', substr($vatNumber, 2, 5), $vatNumber[0], $vatNumber[7]);
+        $transform = ['0', substr($vatNumber, 2, 5), $vatNumber[0], $vatNumber[7]];
         $vat_id = join('', $transform);
 
         return $this->validateIENew($vat_id);

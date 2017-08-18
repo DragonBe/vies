@@ -83,7 +83,7 @@ class ValidatorES extends ValidatorAbstract
             return false;
         }
 
-        if (!is_numeric(substr($vatNumber, 1, 6))) {
+        if (! is_numeric(substr($vatNumber, 1, 6))) {
             return false;
         }
 
@@ -93,11 +93,9 @@ class ValidatorES extends ValidatorAbstract
         if (ctype_alpha($checksum) && in_array($fieldC1, $this->allowedC1Alphabetic)) {
             // Juridical entities other than national ones
             $checkval = $this->validateJuridical($vatNumber);
-
         } elseif (ctype_digit($checksum) && in_array($fieldC1, $this->allowedC1Numeric)) {
             // National juridical entities
             $checkval = $this->validateNational($vatNumber);
-
         } else {
             return false;
         }
