@@ -51,6 +51,8 @@ class ValidatorBG extends ValidatorAbstract
             $checkval = $this->sumWeights($weights, $vatNumber);
 
             $checkval = ($checkval % 11) == 10 ? 0 : ($checkval % 11);
+        } else {
+            $checkval = $checkval % 11;
         }
 
         if ($checkval != $checksum) {
