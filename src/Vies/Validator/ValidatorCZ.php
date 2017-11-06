@@ -92,9 +92,10 @@ class ValidatorCZ extends ValidatorAbstract
         $checksum = (int)$vatNumber[7];
         $checkbase = $this->sumWeights($weights, $vatNumber);
 
-        $checkval = ($checkbase % 11) ? ceil($checkbase / 11.1) * 11 : (($checkbase % 11) + 11);
+        $checkval = ($checkbase % 11) ? intval(ceil($checkbase / 11) * 11) : intval($checkbase + 11);
+        $checkval = ($checkval - $checkbase) % 10;
 
-        if ($checksum != $checkval - $checkbase) {
+        if ($checksum != $checkval) {
             return false;
         }
 
