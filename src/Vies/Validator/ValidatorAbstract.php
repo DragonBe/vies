@@ -8,7 +8,7 @@ abstract class ValidatorAbstract implements ValidatorInterface
      * @param string $val
      * @return int
      */
-    protected function crossSum($val)
+    protected function crossSum($val): int
     {
         $val = (string)$val;
         $sum = 0;
@@ -24,7 +24,7 @@ abstract class ValidatorAbstract implements ValidatorInterface
      * @param int $val
      * @return bool
      */
-    protected function isEven($val)
+    protected function isEven($val): bool
     {
         return ($val / 2 == floor($val / 2)) ? true : false;
     }
@@ -35,7 +35,7 @@ abstract class ValidatorAbstract implements ValidatorInterface
      * @param string $vatNumber
      * @return int
      */
-    protected function sumWeights(array $weights, $vatNumber, $start = 0)
+    protected function sumWeights(array $weights, $vatNumber, $start = 0): int
     {
         $checkval = 0;
         $count = count($weights);

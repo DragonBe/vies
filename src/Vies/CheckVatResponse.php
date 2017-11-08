@@ -34,7 +34,7 @@ class CheckVatResponse
      */
     protected $vatNumber;
     /**
-     * @var \DateTime The date of the request
+     * @var \DateTimeImmutable The date of the request
      */
     protected $requestDate;
     /**
@@ -109,28 +109,27 @@ class CheckVatResponse
     /**
      * Sets the date- and timestamp when the VIES service response was created
      *
-     * @param \DateTime $requestDate
+     * @param \DateTimeInterface $requestDate
      * @return \DragonBe\Vies\CheckVatResponse
      */
-    public function setRequestDate(\DateTime $requestDate): CheckVatResponse
+    public function setRequestDate(\DateTimeInterface $requestDate): CheckVatResponse
     {
-        if (! $requestDate instanceof \DateTime) {
-            $date = substr($requestDate, 0, 10);
-            $timezone = substr($requestDate, -6);
-            $requestDate = new \DateTime($date, \DateTime::createFromFormat('O', $timezone)->getTimezone());
+        if ($requestDate instanceof \DateTime) {
+            $requestDate = \DateTimeImmutable::createFromMutable($requestDate);
         }
+
         $this->requestDate = $requestDate;
         return $this;
     }
     /**
      * Retrieves the date- and timestamp the VIES service response was created
      *
-     * @return \DateTime
+     * @return \DateTimeImmutable
      */
-    public function getRequestDate(): \DateTime
+    public function getRequestDate(): \DateTimeImmutable
     {
         if (null === $this->requestDate) {
-            $this->requestDate = new \DateTime();
+            $this->requestDate = new \DateTimeImmutable();
         }
         return $this->requestDate;
     }

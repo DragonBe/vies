@@ -36,7 +36,7 @@ class ValidatorNL extends ValidatorAbstract
      * @param string $vatNumber
      * @return bool
      */
-    public function validate($vatNumber)
+    public function validate($vatNumber): bool
     {
         if (strlen($vatNumber) != 12) {
             return false;

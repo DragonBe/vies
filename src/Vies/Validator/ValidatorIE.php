@@ -24,7 +24,7 @@ class ValidatorIE extends ValidatorAbstract
      * @param string $vatNumber
      * @return bool
      */
-    public function validate($vatNumber)
+    public function validate($vatNumber): bool
     {
         if (strlen($vatNumber) != 8 && strlen($vatNumber) != 9) {
             return false;
