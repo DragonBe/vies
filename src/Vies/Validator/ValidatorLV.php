@@ -32,7 +32,7 @@ namespace DragonBe\Vies\Validator;
 class ValidatorLV extends ValidatorAbstract
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function validate(string $vatNumber): bool
     {

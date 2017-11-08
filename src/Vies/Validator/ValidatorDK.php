@@ -29,7 +29,7 @@ namespace DragonBe\Vies\Validator;
 class ValidatorDK extends ValidatorAbstract
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function validate(string $vatNumber): bool
     {
@@ -37,9 +37,8 @@ class ValidatorDK extends ValidatorAbstract
             return false;
         }
 
-        $weights = [2, 7, 6, 5, 4, 3, 2, 1];
-        $checksum = $this->sumWeights($weights, $vatNumber);
+        $checksum = $this->sumWeights([2, 7, 6, 5, 4, 3, 2, 1], $vatNumber);
 
-        return ($checksum % 11) == 0;
+        return ($checksum % 11) === 0;
     }
 }

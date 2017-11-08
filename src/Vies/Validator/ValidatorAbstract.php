@@ -8,7 +8,7 @@ namespace DragonBe\Vies\Validator;
 abstract class ValidatorAbstract implements ValidatorInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     abstract public function validate(string $vatNumber): bool;
 

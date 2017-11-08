@@ -147,6 +147,7 @@ class CheckVatResponse
      * Sets the flag to indicate the provided details were valid or not
      *
      * @param bool $flag
+     *
      * @return self
      */
     public function setValid(bool $flag): self
@@ -168,6 +169,7 @@ class CheckVatResponse
      * Sets optionally the registered name of the company
      *
      * @param string $name
+     *
      * @return self
      */
     public function setName(string $name): self
@@ -185,10 +187,12 @@ class CheckVatResponse
     {
         return $this->name;
     }
+
     /**
      * Sets the registered address of a company
      *
      * @param string $address
+     *
      * @return self
      */
     public function setAddress(string $address): self
@@ -197,6 +201,7 @@ class CheckVatResponse
 
         return $this;
     }
+
     /**
      * Retrieves the registered address of a company
      *
@@ -211,6 +216,7 @@ class CheckVatResponse
      * Sets request Identifier
      *
      * @param string $identifier
+     *
      * @return self
      */
     public function setIdentifier(string $identifier): self
@@ -273,7 +279,7 @@ class CheckVatResponse
             'valid'       => $this->isValid(),
             'name'        => $this->getName(),
             'address'     => $this->getAddress(),
-            'identifier'  => $this->getIdentifier()
+            'identifier'  => $this->getIdentifier(),
         ];
     }
 }

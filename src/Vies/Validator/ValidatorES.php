@@ -77,7 +77,7 @@ class ValidatorES extends ValidatorAbstract
     ];
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function validate(string $vatNumber): bool
     {

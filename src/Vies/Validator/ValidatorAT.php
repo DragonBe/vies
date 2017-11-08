@@ -33,7 +33,7 @@ namespace DragonBe\Vies\Validator;
 class ValidatorAT extends ValidatorAbstract
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function validate(string $vatNumber): bool
     {
@@ -45,15 +45,13 @@ class ValidatorAT extends ValidatorAbstract
             return false;
         }
 
-        $checksum = (int)$vatNumber[8];
         $checkval = 0;
-
         for ($i = 1; $i < 8; $i++) {
             $checkval += $this->crossSum((int)$vatNumber[$i] * ($this->isEven($i) ? 2 : 1));
         }
 
         $checkval = substr((string)(96 - $checkval), -1);
 
-        return $checksum == $checkval;
+        return (int)$vatNumber[8] == $checkval;
     }
 }

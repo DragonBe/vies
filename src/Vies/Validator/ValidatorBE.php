@@ -29,7 +29,7 @@ namespace DragonBe\Vies\Validator;
 class ValidatorBE extends ValidatorAbstract
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function validate(string $vatNumber): bool
     {
@@ -42,8 +42,7 @@ class ValidatorBE extends ValidatorAbstract
         }
 
         $checkvals = (int) substr($vatNumber, 0, -2);
-        $checksum = (int) substr($vatNumber, -2);
 
-        return 97 - ($checkvals % 97) == $checksum;
+        return 97 - ($checkvals % 97) == (int) substr($vatNumber, -2);
     }
 }

@@ -293,7 +293,7 @@ class Vies
      */
     public function validateVatSum(string $countryCode, string $vatNumber): bool
     {
-        if (! isset(self::VIES_EU_COUNTRY_LIST[$countryCode])) {
+        if (!isset(self::VIES_EU_COUNTRY_LIST[$countryCode])) {
             throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
         }
         $className = self::VIES_EU_COUNTRY_LIST[$countryCode]['validator'];
@@ -322,12 +322,10 @@ class Vies
     {
         static $list;
 
-        if (null === $list) {
-            $list = array_combine(
-                array_keys(self::VIES_EU_COUNTRY_LIST),
-                array_column(self::VIES_EU_COUNTRY_LIST, 'name')
-            );
-        }
+        $list = $list ?? array_combine(
+            array_keys(self::VIES_EU_COUNTRY_LIST),
+            array_column(self::VIES_EU_COUNTRY_LIST, 'name')
+        );
 
         return $list;
     }

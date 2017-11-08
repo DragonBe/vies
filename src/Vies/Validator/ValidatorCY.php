@@ -29,7 +29,7 @@ namespace DragonBe\Vies\Validator;
 class ValidatorCY extends ValidatorAbstract
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function validate(string $vatNumber): bool
     {
@@ -41,7 +41,7 @@ class ValidatorCY extends ValidatorAbstract
             return false;
         }
 
-        return in_array($vatNumber[0], [0, 1, 3, 4, 5, 9])
+        return in_array((int) $vatNumber[0], [0, 1, 3, 4, 5, 9], true)
             && ctype_alpha($vatNumber[8]);
     }
 }

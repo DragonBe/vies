@@ -48,11 +48,15 @@ namespace DragonBe\Vies\Validator;
  */
 class ValidatorFR extends ValidatorAbstract
 {
-    # the valid characters for the first two digits (O and I are missing)
+    /**
+     * the valid characters for the first two digits (O and I are missing)
+     *
+     * @var string
+     */
     protected $alphabet = '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function validate(string $vatNumber): bool
     {

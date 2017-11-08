@@ -24,7 +24,7 @@ class ValidatorIE extends ValidatorAbstract
     protected $alphabet = 'WABCDEFGHIJKLMNOPQRSTUV';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function validate(string $vatNumber): bool
     {

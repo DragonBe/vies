@@ -35,7 +35,7 @@ namespace DragonBe\Vies\Validator;
 class ValidatorBG extends ValidatorAbstract
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function validate(string $vatNumber): bool
     {
@@ -44,7 +44,6 @@ class ValidatorBG extends ValidatorAbstract
         }
 
         $weights = [1, 2, 3, 4, 5, 6, 7, 8];
-        $checksum = (int) $vatNumber[8];
         $checkval = $this->sumWeights($weights, $vatNumber);
 
         if ($checkval % 11 == 10) {
@@ -54,6 +53,6 @@ class ValidatorBG extends ValidatorAbstract
             $checkval = ($checkval % 11) == 10 ? 0 : ($checkval % 11);
         }
 
-        return $checkval == $checksum;
+        return $checkval == (int) $vatNumber[8];
     }
 }
