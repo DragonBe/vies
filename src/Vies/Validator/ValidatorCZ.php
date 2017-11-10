@@ -88,7 +88,7 @@ class ValidatorCZ extends ValidatorAbstract
      */
     protected function validateLegalEntities($vatNumber)
     {
-        $weights = array(8, 7, 6, 5, 4, 3, 2);
+        $weights = [8, 7, 6, 5, 4, 3, 2];
         $checksum = (int)$vatNumber[7];
         $checkbase = $this->sumWeights($weights, $vatNumber);
 
@@ -120,7 +120,7 @@ class ValidatorCZ extends ValidatorAbstract
      */
     protected function validateIndividualsShort($vatNumber)
     {
-        $monthBase = array_merge(range(1, 12),range(51,62));
+        $monthBase = array_merge(range(1, 12), range(51, 62));
 
         $yearOfBirth = (int)substr($vatNumber, 0, 2);
         $monthOfBirth = (int)substr($vatNumber, 2, 2);
@@ -168,18 +168,18 @@ class ValidatorCZ extends ValidatorAbstract
      */
     protected function validateIndividualsShortSpecial($vatNumber)
     {
-        $weights = array(0, 8, 7, 6, 5, 4, 3, 2);
+        $weights = [0, 8, 7, 6, 5, 4, 3, 2];
         $checkval = $this->sumWeights($weights, $vatNumber, 1);
         $checksum = ($checkval % 11);
 
         if ($checksum > 0) {
-            $checksum = ceil($checkval/11) * 11;
+            $checksum = ceil($checkval / 11) * 11;
         } else {
             $checksum = $checkval + 11;
         }
 
         $checksum = $checksum - $checkval;
-        $checkval = $this->allowedD[$checksum-1];
+        $checkval = $this->allowedD[$checksum - 1];
 
         if ($vatNumber[8] != $checkval) {
             return false;
@@ -209,7 +209,7 @@ class ValidatorCZ extends ValidatorAbstract
      */
     public function validateIndividualsLong($vatNumber)
     {
-        $monthBase = array_merge(range(1, 12),range(21,32),range(51,62),range(71, 82));
+        $monthBase = array_merge(range(1, 12), range(21, 32), range(51, 62), range(71, 82));
 
         $yearOfBirth = (int)substr($vatNumber, 0, 2);
         $monthOfBirth = (int)substr($vatNumber, 2, 2);
@@ -232,7 +232,7 @@ class ValidatorCZ extends ValidatorAbstract
 
         $checkval = 0;
 
-        for ($i = 0; $i <= 8; $i+=2) {
+        for ($i = 0; $i <= 8; $i += 2) {
             $checkval += (int)substr($vatNumber, $i, 2);
         }
 

@@ -247,7 +247,7 @@ class CheckVatResponse
 
         $requiredFields = ['countryCode', 'vatNumber', 'requestDate', 'valid'];
         foreach ($requiredFields as $requiredField) {
-            if (! isset ($row->$requiredField)) {
+            if (! isset($row->$requiredField)) {
                 throw new InvalidArgumentException('Required field "' . $requiredField . '" is missing');
             }
         }

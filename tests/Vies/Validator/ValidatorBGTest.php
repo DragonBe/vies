@@ -23,5 +23,4 @@ class ValidatorBGTest extends AbstractValidatorTest
             ['301004502', false],
         ];
     }
-
 }

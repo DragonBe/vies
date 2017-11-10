@@ -67,7 +67,7 @@ class ValidatorGB extends ValidatorAbstract
         $Result1 = $checkval % 97;
         $Result2 = ($Result1 + 55) % 97;
 
-        return !($Result1 * $Result2);
+        return ! ($Result1 * $Result2);
     }
 
     /**

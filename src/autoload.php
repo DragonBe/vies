@@ -19,7 +19,7 @@ spl_autoload_register(function ($class): void {
         .'Vies'
         .str_replace('\\', DIRECTORY_SEPARATOR, substr($class, strlen($prefix)))
         .'.php';
-    if (!is_readable($file)) {
+    if (! is_readable($file)) {
         return;
     }
 
