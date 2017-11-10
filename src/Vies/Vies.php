@@ -281,7 +281,7 @@ class Vies
                 $e->getMessage()
             );
 
-            throw new ViesServiceException($message, 0 , $e);
+            throw new ViesServiceException($message, 0, $e);
         }
     }
 
@@ -297,7 +297,7 @@ class Vies
      */
     public function validateVatSum(string $countryCode, string $vatNumber): bool
     {
-        if (!isset(self::VIES_EU_COUNTRY_LIST[$countryCode])) {
+        if (! isset(self::VIES_EU_COUNTRY_LIST[$countryCode])) {
             throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
         }
         $className = self::VIES_EU_COUNTRY_LIST[$countryCode]['validator'];

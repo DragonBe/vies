@@ -111,7 +111,7 @@ class CheckVatResponseTest extends TestCase
     public function testCanCreateResponseWithoutNameAndAddressAtConstruct($validCheck)
     {
         $response = $this->createViesResponse($validCheck);
-        unset ($response->traderName, $response->traderAddress);
+        unset($response->traderName, $response->traderAddress);
         $checkVatResponse = new CheckVatResponse($response);
         $this->assertSame($response->countryCode, $checkVatResponse->getCountryCode());
         $this->assertSame($response->vatNumber, $checkVatResponse->getVatNumber());
