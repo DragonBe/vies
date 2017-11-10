@@ -7,21 +7,21 @@
  * Code inspired from the SplClassLoader RFC
  * @see https://wiki.php.net/rfc/splclassloader#example_implementation
  */
-spl_autoload_register(function ($className) {
-    $className = ltrim($className, '\\');
-    $fileName = '';
-    $namespace = '';
-    if ($lastNsPos = strripos($className, '\\')) {
-        $namespace = substr($className, 0, $lastNsPos);
-        $className = substr($className, $lastNsPos + 1);
-        $fileName = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
-    }
-    $fileName = __DIR__ . DIRECTORY_SEPARATOR . $fileName . $className . '.php';
-    if (file_exists($fileName)) {
-        require $fileName;
+spl_autoload_register(function ($class): void {
 
-        return true;
+    $prefix = 'DragonBe\Vies\\';
+    if (0 !== strpos($class, $prefix)) {
+        return;
     }
 
-    return false;
+    $file = __DIR__
+        .DIRECTORY_SEPARATOR
+        .'Vies'
+        .str_replace('\\', DIRECTORY_SEPARATOR, substr($class, strlen($prefix)))
+        .'.php';
+    if (!is_readable($file)) {
+        return;
+    }
+
+    require $file;
 });

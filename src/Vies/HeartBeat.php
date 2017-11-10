@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types=1);
+
 /**
  * \DragonBe\Vies
  *
@@ -10,6 +13,8 @@
  *
  */
 namespace DragonBe\Vies;
+
+use DomainException;
 
 /**
  * Class HeartBeat
@@ -46,11 +51,12 @@ class HeartBeat
      * @param string|null $host
      * @param int $port
      */
-    public function __construct(? string $host = null, int $port = 80)
+    public function __construct(?string $host = null, int $port = 80)
     {
         if (null !== $host) {
             $this->setHost($host);
         }
+
         $this->setPort($port);
     }
 
@@ -59,19 +65,21 @@ class HeartBeat
      */
     public function getHost(): string
     {
-        if (null === $this->host) {
-            throw new \DomainException('A host is required');
+        if (null !== $this->host) {
+            return $this->host;
         }
-        return $this->host;
+
+        throw new DomainException('A host is required');
     }
 
     /**
      * @param string $host
-     * @return HeartBeat
+     * @return self
      */
-    public function setHost(string $host): HeartBeat
+    public function setHost(string $host): self
     {
         $this->host = $host;
+
         return $this;
     }
 
@@ -85,11 +93,12 @@ class HeartBeat
 
     /**
      * @param int $port
-     * @return HeartBeat
+     * @return self
      */
-    public function setPort(int $port): heartbeat
+    public function setPort(int $port): self
     {
         $this->port = $port;
+
         return $this;
     }
 
@@ -100,29 +109,10 @@ class HeartBeat
      */
     public function isAlive(): bool
     {
-
-        $status = $this->connect($this->getHost(), $this->getPort());
-        if (false === $status) {
-            return false;
+        if (false === static::$testingEnabled) {
+            return false !== fsockopen($this->getHost(), $this->getPort());
         }
-        return true;
-    }
 
-    /**
-     * Make a connection outwards to test an online service
-     *
-     * @param string $host
-     * @param int $port
-     * @return bool
-     * @private
-     */
-    private function connect(string $host, int $port): bool
-    {
-        $status = HeartBeat::$testingServiceIsUp;
-        if (false === HeartBeat::$testingEnabled) {
-            $resource = fsockopen($host, $port);
-            return (false !== $resource);
-        }
-        return $status;
+        return static::$testingServiceIsUp;
     }
 }

@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types=1);
+
 /**
  * \DragonBe\Vies
  *
@@ -28,27 +31,20 @@ class ValidatorHU extends ValidatorAbstract
 {
 
     /**
-     * @param string $vatNumber
-     * @return bool
+     * {@inheritdoc}
      */
-    public function validate($vatNumber)
+    public function validate(string $vatNumber): bool
     {
         if (strlen($vatNumber) != 8) {
             return false;
         }
 
         $weights = [9, 7, 3, 1, 9, 7, 3];
-        $checksum = (int)$vatNumber[7];
+        $checksum = (int) $vatNumber[7];
         $checkval = $this->sumWeights($weights, $vatNumber);
-
-        $checkval = (int)substr($checkval, -1);
-
+        $checkval = (int) substr((string) $checkval, -1);
         $checkval = ($checkval > 0) ? 10 - $checkval : 0;
 
-        if ($checksum != $checkval) {
-            return false;
-        }
-
-        return true;
+        return $checksum == $checkval;
     }
 }

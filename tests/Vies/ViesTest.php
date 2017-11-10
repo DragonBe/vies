@@ -3,51 +3,56 @@ declare (strict_types=1);
 
 namespace DragonBe\Test\Vies;
 
+use DragonBe\Vies\CheckVatResponse;
 use DragonBe\Vies\HeartBeat;
 use DragonBe\Vies\Vies;
+use DragonBe\Vies\ViesException;
+use DragonBe\Vies\ViesServiceException;
 use PHPUnit\Framework\TestCase;
+use SoapClient;
+use SoapFault;
 
+/**
+ * @coversDefaultClass \DragonBe\Vies\Vies
+ */
 class ViestTest extends TestCase
 {
     public function vatNumberProvider()
     {
         return  [
-             ['0123456749','0123456749'],
-             ['0123 456 749','0123456749'],
-             ['0123.456.749','0123456749'],
-             ['0123-456-749','0123456749'],
+            ['0123456749','0123456749'],
+            ['0123 456 749','0123456749'],
+            ['0123.456.749','0123456749'],
+            ['0123-456-749','0123456749'],
         ];
     }
     /**
      * @dataProvider vatNumberProvider
-     * @covers \DragonBe\Vies\Vies::filterVat
+     * @covers ::filterVat
      */
     public function testVatNumberFilter($vatNumber, $filteredNumber)
     {
-        $this->assertEquals($filteredNumber,
-            Vies::filterVat($vatNumber));
+        $this->assertEquals($filteredNumber, Vies::filterVat($vatNumber));
     }
 
     protected function createdStubbedViesClient($response)
     {
-        $stub = $this->getMockFromWsdl(
-            dirname(__FILE__) . '/_files/checkVatService.wsdl');
+        $stub = $this->getMockFromWsdl(dirname(__FILE__) . '/_files/checkVatService.wsdl');
+
         $stub->expects($this->any())
              ->method('__soapCall')
              ->will($this->returnValue($response));
 
-        $vies = new Vies();
-        $vies->setSoapClient($stub);
-        return $vies;
+        return (new Vies())->setSoapClient($stub);
     }
 
     /**
-     * @covers \DragonBe\Vies\Vies::validateVat
-     * @covers \DragonBe\Vies\Vies::setSoapClient
+     * @covers ::validateVat
+     * @covers ::setSoapClient
      */
     public function testSuccessVatNumberValidation()
     {
-        $response = new \StdClass();
+        $response = (object) [];
         $response->countryCode = 'BE';
         $response->vatNumber = '0123.456.749';
         $response->requestDate = '1983-06-24+23:59';
@@ -56,21 +61,24 @@ class ViestTest extends TestCase
         $response->traderAddress = '';
         $response->requestIdentifier = 'XYZ1234567890';
 
-        $vies = $this->createdStubbedViesClient($response);
+        $response = $this
+            ->createdStubbedViesClient($response)
+            ->validateVat('BE', '0123.456.749')
+        ;
 
-        $response = $vies->validateVat('BE', '0123.456.749');
-        $this->assertInstanceOf('\\DragonBe\\Vies\\CheckVatResponse', $response);
+        $this->assertInstanceOf(CheckVatResponse::class, $response);
         $this->assertTrue($response->isValid());
+
         return $response;
     }
 
     /**
-     * @covers \DragonBe\Vies\Vies::validateVat
-     * @covers \DragonBe\Vies\Vies::setSoapClient
+     * @covers ::validateVat
+     * @covers ::setSoapClient
      */
     public function testSuccessVatNumberValidationWithRequester()
     {
-        $response = new \StdClass();
+        $response = (object) [];
         $response->countryCode = 'BE';
         $response->vatNumber = '0123.456.749';
         $response->requestDate = '1983-06-24+23:59';
@@ -79,30 +87,35 @@ class ViestTest extends TestCase
         $response->traderAddress = '';
         $response->requestIdentifier = 'XYZ1234567890';
 
-        $vies = $this->createdStubbedViesClient($response);
+        $response = $this
+            ->createdStubbedViesClient($response)
+            ->validateVat('BE', '0123.456.749', 'PL', '1234567890')
+        ;
 
-        $response = $vies->validateVat('BE', '0123.456.749', 'PL', '1234567890');
-        $this->assertInstanceOf('\\DragonBe\\Vies\\CheckVatResponse', $response);
+        $this->assertInstanceOf(CheckVatResponse::class, $response);
         $this->assertTrue($response->isValid());
+
         return $response;
     }
 
     /**
-     * @covers \DragonBe\Vies\Vies::validateVat
-     * @covers \DragonBe\Vies\Vies::setSoapClient
+     * @covers ::validateVat
+     * @covers ::setSoapClient
      */
     public function testFailureVatNumberValidation()
     {
-        $response = new \StdClass();
+        $response = (object) [];
         $response->countryCode = 'BE';
         $response->vatNumber = '0123.ABC.749';
         $response->requestDate = '1983-06-24+23:59';
         $response->valid = false;
 
-        $vies = $this->createdStubbedViesClient($response);
+        $response = $this
+            ->createdStubbedViesClient($response)
+            ->validateVat('BE', '0123.ABC.749')
+        ;
 
-        $response = $vies->validateVat('BE', '0123.ABC.749');
-        $this->assertInstanceOf('\\DragonBe\\Vies\\CheckVatResponse', $response);
+        $this->assertInstanceOf(CheckVatResponse::class, $response);
         $this->assertFalse($response->isValid());
     }
 
@@ -119,54 +132,52 @@ class ViestTest extends TestCase
      * Test to see the country code is rejected if not existing in the EU
      *
      * @dataProvider badCountryCodeProvider
-     * @covers \DragonBe\Vies\Vies::validateVat
-     * @expectedException \DragonBe\Vies\ViesException
+     * @covers ::validateVat
      * @param $code
      */
     public function testExceptionIsRaisedForNonEuropeanUnionCountryCodes($code)
     {
-        $vies = new Vies();
-        $vies->validateVat($code, 'does not matter');
+        $this->expectException(ViesException::class);
+        (new Vies())->validateVat($code, 'does not matter');
     }
 
     /**
      * Test to see the country code is rejected if not existing in the EU
      *
      * @dataProvider badCountryCodeProvider
-     * @covers \DragonBe\Vies\Vies::validateVat
+     * @covers ::validateVat
      * @expectedException \DragonBe\Vies\ViesException
      * @param $code
      */
     public function testExceptionIsRaisedForNonEuropeanUnionCountryCodesRequester($code)
     {
-        $vies = new Vies();
-        $vies->validateVat('BE', '0123.456.749', $code, 'does not matter');
+        $this->expectException(ViesException::class);
+        (new Vies())->validateVat('BE', '0123.456.749', $code, 'does not matter');
     }
 
     /**
      * Test exception ViesServiceException is thrown after SoapFault exception
      *
      * @dataProvider vatNumberProvider
-     * @expectedException \DragonBe\Vies\ViesServiceException
      * @param $vat
      */
     public function testExceptionIsRaisedSoapFault($vat)
     {
-        $soapFault = new \SoapFault("test", "myMessage");
-        $stub = $this->getMockFromWsdl(
-            dirname(__FILE__) . '/_files/checkVatService.wsdl');
+        $this->expectException(ViesServiceException::class);
+        $stub = $this->getMockFromWsdl(dirname(__FILE__) . '/_files/checkVatService.wsdl');
         $stub->expects($this->any())
             ->method('__soapCall')
-            ->will($this->throwException($soapFault));
+            ->will($this->throwException(new SoapFault("test", "myMessage")));
 
-        $vies = new Vies();
-        $vies->setSoapClient($stub);
-
-        $vies->validateVat('BE', $vat);
+        (new Vies())
+            ->setSoapClient($stub)
+            ->validateVat('BE', $vat)
+        ;
     }
 
     /**
-     * @param \DragonBe\Vies\CheckVatResponse $response
+     * @param CheckVatResponse $response
+     *
      * @depends testSuccessVatNumberValidation
      * @covers \DragonBe\Vies\CheckVatResponse::toArray
      */
@@ -196,35 +207,29 @@ class ViestTest extends TestCase
     }
 
     /**
-     * @covers \DragonBe\Vies\Vies::getHeartBeat
-     * @covers \DragonBe\Vies\Vies::setHeartBeat
+     * @covers ::getHeartBeat
+     * @covers ::setHeartBeat
      */
     public function testServiceIsAlive()
     {
         $vies = new Vies();
-        $hb = $this->createHeartBeatMock(true);
-        $vies->setHeartBeat($hb);
-        $this->assertTrue(
-            $vies->getHeartBeat()->isAlive()
-        );
+        $vies->setHeartBeat($this->createHeartBeatMock(true));
+        $this->assertTrue($vies->getHeartBeat()->isAlive());
     }
 
     /**
-     * @covers \DragonBe\Vies\Vies::getHeartBeat
-     * @covers \DragonBe\Vies\Vies::setHeartBeat
+     * @covers ::getHeartBeat
+     * @covers ::setHeartBeat
      */
     public function testServiceIsDown()
     {
         $vies = new Vies();
-        $hb = $this->createHeartBeatMock(false);
-        $vies->setHeartBeat($hb);
-        $this->assertFalse(
-            $vies->getHeartBeat()->isAlive()
-        );
+        $vies->setHeartBeat($this->createHeartBeatMock(false));
+        $this->assertFalse($vies->getHeartBeat()->isAlive());
     }
 
     /**
-     * @covers \DragonBe\Vies\Vies::getSoapClient
+     * @covers ::getSoapClient
      * @todo: SoapClient connects to european commission VIES service at initialisation
      */
     public function testGettingDefaultSoapClient()
@@ -235,12 +240,11 @@ class ViestTest extends TestCase
         $vies = new Vies();
         $vies->setSoapClient($this->createdStubbedViesClient('blabla')->getSoapClient());
         $soapClient = $vies->getSoapClient();
-        $expected = '\\SoapClient';
-        $this->assertInstanceOf($expected, $soapClient);
+        $this->assertInstanceOf(SoapClient::class, $soapClient);
     }
 
     /**
-     * @covers \DragonBe\Vies\Vies::getSoapClient
+     * @covers ::getSoapClient
      */
     public function testDefaultSoapClientIsLazyLoaded()
     {
@@ -250,12 +254,12 @@ class ViestTest extends TestCase
         $wsdl = dirname(__FILE__) . '/_files/checkVatService.wsdl';
         $vies = new Vies();
         $vies->setWsdl($wsdl);
-        $this->assertInstanceOf('\\SoapClient', $vies->getSoapClient());
+        $this->assertInstanceOf(SoapClient::class, $vies->getSoapClient());
     }
 
     /**
-     * @covers \DragonBe\Vies\Vies::setOptions
-     * @covers \DragonBe\Vies\Vies::getOptions
+     * @covers ::setOptions
+     * @covers ::getOptions
      */
     public function testOptionsCanBeSet()
     {
@@ -266,23 +270,16 @@ class ViestTest extends TestCase
     }
 
     /**
-     * @covers \DragonBe\Vies\Vies::getWsdl
+     * @covers ::getWsdl
      */
     public function testGettingDefaultWsdl()
     {
-        $vies = new Vies();
-        $wsdl = $vies->getWsdl();
-        $expected = sprintf(
-            '%s://%s%s',
-            Vies::VIES_PROTO,
-            Vies::VIES_DOMAIN,
-            Vies::VIES_WSDL
-        );
-        $this->assertSame($expected, $wsdl);
+        $expected = sprintf('%s://%s%s', Vies::VIES_PROTO, Vies::VIES_DOMAIN, Vies::VIES_WSDL);
+        $this->assertSame($expected, (new Vies())->getWsdl());
     }
 
     /**
-     * @covers \DragonBe\Vies\Vies::setWsdl
+     * @covers ::setWsdl
      */
     public function testSettingCustomWsdl()
     {
@@ -294,8 +291,8 @@ class ViestTest extends TestCase
     }
 
     /**
-     * @covers \DragonBe\Vies\Vies::setOptions
-     * @covers \DragonBe\Vies\Vies::getOptions
+     * @covers ::setOptions
+     * @covers ::getOptions
      */
     public function testSettingSoapOptions()
     {
@@ -315,7 +312,7 @@ class ViestTest extends TestCase
     }
 
     /**
-     * @covers \DragonBe\Vies\Vies::getOptions
+     * @covers ::getOptions
      */
     public function testDefaultOptionsAreEmpty()
     {
@@ -326,24 +323,21 @@ class ViestTest extends TestCase
     }
 
     /**
-     * @covers \DragonBe\Vies\Vies::getHeartBeat
+     * @covers ::getHeartBeat
      */
     public function testGetDefaultHeartBeatWhenNoneSpecified()
     {
-        $vies = new Vies();
-        $hb = $vies->getHeartBeat();
-        $this->assertInstanceOf('\\DragonBe\\Vies\\HeartBeat', $hb);
-
+        $hb = (new Vies())->getHeartBeat();
+        $this->assertInstanceOf(HeartBeat::class, $hb);
         $this->assertSame('tcp://' . Vies::VIES_DOMAIN, $hb->getHost());
         $this->assertSame(80, $hb->getPort());
     }
 
     /**
-     * @covers \DragonBe\Vies\Vies::listEuropeanCountries
+     * @covers ::listEuropeanCountries
      */
     public function testRetrievingListOfEuropeanCountriesStatically()
     {
-        $countryList = Vies::listEuropeanCountries();
-        $this->assertCount(Vies::VIES_EU_COUNTRY_TOTAL, $countryList);
+        $this->assertCount(Vies::VIES_EU_COUNTRY_TOTAL, Vies::listEuropeanCountries());
     }
 }

@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types=1);
+
 /**
  * \DragonBe\Vies
  *
@@ -26,12 +29,10 @@ namespace DragonBe\Vies\Validator;
  */
 class ValidatorPL extends ValidatorAbstract
 {
-
     /**
-     * @param string $vatNumber
-     * @return bool
+     * {@inheritdoc}
      */
-    public function validate($vatNumber)
+    public function validate(string $vatNumber): bool
     {
         if (strlen($vatNumber) != 10) {
             return false;
@@ -41,10 +42,6 @@ class ValidatorPL extends ValidatorAbstract
         $checksum = (int)$vatNumber[9];
         $checkval = $this->sumWeights($weights, $vatNumber);
 
-        if ($checkval % 11 != $checksum) {
-            return false;
-        }
-
-        return true;
+        return $checkval % 11 == $checksum;
     }
 }

@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types=1);
+
 /**
  * \DragonBe\Vies
  *
@@ -26,12 +29,10 @@ namespace DragonBe\Vies\Validator;
  */
 class ValidatorSK extends ValidatorAbstract
 {
-
     /**
-     * @param string $vatNumber
-     * @return bool
+     * {@inheritdoc}
      */
-    public function validate($vatNumber)
+    public function validate(string $vatNumber): bool
     {
         if (strlen($vatNumber) != 10) {
             return false;
@@ -41,18 +42,7 @@ class ValidatorSK extends ValidatorAbstract
             return false;
         }
 
-        if (((int)$vatNumber[2] == 0) ||
-            ((int)$vatNumber[2] == 1) ||
-            ((int)$vatNumber[2] == 5) ||
-            ((int)$vatNumber[2] == 6)
-        ) {
-            return false;
-        }
-
-        if (($vatNumber % 11) != 0) {
-            return false;
-        }
-
-        return true;
+        return in_array((int) $vatNumber[2], [2, 3, 4, 7, 8, 9])
+            && $vatNumber % 11 == 0;
     }
 }

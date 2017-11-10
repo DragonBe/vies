@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types=1);
+
 /**
  * \DragonBe\Vies
  *
@@ -10,6 +13,10 @@
  *
  */
 namespace DragonBe\Vies;
+
+use DateTime;
+use InvalidArgumentException;
+use stdClass;
 
 /**
  * CheckVatResponse
@@ -34,7 +41,7 @@ class CheckVatResponse
      */
     protected $vatNumber;
     /**
-     * @var \DateTime The date of the request
+     * @var DateTime The date of the request
      */
     protected $requestDate;
     /**
@@ -57,7 +64,7 @@ class CheckVatResponse
     /**
      * Constructor for this response object
      *
-     * @param null|array|\StdClass $params
+     * @param null|array|stdClass $params
      */
     public function __construct($params = null)
     {
@@ -69,11 +76,13 @@ class CheckVatResponse
      * Sets the two-character country code for a member of the European Union
      *
      * @param string $countryCode
-     * @return \DragonBe\Vies\CheckVatResponse
+     *
+     * @return self
      */
-    public function setCountryCode(string $countryCode): CheckVatResponse
+    public function setCountryCode(string $countryCode): self
     {
-        $this->countryCode = (string) $countryCode;
+        $this->countryCode = $countryCode;
+
         return $this;
     }
     /**
@@ -90,11 +99,13 @@ class CheckVatResponse
      * Sets the VAT number of a company within the European Union
      *
      * @param string $vatNumber
-     * @return \DragonBe\Vies\CheckVatResponse
+     *
+     * @return self
      */
-    public function setVatNumber(string $vatNumber): CheckVatResponse
+    public function setVatNumber(string $vatNumber): self
     {
-        $this->vatNumber = (string) $vatNumber;
+        $this->vatNumber = $vatNumber;
+
         return $this;
     }
     /**
@@ -106,43 +117,43 @@ class CheckVatResponse
     {
         return $this->vatNumber;
     }
+
     /**
      * Sets the date- and timestamp when the VIES service response was created
      *
-     * @param \DateTime $requestDate
-     * @return \DragonBe\Vies\CheckVatResponse
+     * @param DateTime $requestDate
+     *
+     * @return self
      */
-    public function setRequestDate(\DateTime $requestDate): CheckVatResponse
+    public function setRequestDate(DateTime $requestDate): self
     {
-        if (! $requestDate instanceof \DateTime) {
-            $date = substr($requestDate, 0, 10);
-            $timezone = substr($requestDate, -6);
-            $requestDate = new \DateTime($date, \DateTime::createFromFormat('O', $timezone)->getTimezone());
-        }
         $this->requestDate = $requestDate;
+
         return $this;
     }
+
     /**
      * Retrieves the date- and timestamp the VIES service response was created
      *
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getRequestDate(): \DateTime
+    public function getRequestDate(): DateTime
     {
-        if (null === $this->requestDate) {
-            $this->requestDate = new \DateTime();
-        }
+        $this->requestDate = $this->requestDate ?? date_create();
+
         return $this->requestDate;
     }
     /**
      * Sets the flag to indicate the provided details were valid or not
      *
      * @param bool $flag
-     * @return \DragonBe\Vies\CheckVatResponse
+     *
+     * @return self
      */
-    public function setValid(bool $flag): CheckVatResponse
+    public function setValid(bool $flag): self
     {
-        $this->valid = (boolean) $flag;
+        $this->valid = $flag;
+
         return $this;
     }
     /**
@@ -158,11 +169,13 @@ class CheckVatResponse
      * Sets optionally the registered name of the company
      *
      * @param string $name
-     * @return \DragonBe\Vies\CheckVatResponse
+     *
+     * @return self
      */
-    public function setName(string $name): CheckVatResponse
+    public function setName(string $name): self
     {
-        $this->name = (string) $name;
+        $this->name = $name;
+
         return $this;
     }
     /**
@@ -174,17 +187,21 @@ class CheckVatResponse
     {
         return $this->name;
     }
+
     /**
      * Sets the registered address of a company
      *
      * @param string $address
-     * @return \DragonBe\Vies\CheckVatResponse
+     *
+     * @return self
      */
-    public function setAddress(string $address): CheckVatResponse
+    public function setAddress(string $address): self
     {
-        $this->address = (string) $address;
+        $this->address = $address;
+
         return $this;
     }
+
     /**
      * Retrieves the registered address of a company
      *
@@ -199,11 +216,13 @@ class CheckVatResponse
      * Sets request Identifier
      *
      * @param string $identifier
-     * @return \DragonBe\Vies\CheckVatResponse
+     *
+     * @return self
      */
-    public function setIdentifier(string $identifier): CheckVatResponse
+    public function setIdentifier(string $identifier): self
     {
-        $this->identifier = (string)$identifier;
+        $this->identifier = $identifier;
+
         return $this;
     }
     /**
@@ -218,39 +237,32 @@ class CheckVatResponse
     /**
      * Populates this response object with external data
      *
-     * @param array|\stdClass $row
+     * @param array|stdClass $row
      */
-    public function populate($row)
+    public function populate($row): void
     {
         if (is_array($row)) {
-            $row = new \ArrayObject($row, \ArrayObject::ARRAY_AS_PROPS);
+            $row = (object) $row;
         }
 
         $requiredFields = ['countryCode', 'vatNumber', 'requestDate', 'valid'];
         foreach ($requiredFields as $requiredField) {
             if (! isset ($row->$requiredField)) {
-                throw new \InvalidArgumentException('Required field "' . $requiredField . '" is missing');
+                throw new InvalidArgumentException('Required field "' . $requiredField . '" is missing');
             }
         }
 
-        // required parameters
-        $this->setCountryCode($row->countryCode)
+        $this
+            // required parameters
+            ->setCountryCode($row->countryCode)
              ->setVatNumber($row->vatNumber)
              ->setRequestDate($row->requestDate)
-             ->setValid($row->valid);
-
-        // optional parameters
-        isset($row->traderName) ?
-            $this->setName($row->traderName) :
-            $this->setName('---');
-
-        isset($row->traderAddress)
-            ? $this->setAddress($row->traderAddress)
-            : $this->setAddress('---');
-
-        isset($row->requestIdentifier)
-            ? $this->setIdentifier($row->requestIdentifier)
-            : $this->setIdentifier('');
+             ->setValid($row->valid)
+            // optional parameters
+            ->setName($row->traderName ?? '---')
+            ->setAddress($row->traderAddress ?? '---')
+            ->setIdentifier($row->requestIdentifier ?? '')
+        ;
     }
 
     /**
@@ -267,7 +279,7 @@ class CheckVatResponse
             'valid'       => $this->isValid(),
             'name'        => $this->getName(),
             'address'     => $this->getAddress(),
-            'identifier'  => $this->getIdentifier()
+            'identifier'  => $this->getIdentifier(),
         ];
     }
 }
