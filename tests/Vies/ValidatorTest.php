@@ -21,7 +21,35 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * @covers \DragonBe\Vies\Validator\ValidatorAbstract<extended>
+     * @covers \DragonBe\Vies\Validator\ValidatorAbstract
+     * @covers \DragonBe\Vies\Validator\ValidatorAT
+     * @covers \DragonBe\Vies\Validator\ValidatorBE
+     * @covers \DragonBe\Vies\Validator\ValidatorBG
+     * @covers \DragonBe\Vies\Validator\ValidatorCY
+     * @covers \DragonBe\Vies\Validator\ValidatorCZ
+     * @covers \DragonBe\Vies\Validator\ValidatorDE
+     * @covers \DragonBe\Vies\Validator\ValidatorDK
+     * @covers \DragonBe\Vies\Validator\ValidatorEE
+     * @covers \DragonBe\Vies\Validator\ValidatorEL
+     * @covers \DragonBe\Vies\Validator\ValidatorES
+     * @covers \DragonBe\Vies\Validator\ValidatorFI
+     * @covers \DragonBe\Vies\Validator\ValidatorFR
+     * @covers \DragonBe\Vies\Validator\ValidatorHR
+     * @covers \DragonBe\Vies\Validator\ValidatorHU
+     * @covers \DragonBe\Vies\Validator\ValidatorIE
+     * @covers \DragonBe\Vies\Validator\ValidatorIT
+     * @covers \DragonBe\Vies\Validator\ValidatorLU
+     * @covers \DragonBe\Vies\Validator\ValidatorLV
+     * @covers \DragonBe\Vies\Validator\ValidatorLT
+     * @covers \DragonBe\Vies\Validator\ValidatorMT
+     * @covers \DragonBe\Vies\Validator\ValidatorNL
+     * @covers \DragonBe\Vies\Validator\ValidatorPL
+     * @covers \DragonBe\Vies\Validator\ValidatorPT
+     * @covers \DragonBe\Vies\Validator\ValidatorRO
+     * @covers \DragonBe\Vies\Validator\ValidatorSE
+     * @covers \DragonBe\Vies\Validator\ValidatorSI
+     * @covers \DragonBe\Vies\Validator\ValidatorSK
+     * @covers \DragonBe\Vies\Validator\ValidatorGB
      * @covers \DragonBe\Vies\Vies::validateVatSum
      *
      * @dataProvider vatNumberValid
@@ -87,7 +115,35 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * @covers \DragonBe\Vies\Validator\ValidatorAbstract<extended>
+     * @covers \DragonBe\Vies\Validator\ValidatorAbstract
+     * @covers \DragonBe\Vies\Validator\ValidatorAT
+     * @covers \DragonBe\Vies\Validator\ValidatorBE
+     * @covers \DragonBe\Vies\Validator\ValidatorBG
+     * @covers \DragonBe\Vies\Validator\ValidatorCY
+     * @covers \DragonBe\Vies\Validator\ValidatorCZ
+     * @covers \DragonBe\Vies\Validator\ValidatorDE
+     * @covers \DragonBe\Vies\Validator\ValidatorDK
+     * @covers \DragonBe\Vies\Validator\ValidatorEE
+     * @covers \DragonBe\Vies\Validator\ValidatorEL
+     * @covers \DragonBe\Vies\Validator\ValidatorES
+     * @covers \DragonBe\Vies\Validator\ValidatorFI
+     * @covers \DragonBe\Vies\Validator\ValidatorFR
+     * @covers \DragonBe\Vies\Validator\ValidatorHR
+     * @covers \DragonBe\Vies\Validator\ValidatorHU
+     * @covers \DragonBe\Vies\Validator\ValidatorIE
+     * @covers \DragonBe\Vies\Validator\ValidatorIT
+     * @covers \DragonBe\Vies\Validator\ValidatorLU
+     * @covers \DragonBe\Vies\Validator\ValidatorLV
+     * @covers \DragonBe\Vies\Validator\ValidatorLT
+     * @covers \DragonBe\Vies\Validator\ValidatorMT
+     * @covers \DragonBe\Vies\Validator\ValidatorNL
+     * @covers \DragonBe\Vies\Validator\ValidatorPL
+     * @covers \DragonBe\Vies\Validator\ValidatorPT
+     * @covers \DragonBe\Vies\Validator\ValidatorRO
+     * @covers \DragonBe\Vies\Validator\ValidatorSE
+     * @covers \DragonBe\Vies\Validator\ValidatorSI
+     * @covers \DragonBe\Vies\Validator\ValidatorSK
+     * @covers \DragonBe\Vies\Validator\ValidatorGB
      * @covers \DragonBe\Vies\Vies::validateVatSum
      *
      * @dataProvider vatNumberInValid

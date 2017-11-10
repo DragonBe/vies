@@ -46,10 +46,10 @@ use SoapFault;
  */
 class Vies
 {
-    public const VIES_PROTO = 'http';
-    public const VIES_DOMAIN = 'ec.europa.eu';
-    public const VIES_WSDL = '/taxation_customs/vies/checkVatService.wsdl';
-    public const VIES_EU_COUNTRY_TOTAL = 28;
+    const VIES_PROTO = 'http';
+    const VIES_DOMAIN = 'ec.europa.eu';
+    const VIES_WSDL = '/taxation_customs/vies/checkVatService.wsdl';
+    const VIES_EU_COUNTRY_TOTAL = 28;
 
     protected const VIES_EU_COUNTRY_LIST = [
         'AT' => ['name' => 'Austria', 'validator' => Validator\ValidatorAT::class],
@@ -240,25 +240,24 @@ class Vies
         $vatNumber = self::filterVat($vatNumber);
 
         if (! $this->validateVatSum($countryCode, $vatNumber)) {
-            $params = (object) [];
-            $params->countryCode = $countryCode;
-            $params->vatNumber = $vatNumber;
-            $params->requestDate = date_create();
-            $params->valid = false;
+            $params = (object) [
+                'countryCode' => $countryCode,
+                'vatNumber' => $vatNumber,
+                'requestDate' => date_create(),
+                'valid' => false,
+            ];
 
             return new CheckVatResponse($params);
         }
 
         $requestParams = [
             'countryCode' => $countryCode,
-            'vatNumber' => $vatNumber
+            'vatNumber' => $vatNumber,
         ];
 
         if ($requesterCountryCode && $requesterVatNumber) {
             if (! isset(self::VIES_EU_COUNTRY_LIST[$requesterCountryCode])) {
-                throw new ViesException(
-                    sprintf('Invalid requestor country code "%s" provided', $requesterCountryCode)
-                );
+                throw new ViesException(sprintf('Invalid requestor country code "%s" provided', $requesterCountryCode));
             }
             $requesterVatNumber = self::filterVat($requesterVatNumber);
 
@@ -273,10 +272,15 @@ class Vies
 
             return new CheckVatResponse($response);
         } catch (SoapFault $e) {
-            $message = sprintf('Back-end VIES service cannot validate the VAT number "%s%s" at this moment. '
-                             . 'The service responded with the critical error "%s". This is probably a temporary '
-                             . 'problem. Please try again later.',
-                               $countryCode, $vatNumber, $e->getMessage());
+            $message = sprintf(
+                'Back-end VIES service cannot validate the VAT number "%s%s" at this moment. '
+                . 'The service responded with the critical error "%s". This is probably a temporary '
+                . 'problem. Please try again later.',
+                $countryCode,
+                $vatNumber,
+                $e->getMessage()
+            );
+
             throw new ViesServiceException($message, 0 , $e);
         }
     }
