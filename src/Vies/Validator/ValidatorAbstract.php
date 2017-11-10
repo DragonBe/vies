@@ -1,41 +1,49 @@
 <?php
 
+declare (strict_types=1);
+
+
 namespace DragonBe\Vies\Validator;
 
 abstract class ValidatorAbstract implements ValidatorInterface
 {
     /**
-     * @param string $val
+     * {@inheritdoc}
+     */
+    abstract public function validate(string $vatNumber): bool;
+
+    /**
+     * @param int $val
+     *
      * @return int
      */
-    protected function crossSum($val)
+    protected function crossSum(int $val): int
     {
-        $val = (string)$val;
-        $sum = 0;
-        $count = strlen($val);
-        for ($i = 0; $i < $count; $i++) {
-            $sum += (int)$val[$i];
-        }
+        $reducer = function (int $sum, string $char): int {
+            return  $sum + (int) $char;
+        };
 
-        return $sum;
+        return array_reduce(str_split((string) $val), $reducer, 0);
     }
 
     /**
      * @param int $val
+     *
      * @return bool
      */
-    protected function isEven($val)
+    protected function isEven(int $val): bool
     {
-        return ($val / 2 == floor($val / 2)) ? true : false;
+        return $val / 2 == floor($val / 2);
     }
 
     /**
      * @param array $weights
-     * @param int $start
      * @param string $vatNumber
+     * @param int $start
+     *
      * @return int
      */
-    protected function sumWeights(array $weights, $vatNumber, $start = 0)
+    protected function sumWeights(array $weights, string $vatNumber, int $start = 0): int
     {
         $checkval = 0;
         $count = count($weights);

@@ -3,34 +3,23 @@ declare (strict_types=1);
 
 namespace DragonBe\Test\Vies;
 
+use DateTime;
 use DragonBe\Vies\CheckVatResponse;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * Class CheckVatResponseTest
  *
  * @package DragonBe\Test\Vies
+ * @coversDefaultClass \DragonBe\Vies\CheckVatResponse
  */
 class CheckVatResponseTest extends TestCase
 {
     /**
      * @param bool $isValid
-     * @return \stdClass
-     */
-    protected function createViesResponse($isValid = true)
-    {
-        $response = new \stdClass();
-        $response->countryCode = 'BE';
-        $response->vatNumber = '123456749';
-        $response->requestDate = new \DateTime(date('Y-m-dP'));
-        $response->valid = $isValid;
-        $response->traderName = 'Testing Corp N.V.';
-        $response->traderAddress = 'MARKT 1' . PHP_EOL . '1000  BRUSSEL';
-        $response->requestIdentifier = 'XYZ1234567890';
-        return $response;
-    }
-    /**
-     * @param bool $isValid
+     *
      * @return array
      */
     protected function createViesResponseArray($isValid = true)
@@ -38,7 +27,7 @@ class CheckVatResponseTest extends TestCase
         return [
             'countryCode' => 'BE',
             'vatNumber'   => '123456749',
-            'requestDate' => new \DateTime(date('Y-m-dP')),
+            'requestDate' => date_create(date('Y-m-dP')),
             'valid'       => $isValid,
             'traderName'        => 'Testing Corp N.V.',
             'traderAddress'     => 'MARKT 1' . PHP_EOL . '1000  BRUSSEL',
@@ -46,34 +35,45 @@ class CheckVatResponseTest extends TestCase
         ];
     }
 
+    /**
+     * @param bool $isValid
+     *
+     * @return stdClass
+     */
+    protected function createViesResponse($isValid = true)
+    {
+        return (object) $this->createViesResponseArray($isValid);
+    }
+
     public function validationProvider()
     {
         return  [
-             [true],
-             [false]
+            [true],
+            [false]
         ];
     }
 
     /**
      * Test that a VAT response can be created
      *
+     * @covers ::__construct
+     * @covers ::populate
+     * @covers ::setCountryCode
+     * @covers ::getCountryCode
+     * @covers ::setVatNumber
+     * @covers ::getVatNumber
+     * @covers ::setRequestDate
+     * @covers ::getRequestDate
+     * @covers ::setValid
+     * @covers ::isValid
+     * @covers ::setName
+     * @covers ::getName
+     * @covers ::setAddress
+     * @covers ::getAddress
+     * @covers ::setIdentifier
+     * @covers ::getIdentifier
+     *
      * @dataProvider validationProvider
-     * @covers \DragonBe\Vies\CheckVatResponse::__construct
-     * @covers \DragonBe\Vies\CheckVatResponse::populate
-     * @covers \DragonBe\Vies\CheckVatResponse::setCountryCode
-     * @covers \DragonBe\Vies\CheckVatResponse::getCountryCode
-     * @covers \DragonBe\Vies\CheckVatResponse::setVatNumber
-     * @covers \DragonBe\Vies\CheckVatResponse::getVatNumber
-     * @covers \DragonBe\Vies\CheckVatResponse::setRequestDate
-     * @covers \DragonBe\Vies\CheckVatResponse::getRequestDate
-     * @covers \DragonBe\Vies\CheckVatResponse::setValid
-     * @covers \DragonBe\Vies\CheckVatResponse::isValid
-     * @covers \DragonBe\Vies\CheckVatResponse::setName
-     * @covers \DragonBe\Vies\CheckVatResponse::getName
-     * @covers \DragonBe\Vies\CheckVatResponse::setAddress
-     * @covers \DragonBe\Vies\CheckVatResponse::getAddress
-     * @covers \DragonBe\Vies\CheckVatResponse::setIdentifier
-     * @covers \DragonBe\Vies\CheckVatResponse::getIdentifier
      */
     public function testCanCreateResponseAtConstruct($validCheck)
     {
@@ -89,23 +89,24 @@ class CheckVatResponseTest extends TestCase
     }
 
     /**
+     * @covers ::__construct
+     * @covers ::populate
+     * @covers ::setCountryCode
+     * @covers ::getCountryCode
+     * @covers ::setVatNumber
+     * @covers ::getVatNumber
+     * @covers ::setRequestDate
+     * @covers ::getRequestDate
+     * @covers ::setValid
+     * @covers ::isValid
+     * @covers ::setName
+     * @covers ::getName
+     * @covers ::setAddress
+     * @covers ::getAddress
+     * @covers ::setIdentifier
+     * @covers ::getIdentifier
+     *
      * @dataProvider validationProvider
-     * @covers \DragonBe\Vies\CheckVatResponse::__construct
-     * @covers \DragonBe\Vies\CheckVatResponse::populate
-     * @covers \DragonBe\Vies\CheckVatResponse::setCountryCode
-     * @covers \DragonBe\Vies\CheckVatResponse::getCountryCode
-     * @covers \DragonBe\Vies\CheckVatResponse::setVatNumber
-     * @covers \DragonBe\Vies\CheckVatResponse::getVatNumber
-     * @covers \DragonBe\Vies\CheckVatResponse::setRequestDate
-     * @covers \DragonBe\Vies\CheckVatResponse::getRequestDate
-     * @covers \DragonBe\Vies\CheckVatResponse::setValid
-     * @covers \DragonBe\Vies\CheckVatResponse::isValid
-     * @covers \DragonBe\Vies\CheckVatResponse::setName
-     * @covers \DragonBe\Vies\CheckVatResponse::getName
-     * @covers \DragonBe\Vies\CheckVatResponse::setAddress
-     * @covers \DragonBe\Vies\CheckVatResponse::getAddress
-     * @covers \DragonBe\Vies\CheckVatResponse::setIdentifier
-     * @covers \DragonBe\Vies\CheckVatResponse::getIdentifier
      */
     public function testCanCreateResponseWithoutNameAndAddressAtConstruct($validCheck)
     {
@@ -122,23 +123,24 @@ class CheckVatResponseTest extends TestCase
     }
 
     /**
+     * @covers ::__construct
+     * @covers ::populate
+     * @covers ::setCountryCode
+     * @covers ::getCountryCode
+     * @covers ::setVatNumber
+     * @covers ::getVatNumber
+     * @covers ::setRequestDate
+     * @covers ::getRequestDate
+     * @covers ::setValid
+     * @covers ::isValid
+     * @covers ::setName
+     * @covers ::getName
+     * @covers ::setAddress
+     * @covers ::getAddress
+     * @covers ::setIdentifier
+     * @covers ::getIdentifier
+     *
      * @dataProvider validationProvider
-     * @covers \DragonBe\Vies\CheckVatResponse::__construct
-     * @covers \DragonBe\Vies\CheckVatResponse::populate
-     * @covers \DragonBe\Vies\CheckVatResponse::setCountryCode
-     * @covers \DragonBe\Vies\CheckVatResponse::getCountryCode
-     * @covers \DragonBe\Vies\CheckVatResponse::setVatNumber
-     * @covers \DragonBe\Vies\CheckVatResponse::getVatNumber
-     * @covers \DragonBe\Vies\CheckVatResponse::setRequestDate
-     * @covers \DragonBe\Vies\CheckVatResponse::getRequestDate
-     * @covers \DragonBe\Vies\CheckVatResponse::setValid
-     * @covers \DragonBe\Vies\CheckVatResponse::isValid
-     * @covers \DragonBe\Vies\CheckVatResponse::setName
-     * @covers \DragonBe\Vies\CheckVatResponse::getName
-     * @covers \DragonBe\Vies\CheckVatResponse::setAddress
-     * @covers \DragonBe\Vies\CheckVatResponse::getAddress
-     * @covers \DragonBe\Vies\CheckVatResponse::setIdentifier
-     * @covers \DragonBe\Vies\CheckVatResponse::getIdentifier
      */
     public function testCanCreateResponseWithArrayAtConstruct($validCheck)
     {
@@ -154,24 +156,24 @@ class CheckVatResponseTest extends TestCase
     }
 
     /**
-     * @covers \DragonBe\Vies\CheckVatResponse::__construct
-     * @covers \DragonBe\Vies\CheckVatResponse::getRequestDate
+     * @covers ::__construct
+     * @covers ::getRequestDate
      */
     public function testDefaultDateIsNow()
     {
         $vatResponse = new CheckVatResponse();
-        $this->assertInstanceOf('\\DateTime', $vatResponse->getRequestDate());
+        $this->assertInstanceOf(DateTime::class, $vatResponse->getRequestDate());
         $this->assertSame(date('Y-m-dP'), $vatResponse->getRequestDate()->format('Y-m-dP'));
     }
 
     /**
-     * @covers \DragonBe\Vies\CheckVatResponse::__construct
-     * @covers \DragonBe\Vies\CheckVatResponse::populate
-     * @expectedException \InvalidArgumentException
+     * @covers ::__construct
+     * @covers ::populate
      */
     public function testExceptionIsThrownWhenRequiredParametersAreMissing()
     {
-        $vatResponse = new CheckVatResponse([]);
+        $this->expectException(InvalidArgumentException::class);
+        new CheckVatResponse([]);
     }
 
     public function requiredDataProvider()
@@ -183,23 +185,24 @@ class CheckVatResponseTest extends TestCase
     }
 
     /**
+     * @covers ::__construct
+     * @covers ::populate
+     * @covers ::setCountryCode
+     * @covers ::getCountryCode
+     * @covers ::setVatNumber
+     * @covers ::getVatNumber
+     * @covers ::setRequestDate
+     * @covers ::getRequestDate
+     * @covers ::setValid
+     * @covers ::isValid
+     * @covers ::setName
+     * @covers ::getName
+     * @covers ::setAddress
+     * @covers ::getAddress
+     * @covers ::setIdentifier
+     * @covers ::getIdentifier
+     *
      * @dataProvider requiredDataProvider
-     * @covers \DragonBe\Vies\CheckVatResponse::__construct
-     * @covers \DragonBe\Vies\CheckVatResponse::populate
-     * @covers \DragonBe\Vies\CheckVatResponse::setCountryCode
-     * @covers \DragonBe\Vies\CheckVatResponse::getCountryCode
-     * @covers \DragonBe\Vies\CheckVatResponse::setVatNumber
-     * @covers \DragonBe\Vies\CheckVatResponse::getVatNumber
-     * @covers \DragonBe\Vies\CheckVatResponse::setRequestDate
-     * @covers \DragonBe\Vies\CheckVatResponse::getRequestDate
-     * @covers \DragonBe\Vies\CheckVatResponse::setValid
-     * @covers \DragonBe\Vies\CheckVatResponse::isValid
-     * @covers \DragonBe\Vies\CheckVatResponse::setName
-     * @covers \DragonBe\Vies\CheckVatResponse::getName
-     * @covers \DragonBe\Vies\CheckVatResponse::setAddress
-     * @covers \DragonBe\Vies\CheckVatResponse::getAddress
-     * @covers \DragonBe\Vies\CheckVatResponse::setIdentifier
-     * @covers \DragonBe\Vies\CheckVatResponse::getIdentifier
      */
     public function testResponseContainsEmptyValuesWithOnlyRequiredArguments(
         $countryCode,
@@ -217,10 +220,11 @@ class CheckVatResponseTest extends TestCase
             'address' => '---',
             'identifier' => '',
         ];
+
         $vatResponse = new CheckVatResponse([
             'countryCode' => $countryCode,
             'vatNumber' => $vatNumber,
-            'requestDate' => new \DateTime($requestDate),
+            'requestDate' => date_create($requestDate),
             'valid' => $valid,
         ]);
 

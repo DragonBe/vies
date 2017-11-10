@@ -3,24 +3,29 @@ declare (strict_types=1);
 
 namespace DragonBe\Test\Vies;
 
+use DomainException;
 use DragonBe\Vies\HeartBeat;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class HeartBeatTest
+ *
+ * @package DragonBe\Test\Vies
+ * @coversDefaultClass \DragonBe\Vies\HeartBeat
+ */
 class HeartBeatTest extends TestCase
 {
     /**
-     * @expectedException \DomainException
-     * @covers \DragonBe\Vies\HeartBeat::getHost
+     * @covers ::getHost
      */
     public function testExceptionThrownWhenNoHostIsConfigured()
     {
-        $hb = new HeartBeat();
-        $host = $hb->getHost();
-        $this->assertNull($host);
+        $this->expectException(DomainException::class);
+        (new HeartBeat())->getHost();
     }
 
     /**
-     * @covers \DragonBe\Vies\HeartBeat::getPort
+     * @covers ::getPort
      */
     public function testDefaultPortIsHttp()
     {
@@ -30,8 +35,8 @@ class HeartBeatTest extends TestCase
     }
 
     /**
-     * @covers DragonBe\Vies\HeartBeat::setHost
-     * @covers DragonBe\Vies\HeartBeat::getHost
+     * @covers ::setHost
+     * @covers ::getHost
      */
     public function testCanSetHost()
     {
@@ -42,7 +47,7 @@ class HeartBeatTest extends TestCase
     }
 
     /**
-     * @covers DragonBe\Vies\HeartBeat::setPort
+     * @covers ::setPort
      */
     public function testCanSetPort()
     {
@@ -53,7 +58,7 @@ class HeartBeatTest extends TestCase
     }
 
     /**
-     * @covers DragonBe\Vies\HeartBeat::__construct
+     * @covers ::__construct
      */
     public function testCanOverrideSettingsAtConstruct()
     {
@@ -65,8 +70,7 @@ class HeartBeatTest extends TestCase
     }
 
     /**
-     * @covers DragonBe\Vies\HeartBeat::isAlive
-     * @covers DragonBe\Vies\HeartBeat::connect
+     * @covers ::isAlive
      */
     public function testVerifyServicesIsAlive()
     {
@@ -75,13 +79,11 @@ class HeartBeatTest extends TestCase
         HeartBeat::$testingEnabled = true;
         HeartBeat::$testingServiceIsUp = true;
         $hb = new HeartBeat($host, $port);
-        $result = $hb->isAlive();
-        $this->assertTrue($result);
+        $this->assertTrue($hb->isAlive());
     }
 
     /**
-     * @covers DragonBe\Vies\HeartBeat::isAlive
-     * @covers DragonBe\Vies\HeartBeat::connect
+     * @covers ::isAlive
      */
     public function testVerifyServicesIsDown()
     {
@@ -90,7 +92,6 @@ class HeartBeatTest extends TestCase
         HeartBeat::$testingEnabled = true;
         HeartBeat::$testingServiceIsUp = false;
         $hb = new HeartBeat($host, $port);
-        $result = $hb->isAlive();
-        $this->assertFalse($result);
+        $this->assertFalse($hb->isAlive());
     }
 }

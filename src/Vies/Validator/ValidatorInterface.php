@@ -1,4 +1,7 @@
 <?php
+
+declare (strict_types=1);
+
 /**
  * \DragonBe\Vies
  *
@@ -12,7 +15,8 @@ interface ValidatorInterface
 {
     /**
      * @param string $vatNumber
+     *
      * @return bool
      */
-    public function validate($vatNumber);
+    public function validate(string $vatNumber): bool;
 }
