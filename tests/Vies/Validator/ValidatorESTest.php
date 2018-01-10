@@ -20,10 +20,13 @@ class ValidatorESTest extends AbstractValidatorTest
         return [
             ['A0011012B', true],
             ['A78304516', true],
+            ['X5910266W', true],
             ['K0011012B', false],
             ['12345678', false],
             ['K001A012B', false],
             ['A0011012C', false],
+            ['Z5910266W', false],
+            ['J5910266W', false],
         ];
     }
 }
