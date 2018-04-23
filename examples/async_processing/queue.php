@@ -31,6 +31,10 @@ if ([] !== $_GET && array_key_exists('vatid', $_GET)) {
         <title>Add a new VAT ID to the queue</title>
     </head>
     <body>
+        <h1>Add a new VAT ID to the queue</h1>
+
+        <p><a href="/list.php">Back to list</a></p>
+
         <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="GET">
             <label for="vat-id">VAT ID to validate</label>:
             <input type="text" id="vat-id" name="vatid" value="" placeholder="e.g. BE0123456789">
