@@ -24,3 +24,17 @@ if ([] !== $_GET && array_key_exists('vatid', $_GET)) {
     }
     header('Location: ' . $_SERVER['PHP_SELF']);
 }
+?>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Add a new VAT ID to the queue</title>
+    </head>
+    <body>
+        <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="GET">
+            <label for="vat-id">VAT ID to validate</label>:
+            <input type="text" id="vat-id" name="vatid" value="" placeholder="e.g. BE0123456789">
+            <input type="submit" value="Add to validation queue">
+        </form>
+    </body>
+</html>
