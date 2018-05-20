@@ -18,15 +18,20 @@ More information at http://ec.europa.eu/taxation_customs/vies/faqvies.do#item16
 
 [![Travis-CI Build status](https://api.travis-ci.org/DragonBe/vies.png)](https://travis-ci.org/DragonBe/vies) [![SensioLabs Insights](https://insight.sensiolabs.com/projects/21b019ce-dd1d-4d16-8b74-880b9ee5e795/mini.png)](https://insight.sensiolabs.com/projects/21b019ce-dd1d-4d16-8b74-880b9ee5e795) [![CodeClimate Analysis](https://d3s6mut3hikguw.cloudfront.net/github/DragonBe/vies/badges/gpa.svg)](https://codeclimate.com/github/DragonBe/vies) [![CodeClimate CodeCoverage](https://d3s6mut3hikguw.cloudfront.net/github/DragonBe/vies/badges/coverage.svg)](https://codeclimate.com/github/DragonBe/vies) [![CodeShip CI](https://codeship.com/projects/304718e0-8d01-0132-6960-7671d147512f/status?branch=master)](https://codeship.com/projects/60548) [![Build Status](https://status.continuousphp.com/git-hub/DragonBe/vies?token=e8721fe8-0619-4789-9691-33021709f42f)](https://continuousphp.com/git-hub/DragonBe/vies)
 
+## GDPR and privacy regulation of VAT within the EU
+
+On May 25, 2018 the General Data Protection Regulation or GDPR becomes law within all 28 European Member States. Is this VIES service package going to be compliant with GDPR? 
+
+In short: yes. 
+
+The longer answer is that this VIES package only interacts with the service for VAT ID verification provided by the European Commission. VAT validation is mandatory in European countries and therefor this service is allowed as lawfulness and legal basis. Please read more about this in [European DPO-3816.1](http://ec.europa.eu/dpo-register/details.htm?id=40647). This service does not store any data itself or collects more information than what's strictly required by law and provided by the EC VIES service.
+
+When you have implemented this service package in your own project, be sure that you're making sure you're just store the VAT ID, the timestamp of validation, the result of validation and optionally the given validation ID provided by the EC VIES service.
+
 ## Requirements
 
-[![PHP 7.1 Approved](http://blob.in2itvof.com/php/php-7.1/approved_small.png)](http://blob.in2itvof.com/php/php-7.1/approved.png)
-
-- ~~Min PHP version: 5.4~~ (EOL 3 Sep 2015)
-- ~~Min PHP version: 5.5~~ (EOL 21 Jul 2016)
-- Min supported PHP version: 5.6 (EOL 19 Jan 2017, Security updates **31 Dec 2018**) -&gt; only v1.0.x
-- Supported PHP version: 7.0 (EOL 3 Dec 2017, Security updates **3 Dec 2018**) -&gt; only v1.0.x
-- Recommended PHP version: 7.1 [**CURRENT**] (EOL 1 Dec 2018, Security updates **1 Dec 2019**
+- Minimum PHP version: 7.1
+- Recommended PHP version: 7.2
 - Extension: soap
 - Extension: pcntl
 
@@ -38,9 +43,7 @@ This project is on [Packagist](https://packagist.org/packages/dragonbe/vies)!
 
 To install the latest stable version use `composer require dragonbe/vies`.
 
-**WARNING:** The latest version 2.0.0 will have no support for PHP 5 and PHP 7.0! Only PHP 7.1 and higher!
-
-To install specifically a version (e.g. 1.0.4), just add it to the command above, for example `composer require dragonbe/vies:1.0.4`
+To install specifically a version (e.g. 2.0.4), just add it to the command above, for example `composer require dragonbe/vies:2.0.4`
 
 ## Usage
 
