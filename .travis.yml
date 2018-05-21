@@ -11,3 +11,7 @@ before_script:
 script:
   - vendor/bin/phpunit
   - vendor/bin/phpcs
+
+cache:
+  directories:
+    - "$HOME/.composer/cache/files"
