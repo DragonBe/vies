@@ -111,4 +111,4 @@ If you have a product or a project that's using this package and you want some a
 
 ## Licence
 
-DragonBe\Vies is released under the MIT Licence. See the bundled [LICENSE](LICENSE) file for details.
+DragonBe\Vies is released under the MIT Licence. See the bundled [LICENCE](LICENCE) file for details.
