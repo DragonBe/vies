@@ -5,6 +5,7 @@ namespace DragonBe\Test\Vies;
 
 use DragonBe\Vies\CheckVatResponse;
 use DragonBe\Vies\HeartBeat;
+use DragonBe\Vies\Request;
 use DragonBe\Vies\Vies;
 use DragonBe\Vies\ViesException;
 use DragonBe\Vies\ViesServiceException;
@@ -172,6 +173,47 @@ class ViestTest extends TestCase
         (new Vies())
             ->setSoapClient($stub)
             ->validateVat('BE', $vat)
+        ;
+    }
+
+    public function testExtendedRequestParams()
+    {
+        $request = new Request();
+        $request->setRequesterVatNumber('012-34-56748');
+        $request->setRequesterCountryCode('DE');
+        $request->setVatNumber('0123.456.749');
+        $request->setCountryCode('BE');
+        $request->setTraderName('MegaCorp');
+        $request->setTraderCompanyType('el-23');
+        $request->setTraderStreet('Galaxy Road');
+        $request->setTraderPostcode('1337PI');
+        $request->setTraderCity('Gotham');
+
+        $response = (object) [];
+        $response->countryCode = 'BE';
+        $response->vatNumber = '0123.ABC.749';
+        $response->requestDate = '1983-06-24+23:59';
+        $response->valid = false;
+
+        $stub = $this->getMockFromWsdl(dirname(__FILE__) . '/_files/checkVatService.wsdl');
+        $stub->expects($this->exactly(1))
+            ->method('__soapCall')
+            ->with('checkVatApprox', [[
+                'requesterCountryCode' => 'DE',
+                'requesterVatNumber' => '0123456748',
+                'countryCode' => 'BE',
+                'vatNumber' => '0123456749',
+                'traderName' => 'MegaCorp',
+                'traderCompanyType' => 'el-23',
+                'traderStreet' => 'Galaxy Road',
+                'traderPostcode' => '1337PI',
+                'traderCity' => 'Gotham',
+            ]])
+            ->willReturn($response);
+
+        $ret = (new Vies())
+            ->setSoapClient($stub)
+            ->validateVatRequest($request)
         ;
     }
 

@@ -30,6 +30,10 @@ use stdClass;
  */
 class CheckVatResponse
 {
+    public const VALID = 1;
+    public const INVALID = 2;
+    public const NOT_PROCESSED = 3;
+
     public const VIES_DATETIME_FORMAT = 'Y-m-dP';
 
     /**
@@ -60,6 +64,44 @@ class CheckVatResponse
      * @var string The request Identifier (optional)
      */
     protected $identifier;
+
+    /**
+     * @var string
+     */
+    protected $street;
+    /**
+     * @var string
+     */
+    protected $postcode;
+    /**
+     * @var string
+     */
+    protected $city;
+    /**
+     * @var string
+     */
+    protected $companyType;
+    /**
+     * @var int
+     */
+    protected $nameMatch;
+    /**
+     * @var int
+     */
+    protected $companyTypeMatch;
+    /**
+     * @var int
+     */
+    protected $streetMatch;
+    /**
+     * @var int
+     */
+    protected $postcodeMatch;
+    /**
+     * @var int
+     */
+    protected $cityMatch;
+
 
     /**
      * Constructor for this response object
@@ -225,6 +267,7 @@ class CheckVatResponse
 
         return $this;
     }
+
     /**
      * get requerst Identifier
      *
@@ -234,6 +277,169 @@ class CheckVatResponse
     {
         return $this->identifier;
     }
+
+    /**
+     * @return string
+     */
+    public function getStreet()
+    {
+        return $this->street;
+    }
+
+    /**
+     * @param string $street
+     * @return CheckVatResponse
+     */
+    public function setStreet($street)
+    {
+        $this->street = $street;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPostcode()
+    {
+        return $this->postcode;
+    }
+
+    /**
+     * @param string $postcode
+     * @return CheckVatResponse
+     */
+    public function setPostcode($postcode)
+    {
+        $this->postcode = $postcode;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param string $city
+     * @return CheckVatResponse
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyType()
+    {
+        return $this->companyType;
+    }
+
+    /**
+     * @param string $companyType
+     * @return CheckVatResponse
+     */
+    public function setCompanyType($companyType)
+    {
+        $this->companyType = $companyType;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNameMatch()
+    {
+        return $this->nameMatch;
+    }
+
+    /**
+     * @param int $nameMatch
+     * @return CheckVatResponse
+     */
+    public function setNameMatch($nameMatch)
+    {
+        $this->nameMatch = $nameMatch;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCompanyTypeMatch()
+    {
+        return $this->companyTypeMatch;
+    }
+
+    /**
+     * @param int $companyTypeMatch
+     * @return CheckVatResponse
+     */
+    public function setCompanyTypeMatch($companyTypeMatch)
+    {
+        $this->companyTypeMatch = $companyTypeMatch;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStreetMatch()
+    {
+        return $this->streetMatch;
+    }
+
+    /**
+     * @param int $streetMatch
+     * @return CheckVatResponse
+     */
+    public function setStreetMatch($streetMatch)
+    {
+        $this->streetMatch = $streetMatch;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPostcodeMatch()
+    {
+        return $this->postcodeMatch;
+    }
+
+    /**
+     * @param int $postcodeMatch
+     * @return CheckVatResponse
+     */
+    public function setPostcodeMatch($postcodeMatch)
+    {
+        $this->postcodeMatch = $postcodeMatch;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCityMatch()
+    {
+        return $this->cityMatch;
+    }
+
+    /**
+     * @param int $cityMatch
+     * @return CheckVatResponse
+     */
+    public function setCityMatch($cityMatch)
+    {
+        $this->cityMatch = $cityMatch;
+        return $this;
+    }
+
     /**
      * Populates this response object with external data
      *
@@ -262,6 +468,16 @@ class CheckVatResponse
             ->setName($row->traderName ?? '---')
             ->setAddress($row->traderAddress ?? '---')
             ->setIdentifier($row->requestIdentifier ?? '')
+
+            ->setStreet($row->traderStreet ?? '---')
+            ->setPostcode($row->traderPostcode ?? '---')
+            ->setCity($row->city ?? '---')
+            ->setCompanyType($row->companyType ?? '---')
+            ->setNameMatch($row->traderNameMatch ?? self::NOT_PROCESSED)
+            ->setCompanyTypeMatch($row->traderCompanyTypeMatch ?? self::NOT_PROCESSED)
+            ->setStreetMatch($row->traderStreetMatch ?? self::NOT_PROCESSED)
+            ->setPostcodeMatch($row->traderPostcodeMatch ?? self::NOT_PROCESSED)
+            ->setCityMatch($row->traderCityMatch ?? self::NOT_PROCESSED)
         ;
     }
 

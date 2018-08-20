@@ -234,10 +234,32 @@ class Vies
         string $requesterVatNumber = ''
     ): CheckVatResponse {
 
+        $req = new Request();
+        $req->setCountryCode($countryCode)
+            ->setVatNumber($vatNumber)
+            ->setRequesterCountryCode($requesterCountryCode)
+            ->setRequesterVatNumber($requesterVatNumber);
+
+        return $this->validateVatRequest($req);
+    }
+
+    /**
+     * Validates a given country code and VAT number and returns a
+     * \DragonBe\Vies\CheckVatResponse object
+     *
+     * @param Request $req A request object containing the parameters to check against
+     * @return CheckVatResponse
+     * @throws ViesException
+     * @throws ViesServiceException
+     */
+    public function validateVatRequest(Request $req): CheckVatResponse
+    {
+        $countryCode = $req->getCountryCode();
+        $vatNumber = $req->getVatNumber();
+
         if (! isset(self::VIES_EU_COUNTRY_LIST[$countryCode])) {
             throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
         }
-        $vatNumber = self::filterVat($vatNumber);
 
         if (! $this->validateVatSum($countryCode, $vatNumber)) {
             $params = (object) [
@@ -250,23 +272,13 @@ class Vies
             return new CheckVatResponse($params);
         }
 
-        $requestParams = [
-            'countryCode' => $countryCode,
-            'vatNumber' => $vatNumber,
-        ];
-
-        if ($requesterCountryCode && $requesterVatNumber) {
-            if (! isset(self::VIES_EU_COUNTRY_LIST[$requesterCountryCode])) {
-                throw new ViesException(sprintf('Invalid requestor country code "%s" provided', $requesterCountryCode));
-            }
-            $requesterVatNumber = self::filterVat($requesterVatNumber);
-
-            $requestParams['requesterCountryCode'] = $requesterCountryCode;
-            $requestParams['requesterVatNumber'] = $requesterVatNumber;
+        $requesterCountryCode = $req->getRequesterCountryCode();
+        if ($requesterCountryCode && ! isset(self::VIES_EU_COUNTRY_LIST[$requesterCountryCode])) {
+            throw new ViesException(sprintf('Invalid requestor country code "%s" provided', $requesterCountryCode));
         }
 
         try {
-            $response = $this->getSoapClient()->__soapCall('checkVatApprox', [$requestParams]);
+            $response = $this->getSoapClient()->__soapCall('checkVatApprox', [$req->toArray()]);
             // Soap returns "yyyy-mm-dd+hh:mm" so we need to convert it
             $response->requestDate = date_create_from_format('Y-m-d\+H:i', $response->requestDate);
 
