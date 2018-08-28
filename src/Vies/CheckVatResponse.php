@@ -496,6 +496,16 @@ class CheckVatResponse
             'name'        => $this->getName(),
             'address'     => $this->getAddress(),
             'identifier'  => $this->getIdentifier(),
+            'street'      => $this->getStreet(),
+            'postcode'    => $this->getPostcode(),
+            'city'        => $this->getCity(),
+            'companyType' => $this->getCompanyType(),
+
+            'nameMatch'        => $this->getNameMatch(),
+            'companyTypeMatch' => $this->getCompanyTypeMatch(),
+            'streetMatch'      => $this->getStreetMatch(),
+            'postcodeMatch'    => $this->getPostcodeMatch(),
+            'cityMatch'        => $this->getCityMatch()
         ];
     }
 }
