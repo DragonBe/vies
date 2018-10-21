@@ -361,7 +361,7 @@ class Vies
     {
         if ('' !== $argumentValue) {
             $argumentValue = $this->filterArgument($argumentValue);
-            if (!$this->validateArgument($argumentValue)) {
+            if (! $this->validateArgument($argumentValue)) {
                 throw new \InvalidArgumentException('The provided argument is not valid');
             }
             $requestParams[$argumentKey] = $argumentValue;
@@ -392,7 +392,7 @@ class Vies
      */
     private function validateArgument(string $argumentValue): bool
     {
-        if (!is_string($argumentValue)) {
+        if (! is_string($argumentValue)) {
             return false;
         }
         if (false === ($result = filter_var($argumentValue, FILTER_VALIDATE_REGEXP, [

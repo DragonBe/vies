@@ -361,8 +361,7 @@ class CheckVatResponseTest extends TestCase
         string $companyStreet,
         string $companyPostcode,
         string $companyCity
-    )
-    {
+    ) {
         $requestDate = date('Y-m-dP');
         $valid = true;
         $identifier = substr(md5('The world is not enough...'), 0, 16);
