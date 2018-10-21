@@ -223,6 +223,11 @@ class Vies
      * member country
      * @param string $requesterVatNumber The VAT number (without the country
      * identification) of a registered company
+     * @param string $traderName The name of the company you want to validate
+     * @param string $traderCompanyType The type of company you want to validate
+     * @param string $traderStreet The street of the company you want to validate
+     * @param string $traderPostcode The postal code of the company you want to validate
+     * @param string $traderCity The city of the company you want to validate
      * @return CheckVatResponse
      * @throws ViesException
      * @throws ViesServiceException
@@ -231,7 +236,12 @@ class Vies
         string $countryCode,
         string $vatNumber,
         string $requesterCountryCode = '',
-        string $requesterVatNumber = ''
+        string $requesterVatNumber = '',
+        string $traderName = '',
+        string $traderCompanyType = '',
+        string $traderStreet = '',
+        string $traderPostcode = '',
+        string $traderCity = ''
     ): CheckVatResponse {
 
         if (! isset(self::VIES_EU_COUNTRY_LIST[$countryCode])) {
@@ -254,6 +264,12 @@ class Vies
             'countryCode' => $countryCode,
             'vatNumber' => $vatNumber,
         ];
+
+        $this->addOptionalArguments($requestParams, 'traderName', $traderName);
+        $this->addOptionalArguments($requestParams, 'traderCompanyType', $traderCompanyType);
+        $this->addOptionalArguments($requestParams, 'traderStreet', $traderStreet);
+        $this->addOptionalArguments($requestParams, 'traderPostcode', $traderPostcode);
+        $this->addOptionalArguments($requestParams, 'traderCity', $traderCity);
 
         if ($requesterCountryCode && $requesterVatNumber) {
             if (! isset(self::VIES_EU_COUNTRY_LIST[$requesterCountryCode])) {
@@ -332,5 +348,22 @@ class Vies
         );
 
         return $list;
+    }
+
+    /**
+     * Here you can safely add optional arguments for verification
+     *
+     * @param array $requestParams
+     * @param string $argumentKey
+     * @param string $argumentValue
+     * @return bool
+     */
+    private function addOptionalArguments(array &$requestParams, string $argumentKey, string $argumentValue): bool
+    {
+        if ('' !== $argumentValue) {
+            $requestParams[$argumentKey] = $argumentValue;
+            return true;
+        }
+        return false;
     }
 }

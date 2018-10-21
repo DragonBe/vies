@@ -340,4 +340,77 @@ class ViestTest extends TestCase
     {
         $this->assertCount(Vies::VIES_EU_COUNTRY_TOTAL, Vies::listEuropeanCountries());
     }
+
+    /**
+     * Data provider that will generate bad VAT ID's
+     *
+     * @return array
+     */
+    public function badVatIdProvider(): array
+    {
+        return [
+            ['UU', '1239874560'],
+            ['AA', '1234567890'],
+        ];
+    }
+
+    /**
+     * Validates exception it thrown if VAT checksum fails on
+     * provided country code and VAT ID
+     *
+     * @param string $countryCode
+     * @param string $vatId
+     *
+     * @dataProvider badVatIdProvider
+     * @covers ::validateVatSum
+     */
+    public function testValidateVatSumToThrowException(
+        string $countryCode,
+        string $vatId
+    )
+    {
+        $vies = new Vies();
+        $this->expectException(ViesException::class);
+        $vies->validateVatSum($countryCode, $vatId);
+        $this->fail('Expected exception was not thrown');
+    }
+
+    /**
+     * Test functionality to add optional arguments for VIES validation
+     *
+     * @covers ::addOptionalArguments
+     */
+    public function testCanAddOptionalArgumentsWithValue()
+    {
+        $viesRef = new \ReflectionClass(Vies::class);
+        $addOptionalArguments = $viesRef->getMethod('addOptionalArguments');
+        $addOptionalArguments->setAccessible(true);
+
+        $array = [];
+        $object = new Vies();
+        $addOptionalArguments->invokeArgs($object, [&$array, 'foo', 'bar']);
+        $addOptionalArguments->invokeArgs($object, [&$array, 'bar', 'baz']);
+        $addOptionalArguments->invokeArgs($object, [&$array, 'baz', 'foobar']);
+        $this->assertCount(3, $array);
+    }
+
+    /**
+     * Test functionality to add optional arguments for VIES validation
+     * only if they have value
+     *
+     * @covers ::addOptionalArguments
+     */
+    public function testCanNotAddOptionalArgumentsWithoutValue()
+    {
+        $viesRef = new \ReflectionClass(Vies::class);
+        $addOptionalArguments = $viesRef->getMethod('addOptionalArguments');
+        $addOptionalArguments->setAccessible(true);
+
+        $array = [];
+        $object = new Vies();
+        $addOptionalArguments->invokeArgs($object, [&$array, 'foo', '']);
+        $addOptionalArguments->invokeArgs($object, [&$array, 'bar', '']);
+        $addOptionalArguments->invokeArgs($object, [&$array, 'baz', '']);
+        $this->assertCount(0, $array);
+    }
 }
