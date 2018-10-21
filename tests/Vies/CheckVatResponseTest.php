@@ -219,6 +219,11 @@ class CheckVatResponseTest extends TestCase
             'name' => '---',
             'address' => '---',
             'identifier' => '',
+            'nameMatch' => '',
+            'companyTypeMatch' => '',
+            'streetMatch' => '',
+            'postcodeMatch' => '',
+            'cityMatch' => '',
         ];
 
         $vatResponse = new CheckVatResponse([
@@ -226,6 +231,101 @@ class CheckVatResponseTest extends TestCase
             'vatNumber' => $vatNumber,
             'requestDate' => date_create($requestDate),
             'valid' => $valid,
+        ]);
+
+        $this->assertSame($expectedResult, $vatResponse->toArray());
+    }
+
+    /**
+     * Generates trader details that can be submitted to VIES
+     * as an additional check
+     *
+     * @return array
+     */
+    public function traderDetailsProvider(): array
+    {
+        return [
+            [
+                'BE',
+                '0123456789',
+                'FooBar',
+                'bvba',
+                'Kerkstraat 1234',
+                '2000',
+                'Antwerpen',
+            ],
+            [
+                'NL',
+                '0123456789',
+                'De vrolijke testers',
+                'BV',
+                'Kerkstraat 12',
+                '1017 GC',
+                'Amsterdam',
+            ],
+            [
+                'DE',
+                '0123456789',
+                'Die fröhlichen Tester',
+                'GmbH',
+                'Kaiserstraße 14',
+                '53113',
+                'Bonn',
+            ],
+
+        ];
+    }
+
+    /**
+     * @param string $countryCode
+     * @param string $vatNumber
+     * @param string $companyName
+     * @param string $companyType
+     * @param string $companyStreet
+     * @param string $companyPostcode
+     * @param string $companyCity
+     *
+     * @dataProvider traderDetailsProvider
+     * @covers \DragonBe\Vies\CheckVatResponse::populate
+     * @covers \DragonBe\Vies\CheckVatResponse::toArray
+     */
+    public function testValidatingTraderDetails(
+        string $countryCode,
+        string $vatNumber,
+        string $companyName,
+        string $companyType,
+        string $companyStreet,
+        string $companyPostcode,
+        string $companyCity
+    )
+    {
+        $requestDate = date('Y-m-dP');
+        $valid = true;
+        $identifier = substr(md5('The world is not enough...'), 0, 16);
+
+        $expectedResult = [
+            'countryCode' => $countryCode,
+            'vatNumber' => $vatNumber,
+            'requestDate' => substr($requestDate, 0, -6),
+            'valid' => $valid,
+            'name' => strtoupper($companyType . ' ' . $companyName),
+            'address' => strtoupper($companyStreet . ' ' . $companyPostcode . ' ' . $companyCity),
+            'identifier' => $identifier,
+            'nameMatch' => '',
+            'companyTypeMatch' => '',
+            'streetMatch' => '',
+            'postcodeMatch' => '',
+            'cityMatch' => '',
+        ];
+
+        $vatResponse = new CheckVatResponse([
+            'countryCode' => $countryCode,
+            'vatNumber' => $vatNumber,
+            'requestDate' => date_create($requestDate),
+            'valid' => $valid,
+            'traderName' => strtoupper($companyType . ' ' . $companyName),
+            'traderAddress' => strtoupper($companyStreet . ' ' . $companyPostcode . ' ' . $companyCity),
+            'requestIdentifier' => $identifier,
         ]);
 
         $this->assertSame($expectedResult, $vatResponse->toArray());
