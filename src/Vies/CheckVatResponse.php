@@ -62,6 +62,31 @@ class CheckVatResponse
     protected $identifier;
 
     /**
+     * @var string If optional name was provided, a check on name will be returned
+     */
+    protected $nameMatch;
+
+    /**
+     * @var string If optional company type was provided, a check on type will be returned
+     */
+    protected $companyTypeMatch;
+
+    /**
+     * @var string If optional street was provided, a check on street will be returned
+     */
+    protected $streetMatch;
+
+    /**
+     * @var string If optional postcode was provided, a check on postcode will be returned
+     */
+    protected $postcodeMatch;
+
+    /**
+     * @var string If optional city was provided, a check on city will be returned
+     */
+    protected $cityMatch;
+
+    /**
      * Constructor for this response object
      *
      * @param null|array|stdClass $params
@@ -234,6 +259,97 @@ class CheckVatResponse
     {
         return $this->identifier;
     }
+
+    /**
+     * @return string
+     */
+    public function getNameMatch(): string
+    {
+        return $this->nameMatch;
+    }
+
+    /**
+     * @param string $nameMatch
+     * @return CheckVatResponse
+     */
+    public function setNameMatch(string $nameMatch): CheckVatResponse
+    {
+        $this->nameMatch = $nameMatch;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyTypeMatch(): string
+    {
+        return $this->companyTypeMatch;
+    }
+
+    /**
+     * @param string $companyTypeMatch
+     * @return CheckVatResponse
+     */
+    public function setCompanyTypeMatch(string $companyTypeMatch): CheckVatResponse
+    {
+        $this->companyTypeMatch = $companyTypeMatch;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStreetMatch(): string
+    {
+        return $this->streetMatch;
+    }
+
+    /**
+     * @param string $streetMatch
+     * @return CheckVatResponse
+     */
+    public function setStreetMatch(string $streetMatch): CheckVatResponse
+    {
+        $this->streetMatch = $streetMatch;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPostcodeMatch(): string
+    {
+        return $this->postcodeMatch;
+    }
+
+    /**
+     * @param string $postcodeMatch
+     * @return CheckVatResponse
+     */
+    public function setPostcodeMatch(string $postcodeMatch): CheckVatResponse
+    {
+        $this->postcodeMatch = $postcodeMatch;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCityMatch(): string
+    {
+        return $this->cityMatch;
+    }
+
+    /**
+     * @param string $cityMatch
+     * @return CheckVatResponse
+     */
+    public function setCityMatch(string $cityMatch): CheckVatResponse
+    {
+        $this->cityMatch = $cityMatch;
+        return $this;
+    }
+
     /**
      * Populates this response object with external data
      *
@@ -262,6 +378,11 @@ class CheckVatResponse
             ->setName($row->traderName ?? '---')
             ->setAddress($row->traderAddress ?? '---')
             ->setIdentifier($row->requestIdentifier ?? '')
+            ->setNameMatch($row->traderNameMatch ?? '')
+            ->setCompanyTypeMatch($row->traderCompanyTypeMatch ?? '')
+            ->setStreetMatch($row->traderStreetMatch ?? '')
+            ->setPostcodeMatch($row->traderPostcodeMatch ?? '')
+            ->setCityMatch($row->traderCityMatch ?? '')
         ;
     }
 
@@ -280,6 +401,11 @@ class CheckVatResponse
             'name'        => $this->getName(),
             'address'     => $this->getAddress(),
             'identifier'  => $this->getIdentifier(),
+            'nameMatch'   => $this->getNameMatch(),
+            'companyTypeMatch' => $this->getCompanyTypeMatch(),
+            'streetMatch' => $this->getStreetMatch(),
+            'postcodeMatch' => $this->getPostcodeMatch(),
+            'cityMatch' => $this->getCityMatch(),
         ];
     }
 }

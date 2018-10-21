@@ -223,6 +223,11 @@ class Vies
      * member country
      * @param string $requesterVatNumber The VAT number (without the country
      * identification) of a registered company
+     * @param string $traderName The name of the company you want to validate
+     * @param string $traderCompanyType The type of company you want to validate
+     * @param string $traderStreet The street of the company you want to validate
+     * @param string $traderPostcode The postal code of the company you want to validate
+     * @param string $traderCity The city of the company you want to validate
      * @return CheckVatResponse
      * @throws ViesException
      * @throws ViesServiceException
@@ -231,7 +236,12 @@ class Vies
         string $countryCode,
         string $vatNumber,
         string $requesterCountryCode = '',
-        string $requesterVatNumber = ''
+        string $requesterVatNumber = '',
+        string $traderName = '',
+        string $traderCompanyType = '',
+        string $traderStreet = '',
+        string $traderPostcode = '',
+        string $traderCity = ''
     ): CheckVatResponse {
 
         if (! isset(self::VIES_EU_COUNTRY_LIST[$countryCode])) {
@@ -255,6 +265,12 @@ class Vies
             'vatNumber' => $vatNumber,
         ];
 
+        $this->addOptionalArguments($requestParams, 'traderName', $traderName);
+        $this->addOptionalArguments($requestParams, 'traderCompanyType', $traderCompanyType);
+        $this->addOptionalArguments($requestParams, 'traderStreet', $traderStreet);
+        $this->addOptionalArguments($requestParams, 'traderPostcode', $traderPostcode);
+        $this->addOptionalArguments($requestParams, 'traderCity', $traderCity);
+
         if ($requesterCountryCode && $requesterVatNumber) {
             if (! isset(self::VIES_EU_COUNTRY_LIST[$requesterCountryCode])) {
                 throw new ViesException(sprintf('Invalid requestor country code "%s" provided', $requesterCountryCode));
@@ -269,7 +285,6 @@ class Vies
             $response = $this->getSoapClient()->__soapCall('checkVatApprox', [$requestParams]);
             // Soap returns "yyyy-mm-dd+hh:mm" so we need to convert it
             $response->requestDate = date_create_from_format('Y-m-d\+H:i', $response->requestDate);
-
             return new CheckVatResponse($response);
         } catch (SoapFault $e) {
             $message = sprintf(
@@ -332,5 +347,59 @@ class Vies
         );
 
         return $list;
+    }
+
+    /**
+     * Here you can safely add optional arguments for verification
+     *
+     * @param array $requestParams
+     * @param string $argumentKey
+     * @param string $argumentValue
+     * @return bool
+     */
+    private function addOptionalArguments(array &$requestParams, string $argumentKey, string $argumentValue): bool
+    {
+        if ('' !== $argumentValue) {
+            $argumentValue = $this->filterArgument($argumentValue);
+            if (! $this->validateArgument($argumentValue)) {
+                throw new \InvalidArgumentException('The provided argument is not valid');
+            }
+            $requestParams[$argumentKey] = $argumentValue;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Filter the data so it's clean to be validated before sending
+     * to the VIES service
+     *
+     * @param string $argumentValue
+     * @return string
+     */
+    private function filterArgument(string $argumentValue): string
+    {
+        $argumentValue = filter_var($argumentValue, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_STRIP_HIGH);
+        return $argumentValue;
+    }
+
+    /**
+     * Validate the data to prevent XSS and other nasty things
+     * from happening at the VIES service
+     *
+     * @param string $argumentValue
+     * @return bool
+     */
+    private function validateArgument(string $argumentValue): bool
+    {
+        if (! is_string($argumentValue)) {
+            return false;
+        }
+        if (false === ($result = filter_var($argumentValue, FILTER_VALIDATE_REGEXP, [
+            'options' => ['regexp' => '/^[a-zA-Z0-9\s\.\-,]+$/']
+        ]))) {
+            return false;
+        }
+        return true;
     }
 }

