@@ -285,7 +285,6 @@ class Vies
             $response = $this->getSoapClient()->__soapCall('checkVatApprox', [$requestParams]);
             // Soap returns "yyyy-mm-dd+hh:mm" so we need to convert it
             $response->requestDate = date_create_from_format('Y-m-d\+H:i', $response->requestDate);
-
             return new CheckVatResponse($response);
         } catch (SoapFault $e) {
             $message = sprintf(
@@ -361,9 +360,46 @@ class Vies
     private function addOptionalArguments(array &$requestParams, string $argumentKey, string $argumentValue): bool
     {
         if ('' !== $argumentValue) {
+            $argumentValue = $this->filterArgument($argumentValue);
+            if (!$this->validateArgument($argumentValue)) {
+                throw new \InvalidArgumentException('The provided argument is not valid');
+            }
             $requestParams[$argumentKey] = $argumentValue;
             return true;
         }
         return false;
+    }
+
+    /**
+     * Filter the data so it's clean to be validated before sending
+     * to the VIES service
+     *
+     * @param string $argumentValue
+     * @return string
+     */
+    private function filterArgument(string $argumentValue): string
+    {
+        $argumentValue = filter_var($argumentValue, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_STRIP_HIGH);
+        return $argumentValue;
+    }
+
+    /**
+     * Validate the data to prevent XSS and other nasty things
+     * from happening at the VIES service
+     *
+     * @param string $argumentValue
+     * @return bool
+     */
+    private function validateArgument(string $argumentValue): bool
+    {
+        if (!is_string($argumentValue)) {
+            return false;
+        }
+        if (false === ($result = filter_var($argumentValue, FILTER_VALIDATE_REGEXP, [
+            'options' => ['regexp' => '/^[a-zA-Z0-9\s\.\-,]+$/']
+        ]))) {
+            return false;
+        }
+        return true;
     }
 }
