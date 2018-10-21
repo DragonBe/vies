@@ -47,6 +47,152 @@ To install specifically a version (e.g. 2.0.4), just add it to the command above
 
 ## Usage
 
+Here's a usage example you can immediately execute on the command line (or in cron, worker or whatever) as this will most likely be your most common usecase.
+
+### 1. Setting it up
+
+```php
+<?php
+
+use DragonBe\Vies\Vies;
+use DragonBe\Vies\ViesException;
+use DragonBe\Vies\ViesServiceException;
+
+require_once dirname(__DIR__) . '/vendor/autoload.php';
+
+$vies = new Vies();
+```
+
+### 2. See if the VIES service is alive
+
+```php
+if (false === $vies->getHeartBeat()->isAlive()) {
+
+    echo 'Service is not available at the moment, please try again later.' . PHP_EOL;
+    exit(1);
+}
+```
+
+### 3. Validate VAT
+
+Now that we know the service is alive, we can start validating VAT ID's
+
+#### 3.1. Simple usage
+
+```php
+$vatResult = $vies->validateVat(
+    'BE',           // Trader country code 
+    '0203430576',   // Trader VAT ID
+    'BE',           // Requester country code 
+    '0811231190'    // Requester VAT ID
+);
+```
+
+#### 3.2. Advanced usage
+
+```php
+$vatResult = $vies->validateVat(
+    'BE',                 // Trader country code 
+    '0203430576',         // Trader VAT ID
+    'BE',                 // Requester country code 
+    '0811231190'          // Requester VAT ID
+    'B-Rail',             // Trader name
+    'NV',                 // Trader company type
+    'Frankrijkstraat 65', // Trader street address
+    '1060',               // Trader postcode
+    'Sint-Gillis'         // Trader city
+);
+```
+
+#### 3.3. Result methods
+
+##### 3.3.1. Is the VAT ID valid?
+
+The most important functionality is to see if the VAT ID is valid
+
+```php
+echo ($vatResult->isValid() ? 'Valid' : 'Not valid') . PHP_EOL;
+
+// Result: Valid
+```
+
+##### 3.3.2. Retrieve the VAT validation identifier
+
+```php
+echo 'Identifier: ' . $vatResult->getIdentifier() . PHP_EOL;
+
+// Result: Identifier: WAPIAAAAWaXGj4Ra
+```
+
+##### 3.3.3. Retrieve validation date
+
+**WARNING: VIES service returns invalid time, use your own time setting!**
+
+```php
+echo 'Date and time: ' . $vatResult->getRequestDate()->format('d/m/Y H:i') . PHP_EOL;
+
+// Result: Date and time: 21/10/2018 02:00
+```
+
+##### 3.3.4. Retrieve official trader name (not always available)
+
+```php
+echo 'Company name: ' . $vatResult->getName() . PHP_EOL;
+
+// Result: Company name: NV OR NATIONALE MAATSCHAPPIJ DER BELGISCHE SPOORWEGEN
+```
+
+##### 3.3.5. Retrieve official trader street (not always available)
+
+```php
+echo 'Company address: ' . $vatResult->getAddress() . PHP_EOL;
+
+// Result: Company address: FRANKRIJKSTRAAT 56
+           1060 SINT-GILLIS (BIJ-BRUSSEL)
+```
+
+##### 3.3.6. Retrieve a match for trader name (not always available)
+
+```php
+echo 'Trader name match: ' . $vatResult->getNameMatch() . PHP_EOL;
+
+// Result: Trader name match:
+```
+
+##### 3.3.7. Retrieve a match for trader company type (not always available)
+
+```php
+echo 'Trader company type match: ' . $vatResult->getCompanyTypeMatch() . PHP_EOL;
+
+// Result: Trader company type match:
+```
+
+##### 3.3.8. Retrieve a match for trader street (not always available)
+
+```php
+echo 'Trader street match: ' . $vatResult->getStreetMatch() . PHP_EOL;
+
+// Result: Trader street match:
+```
+
+##### 3.3.9. Retrieve a match for trader postcode (not always available)
+
+```php
+echo 'Trader postcode match: ' . $vatResult->getPostcodeMatch() . PHP_EOL;
+
+// Result: Trader postcode match:
+```
+
+##### 3.3.10. Retrieve a match for trader city (not always available)
+
+```php
+echo 'Trader city match: ' . $vatResult->getCityMatch() . PHP_EOL;
+
+// Result: Trader city match:
+```
+
+### Example code
+
 ```php
 <?php
 
@@ -58,47 +204,65 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 $vies = new Vies();
 
-if (false === $vies->getHeartBeat()->isAlive()) {
+$company = [
+   'country_code' => 'BE',
+   'vat_id' => '0203430576',
+   'trader_name' => 'B-Rail',
+   'trader_company_type' => 'NV',
+   'trader_street' => 'Frankrijkstraat 65',
+   'trader_postcode' => '1060',
+   'trader_city' => 'Sint-Gillis',
+];
 
-    echo 'Service is not available at the moment, please try again later.' . PHP_EOL;
-
-} else {
-
-    $vatNumberProvider = [
-        [
-            'BE' => '0811231190',       // valid
-            'HR' => '20649144807'
-        ],
-        [
-            'BE' => '1234567890',       // invalid
-            'ES' => '9999999999',
-        ],
-        [
-            'AA' => '1234567890',       // invalid country code
-            'NO' => '1234567890'
-        ],
-    ];
-
-    foreach ($vatNumberProvider as $vatNumbers) {
-
-        foreach ($vatNumbers as $countryCode => $vatNumber) {
-
-            echo 'Validating ' . $countryCode . $vatNumber . '... ';
-
-            try {
-                $result = $vies->validateVat($countryCode, $vatNumber); // - Validation routine worked as expected.
-                echo ($result->isValid()) ? 'Valid' : 'Invalid';        //
-            } catch (ViesServiceException $e) {                         // - Recoverable exception.
-                echo $e->getMessage();                                  //   There is probably a temporary problem with back-end VIES service.
-            } catch (ViesException $e) {                                // - Unrecoverable exception.
-                echo $e->getMessage();                                  //   Invalid country code etc.
-            }
-
-            echo PHP_EOL;
-
-        }
-    }
+try {
+    $vatResult = $vies->validateVat(
+        $company['country_code'],        // Trader country code
+        $company['vat_id'],              // Trader VAT ID
+        'BE',                            // Requester country code (your country code)
+        '0811231190',                    // Requester VAT ID (your VAT ID)
+        $company['trader_name'],         // Trader name
+        $company['trader_company_type'], // Trader company type
+        $company['trader_street'],       // Trader street address
+        $company['trader_postcode'],     // Trader postcode
+        $company['trader_city']          // Trader city
+    );
+} catch (ViesException $viesException) {
+    echo 'Cannot process VAT validation: ' . $viesException->getMessage();
+    exit (2);
+} catch (ViesServiceException $viesServiceException) {
+    echo 'Cannot process VAT validation: ' . $viesServiceException->getMessage();
+    exit (2);
 }
+
+echo ($vatResult->isValid() ? 'Valid' : 'Not valid') . PHP_EOL;
+echo 'Identifier: ' . $vatResult->getIdentifier() . PHP_EOL;
+echo 'Date and time: ' . $vatResult->getRequestDate()->format('d/m/Y H:i') . PHP_EOL;
+echo 'Company name: ' . $vatResult->getName() . PHP_EOL;
+echo 'Company address: ' . $vatResult->getAddress() . PHP_EOL;
+
+echo 'Trader name match: ' . $vatResult->getNameMatch() . PHP_EOL;
+echo 'Trader company type match: ' . $vatResult->getCompanyTypeMatch() . PHP_EOL;
+echo 'Trader street match: ' . $vatResult->getStreetMatch() . PHP_EOL;
+echo 'Trader postcode match: ' . $vatResult->getPostcodeMatch() . PHP_EOL;
+echo 'Trader city match: ' . $vatResult->getCityMatch() . PHP_EOL;
+echo PHP_EOL;
+```
+
+When you run this, you will get the following result:
+
+```
+Valid
+Identifier: WAPIAAAAWaYR0O8D
+Date and time: 21/10/2018 02:00
+Company name: NV OR NATIONALE MAATSCHAPPIJ DER BELGISCHE SPOORWEGEN
+Company address: FRANKRIJKSTRAAT 56
+1060 SINT-GILLIS (BIJ-BRUSSEL)
+Trader name match:
+Trader company type match:
+Trader street match:
+Trader postcode match:
+Trader city match:
+
 ```
 
 ## Community involvement
@@ -106,8 +270,17 @@ if (false === $vies->getHeartBeat()->isAlive()) {
 Here's a list of products or projects that have included this VIES package
 
 - [Symfony bundle](https://github.com/MyOnlineStore/ViesBundle) by [MyOnlineStore](https://www.myonlinestore.com)
+- [sandwich/vies-bundle](https://packagist.org/packages/sandwich/vies-bundle)
 
 If you have a product or a project that's using this package and you want some attribution for your work, send me an [email](mailto://dragonbe+github@gmail.com) or ping me on [Twitter](https://www.twitter.com/DragonBe) or [Facebook](https://www.facebook.com/dragonbe).
+
+## Referenced on the web
+
+- [Microsoft Dynamics GP - Dynamics GP real time EU tax registration number validation using VIES](http://timwappat.info/post/2013/08/22/Dynamics-GP-real-time-EU-tax-registration-number-validation-using-VIES)
+- [Popular RIA law eu projects](https://libraries.io/search?keywords=RIA%2Claw%2Ceu)
+- [PHP Code Examples - HotExamples.com](https://hotexamples.com/examples/dragonbe.vies/Vies/validateVat/php-vies-validatevat-method-examples.html)
+
+
 
 ## Licence
 
