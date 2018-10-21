@@ -72,6 +72,16 @@ class CheckVatResponseTest extends TestCase
      * @covers ::getAddress
      * @covers ::setIdentifier
      * @covers ::getIdentifier
+     * @covers ::setNameMatch
+     * @covers ::getNameMatch
+     * @covers ::setCompanyTypeMatch
+     * @covers ::getCompanyTypeMatch
+     * @covers ::setStreetMatch
+     * @covers ::getStreetMatch
+     * @covers ::setPostcodeMatch
+     * @covers ::getPostcodeMatch
+     * @covers ::setCityMatch
+     * @covers ::getCityMatch
      *
      * @dataProvider validationProvider
      */
@@ -105,6 +115,16 @@ class CheckVatResponseTest extends TestCase
      * @covers ::getAddress
      * @covers ::setIdentifier
      * @covers ::getIdentifier
+     * @covers ::setNameMatch
+     * @covers ::getNameMatch
+     * @covers ::setCompanyTypeMatch
+     * @covers ::getCompanyTypeMatch
+     * @covers ::setStreetMatch
+     * @covers ::getStreetMatch
+     * @covers ::setPostcodeMatch
+     * @covers ::getPostcodeMatch
+     * @covers ::setCityMatch
+     * @covers ::getCityMatch
      *
      * @dataProvider validationProvider
      */
@@ -139,6 +159,16 @@ class CheckVatResponseTest extends TestCase
      * @covers ::getAddress
      * @covers ::setIdentifier
      * @covers ::getIdentifier
+     * @covers ::setNameMatch
+     * @covers ::getNameMatch
+     * @covers ::setCompanyTypeMatch
+     * @covers ::getCompanyTypeMatch
+     * @covers ::setStreetMatch
+     * @covers ::getStreetMatch
+     * @covers ::setPostcodeMatch
+     * @covers ::getPostcodeMatch
+     * @covers ::setCityMatch
+     * @covers ::getCityMatch
      *
      * @dataProvider validationProvider
      */
@@ -201,6 +231,16 @@ class CheckVatResponseTest extends TestCase
      * @covers ::getAddress
      * @covers ::setIdentifier
      * @covers ::getIdentifier
+     * @covers ::setNameMatch
+     * @covers ::getNameMatch
+     * @covers ::setCompanyTypeMatch
+     * @covers ::getCompanyTypeMatch
+     * @covers ::setStreetMatch
+     * @covers ::getStreetMatch
+     * @covers ::setPostcodeMatch
+     * @covers ::getPostcodeMatch
+     * @covers ::setCityMatch
+     * @covers ::getCityMatch
      *
      * @dataProvider requiredDataProvider
      */
@@ -286,8 +326,32 @@ class CheckVatResponseTest extends TestCase
      * @param string $companyCity
      *
      * @dataProvider traderDetailsProvider
-     * @covers \DragonBe\Vies\CheckVatResponse::populate
-     * @covers \DragonBe\Vies\CheckVatResponse::toArray
+     * @covers ::toArray
+     * @covers ::populate
+     * @covers ::setCountryCode
+     * @covers ::getCountryCode
+     * @covers ::setVatNumber
+     * @covers ::getVatNumber
+     * @covers ::setRequestDate
+     * @covers ::getRequestDate
+     * @covers ::setValid
+     * @covers ::isValid
+     * @covers ::setName
+     * @covers ::getName
+     * @covers ::setAddress
+     * @covers ::getAddress
+     * @covers ::setIdentifier
+     * @covers ::getIdentifier
+     * @covers ::setNameMatch
+     * @covers ::getNameMatch
+     * @covers ::setCompanyTypeMatch
+     * @covers ::getCompanyTypeMatch
+     * @covers ::setStreetMatch
+     * @covers ::getStreetMatch
+     * @covers ::setPostcodeMatch
+     * @covers ::getPostcodeMatch
+     * @covers ::setCityMatch
+     * @covers ::getCityMatch
      */
     public function testValidatingTraderDetails(
         string $countryCode,
