@@ -46,12 +46,12 @@ class ValidatorSI extends ValidatorAbstract
         $checksum = (int)$vatNumber[7];
         $weights = [8, 7, 6, 5, 4, 3, 2];
         $checkval = $this->sumWeights($weights, $vatNumber);
-        $checkval = ($checkval % 11) == 10 ? 0 : 11 - ($checkval % 11);
-
-        if ($checksum != $checkval) {
+        $mod = 11 - ($checkval % 11);
+        if ($mod === 11) {
             return false;
         }
+        $checkval = ($mod == 10) ? 0 : $mod;
 
-        return true;
+        return $checksum == $checkval;
     }
 }
