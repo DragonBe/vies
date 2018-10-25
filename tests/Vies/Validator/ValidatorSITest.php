@@ -23,7 +23,8 @@ class ValidatorSITest extends AbstractValidatorTest
             ['12345670', false],
             ['01234567', false],
             ['1234567', false],
-            ['95796550', true]
+            ['95796550', true],
+            ['95736220', false],
         ];
     }
 }
