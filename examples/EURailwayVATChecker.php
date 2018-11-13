@@ -96,6 +96,15 @@ $companies = [
         'trader_postcode' => '1100',
         'trader_city' => 'Vienna',
     ],
+    [
+        'country_code' => 'EL',
+        'vat_id' => '999645865',
+        'trader_name' => 'Trainose',
+        'trader_company_type' => 'SA',
+        'trader_street' => '1-3 Karolou',
+        'trader_postcode' => '10437',
+        'trader_city' => 'Athens',
+    ],
 ];
 
 foreach ($companies as $company) {
