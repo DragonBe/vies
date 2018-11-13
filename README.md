@@ -280,7 +280,9 @@ If you have a product or a project that's using this package and you want some a
 - [Popular RIA law eu projects](https://libraries.io/search?keywords=RIA%2Claw%2Ceu)
 - [PHP Code Examples - HotExamples.com](https://hotexamples.com/examples/dragonbe.vies/Vies/validateVat/php-vies-validatevat-method-examples.html)
 
+## Clarification on exceptions
 
+For Greece the [international country ISO code](https://www.iso.org/obp/ui/#iso:code:3166:GR) is **GR**, but for VAT IDN's they use the prefix **EL**. Thanks to [Johan Wilfer](https://github.com/johanwilfer) for [reporting this](https://github.com/DragonBe/vies/issues/57).
 
 ## Licence
 
