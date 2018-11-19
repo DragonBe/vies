@@ -105,6 +105,15 @@ $companies = [
         'trader_postcode' => '10437',
         'trader_city' => 'Athens',
     ],
+    [
+        'country_code' => 'PL',
+        'vat_id' => '1132316427',
+        'trader_name' => 'PKP POLSKIE LINIE KOLEJOWE SPÓŁKA AKCYJNA',
+        'trader_company_type' => '',
+        'trader_street' => 'TARGOWA 74',
+        'trader_postcode' => '03-734',
+        'trader_city' => 'WARSZAWA',
+    ],
 ];
 
 foreach ($companies as $company) {
