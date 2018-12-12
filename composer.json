@@ -39,6 +39,6 @@
         "squizlabs/php_codesniffer": "^3.2",
         "phing/phing": "^2.16",
         "infection/infection": "^0.8",
-        "sensiolabs/security-checker": "^4.1"
+        "sensiolabs/security-checker": "^5.0"
     }
 }
