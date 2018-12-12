@@ -551,4 +551,97 @@ class ViestTest extends TestCase
         $addOptionalArguments->invokeArgs($object, [&$array, 'traderCity', $traderCity]);
         $this->assertCount(5, $array);
     }
+
+    /**
+     * See if we can ensure invalid arguments are rejected from input
+     *
+     * @covers ::addOptionalArguments
+     * @covers ::filterArgument
+     * @covers ::validateArgument
+     */
+    public function testBreakValidationOfOptionalArguments()
+    {
+        $viesRef = new \ReflectionClass(Vies::class);
+        $addOptionalArguments = $viesRef->getMethod('addOptionalArguments');
+        $addOptionalArguments->setAccessible(true);
+
+        $this->expectException(\TypeError::class);
+        $array = [];
+        $object = new Vies();
+        $addOptionalArguments->invokeArgs($object, [&$array, 0, []]);
+        $this->assertSame([], $array);
+    }
+
+    /**
+     * Testing that the Soap constants are defined
+     *
+     * @link https://secure.php.net/soap_client
+     * @group issue-60
+     * @see https://github.com/DragonBe/vies/issues/60
+     */
+    public function testSoapVersionsAreDefinedAsConstants()
+    {
+        $this->assertTrue(defined('SOAP_1_1'));
+        $this->assertTrue(defined('SOAP_1_2'));
+
+        $v1 = var_export(SOAP_1_1, true);
+        $v2 = var_export(SOAP_1_2, true);
+
+        $this->assertSame('1', $v1);
+        $this->assertSame('2', $v2);
+    }
+
+    /**
+     * Testing if the warning is not triggered by something else
+     *
+     * @link https://secure.php.net/soap_client
+     * @group issue-60
+     * @see https://github.com/DragonBe/vies/issues/60
+     */
+    public function testSoapVersionsDoNotTriggerWarning()
+    {
+        $result = eval(file_get_contents(__DIR__ . '/_files/soapVersionCheck.php'));
+        $expected = "array (\n  0 => 1,\n  1 => 2,\n)";
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * A provider to test SOAP versions
+     * @return array
+     */
+    public function soapVersionProvider(): array
+    {
+        return [
+            [SOAP_1_1, '1'],
+            [SOAP_1_2, '2'],
+        ];
+    }
+
+    /**
+     * Test soap client version are defined
+     *
+     * @param int $soapVersion
+     * @param string $expectedValue
+     *
+     * @covers ::setSoapClient
+     * @covers ::getSoapClient
+     * @covers ::getWsdl
+     *
+     * @group issue-60
+     * @see https://github.com/DragonBe/vies/issues/60
+     * @dataProvider soapVersionProvider
+     */
+    public function testSoapVersionsAreDefined(int $soapVersion, string $expectedValue)
+    {
+        $soapV = var_export($soapVersion, true);
+        $this->assertSame($expectedValue, $soapV);
+
+        $vies = new Vies();
+        $soapClient = $this->getMockBuilder(SoapClient::class)
+            ->setConstructorArgs([$vies->getWsdl(), ['soap_version' => $soapVersion]])
+            ->getMock();
+        $vies->setSoapClient($soapClient);
+
+        $this->assertInstanceOf(SoapClient::class, $vies->getSoapClient());
+    }
 }

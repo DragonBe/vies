@@ -392,9 +392,6 @@ class Vies
      */
     private function validateArgument(string $argumentValue): bool
     {
-        if (! is_string($argumentValue)) {
-            return false;
-        }
         if (false === ($result = filter_var($argumentValue, FILTER_VALIDATE_REGEXP, [
             'options' => ['regexp' => '/^[a-zA-Z0-9\s\.\-,]+$/']
         ]))) {
