@@ -600,7 +600,7 @@ class ViestTest extends TestCase
      */
     public function testSoapVersionsDoNotTriggerWarning()
     {
-        $result = eval(file_get_contents(__DIR__ . '/_files/soapVersionCheck.php'));
+        $result = eval(file_get_contents(__DIR__ . '/_files/soapVersionCheck.code'));
         $expected = "array (\n  0 => 1,\n  1 => 2,\n)";
         $this->assertEquals($expected, $result);
     }
