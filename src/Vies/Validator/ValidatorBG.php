@@ -40,7 +40,7 @@ class ValidatorBG extends ValidatorAbstract
     public function validate(string $vatNumber): bool
     {
         $vatNumberLength = strlen($vatNumber);
-        if (!in_array($vatNumberLength, [9, 10], true)) {
+        if (! in_array($vatNumberLength, [9, 10], true)) {
             return false;
         }
 
