@@ -21,6 +21,7 @@ class ValidatorBGTest extends AbstractValidatorTest
             ['301004503', true],
             ['10100450', false],
             ['301004502', false],
+            ['8311046307', true],
         ];
     }
 }
