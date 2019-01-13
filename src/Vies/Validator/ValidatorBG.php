@@ -39,10 +39,25 @@ class ValidatorBG extends ValidatorAbstract
      */
     public function validate(string $vatNumber): bool
     {
-        if (strlen($vatNumber) != 9) {
+        $vatNumberLength = strlen($vatNumber);
+        if (! in_array($vatNumberLength, [9, 10], true)) {
             return false;
         }
 
+        if (10 === $vatNumberLength) {
+            return $this->validateNaturalPerson($vatNumber);
+        }
+        return $this->validateBusiness($vatNumber);
+    }
+
+    /**
+     * Validation for business VAT ID's with 9 digits
+     *
+     * @param string $vatNumber
+     * @return bool
+     */
+    private function validateBusiness(string $vatNumber): bool
+    {
         $weights = [1, 2, 3, 4, 5, 6, 7, 8];
         $checkval = $this->sumWeights($weights, $vatNumber);
 
@@ -56,5 +71,29 @@ class ValidatorBG extends ValidatorAbstract
         }
 
         return $checkval == (int) $vatNumber[8];
+    }
+
+    /**
+     * Validate VAT ID's for natural persons
+     *
+     * @param string $vatNumber
+     * @return bool
+     * @see https://github.com/yolk/valvat/blob/master/lib/valvat/checksum/bg.rb
+     */
+    private function validateNaturalPerson(string $vatNumber): bool
+    {
+        $weights = [2, 4, 8, 5, 10, 9, 7, 3, 6];
+        $checkval = $this->sumWeights($weights, $vatNumber);
+
+        if ($checkval % 11 == 10) {
+            $weights = [3, 4, 5, 6, 7, 8, 9, 10];
+            $checkval = $this->sumWeights($weights, $vatNumber);
+
+            $checkval = ($checkval % 11) == 10 ? 0 : ($checkval % 11);
+        } else {
+            $checkval = $checkval % 11;
+        }
+
+        return $checkval == (int) $vatNumber[9];
     }
 }
