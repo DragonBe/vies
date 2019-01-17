@@ -114,6 +114,15 @@ $companies = [
         'trader_postcode' => '03-734',
         'trader_city' => 'WARSZAWA',
     ],
+    [
+        'country_code' => 'LV',
+        'vat_id' => 'LV40003032065',
+        'trader_name' => 'Valsts akciju sabiedrība "Latvijas dzelzceļš"',
+        'trader_company_type' => '',
+        'trader_street' => 'Gogoļa iela 3,',
+        'trader_postcode' => 'LV-1050',
+        'trader_city' => 'Riga',
+    ],
 ];
 
 foreach ($companies as $company) {
