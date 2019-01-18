@@ -116,7 +116,7 @@ $companies = [
     ],
     [
         'country_code' => 'LV',
-        'vat_id' => 'LV40003032065',
+        'vat_id' => '40003032065',
         'trader_name' => 'Valsts akciju sabiedrība "Latvijas dzelzceļš"',
         'trader_company_type' => '',
         'trader_street' => 'Gogoļa iela 3,',
