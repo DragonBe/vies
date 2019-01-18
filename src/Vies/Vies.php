@@ -379,6 +379,7 @@ class Vies
      */
     private function filterArgument(string $argumentValue): string
     {
+        $argumentValue = str_replace(['"', '\''], '', $argumentValue);
         $argumentValue = filter_var($argumentValue, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_STRIP_HIGH);
         return $argumentValue;
     }
