@@ -5,6 +5,7 @@
     <!-- display progress -->
     <arg value="p"/>
     <arg name="colors"/>
+    <arg name="report-checkstyle" value="build/logs/checkstyle.xml"/>
 
     <!-- inherit rules from: -->
     <rule ref="PSR2"/>
