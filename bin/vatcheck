@@ -1,0 +1,41 @@
+#!/usr/bin/env php
+<?php
+use DragonBe\Vies\Vies;
+use DragonBe\Vies\ViesException;
+use DragonBe\Vies\ViesServiceException;
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+if (2 !== $argc) {
+    echo 'Usage: ' . $argv[0] . ' <VATID>' . PHP_EOL;
+    exit(0);
+}
+
+$vies = new Vies();
+if (false === $vies->getHeartBeat()->isAlive()) {
+    echo 'EU VIES Service not available at this moment, please try again later' . PHP_EOL;
+    exit(0);
+}
+
+$vatId = splitVatId($argv[1]);
+
+$result = null;
+try {
+    $result = $vies->validateVat($vatId['country'], $vatId['id']);
+} catch (ViesServiceException $vse) {
+    echo $vse->getMessage() . PHP_EOL;
+    exit(1);
+} catch (ViesException $ve) {
+    echo $ve->getMessage() . PHP_EOL;
+    exit(1);
+}
+
+var_dump($result);
+
+function splitVatId(string $vatId): array
+{
+    return [
+        'country' => substr($vatId, 0, 2),
+        'id' => substr($vatId, 2),
+    ];
+}
