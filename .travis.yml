@@ -12,6 +12,7 @@ addons:
 before_script:
 - composer install --prefer-source --no-interaction
 script:
+- mkdir -p build/logs
 - vendor/bin/phpcs
 - vendor/bin/phpunit
 - sonar-scanner
