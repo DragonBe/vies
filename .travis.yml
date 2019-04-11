@@ -5,7 +5,7 @@ php:
 - 7.3
 addons:
   sonarcloud:
-    organization: "sonarcloud_organization_key" # the key of the org you chose at step #3
+    organization: "dragonbe-github" # the key of the org you chose at step #3
     token:
       secure: FQCDqU91VA1n8jYrhHIC3SkDwZLHyek7satSFLXgmlM82mmNjoU4dYyiiNbFu9XP11DkUKYLttCFsb22qNPDPGywh90PEJD4Vz4G843ERacKgh0FK+8Q8sWrqs+Uj/3bcQlo3kK3CUyfUvCggjotr+vDbcf2cq3kdDW4VLFCtPY=
 
