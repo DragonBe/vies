@@ -21,6 +21,7 @@ class ValidatorHRTest extends AbstractValidatorTest
             ['38192148118', true],
             ['3819214811', false],
             ['1234567890A', false],
+            ['AA123456789', false],
         ];
     }
 }

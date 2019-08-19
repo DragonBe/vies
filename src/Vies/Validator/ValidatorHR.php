@@ -27,6 +27,10 @@ class ValidatorHR extends ValidatorAbstract
             return false;
         }
 
+        if (! ctype_digit($vatNumber)) {
+            return false;
+        }
+
         $product = 10;
 
         for ($i = 0; $i < 10; $i++) {

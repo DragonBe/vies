@@ -40,6 +40,10 @@ class ValidatorIT extends ValidatorAbstract
             return false;
         }
 
+        if (! ctype_digit($vatNumber)) {
+            return false;
+        }
+
         if (substr($vatNumber, 0, 7) == '0000000') {
             return false;
         }
