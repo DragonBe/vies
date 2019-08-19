@@ -27,7 +27,7 @@ class ValidatorHR extends ValidatorAbstract
             return false;
         }
 
-        if (!ctype_digit($vatNumber)) {
+        if (! ctype_digit($vatNumber)) {
             return false;
         }
 
