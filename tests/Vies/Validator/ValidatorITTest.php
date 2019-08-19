@@ -22,6 +22,7 @@ class ValidatorITTest extends AbstractValidatorTest
             ['00000010214', false],
             ['1234567890', false],
             ['00000001234', false],
+            ['AA123456789', false],
         ];
     }
 }
