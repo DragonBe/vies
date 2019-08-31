@@ -283,8 +283,14 @@ class Vies
 
         try {
             $response = $this->getSoapClient()->__soapCall('checkVatApprox', [$requestParams]);
-            // Soap returns "yyyy-mm-dd+hh:mm" so we need to convert it
-            $response->requestDate = date_create_from_format('Y-m-d\+H:i', $response->requestDate);
+            
+            // Soap returns "Y-m-dP" so we need to convert it
+            $datetime = date_create_from_format('Y-m-dP', $response->requestDate);
+            
+            // Need to set time to zero - otherwise datetime would use current system time (which is not the response time)
+            $datetime->setTime(0, 0, 0, 0);
+            
+            $response->requestDate = $datetime;            
             return new CheckVatResponse($response);
         } catch (SoapFault $e) {
             $message = sprintf(
