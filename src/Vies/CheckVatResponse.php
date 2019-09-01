@@ -369,7 +369,7 @@ class CheckVatResponse
         }
 
         $requestDate = $row->requestDate;
-        if (! $row->requestDate instanceof DateTimeInterface) {
+        if (! $row->requestDate instanceof DateTime) {
             // prepare request date
             $requestDate = date_create_from_format(
                 self::VIES_DATETIME_FORMAT,
