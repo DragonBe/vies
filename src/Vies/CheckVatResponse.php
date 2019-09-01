@@ -363,16 +363,24 @@ class CheckVatResponse
 
         $requiredFields = ['countryCode', 'vatNumber', 'requestDate', 'valid'];
         foreach ($requiredFields as $requiredField) {
-            if (! isset($row->$requiredField)) {
+            if (! isset($row->{$requiredField})) {
                 throw new InvalidArgumentException('Required field "' . $requiredField . '" is missing');
             }
         }
+
+        // prepare request date
+        $requestDate = date_create_from_format(
+            self::VIES_DATETIME_FORMAT,
+            $row->requestDate
+        );
+        // Need to set time to zero - otherwise datetime would use current system time (which is not the response time)
+        $requestDate->setTime(0, 0, 0, 0);
 
         $this
             // required parameters
             ->setCountryCode($row->countryCode)
              ->setVatNumber($row->vatNumber)
-             ->setRequestDate($row->requestDate)
+             ->setRequestDate($requestDate)
              ->setValid($row->valid)
             // optional parameters
             ->setName($row->traderName ?? '---')
