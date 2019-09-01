@@ -126,12 +126,12 @@ echo 'Identifier: ' . $vatResult->getIdentifier() . PHP_EOL;
 
 ##### 3.3.3. Retrieve validation date
 
-**WARNING: VIES service returns invalid time, use your own time setting!**
+**Note: VIES service returns date and timezone, but no time**
 
 ```php
-echo 'Date and time: ' . $vatResult->getRequestDate()->format('d/m/Y H:i') . PHP_EOL;
+echo 'Date and time: ' . $vatResult->getRequestDate()->format('r') . PHP_EOL;
 
-// Result: Date and time: 21/10/2018 02:00
+// Result: Date and time: Sat, 31 Aug 2019 00:00:00 +0200
 ```
 
 ##### 3.3.4. Retrieve official trader name (not always available)
