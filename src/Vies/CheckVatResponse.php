@@ -375,7 +375,8 @@ class CheckVatResponse
                 self::VIES_DATETIME_FORMAT,
                 $row->requestDate
             );
-            // Need to set time to zero - otherwise datetime would use current system time (which is not the response time)
+            // Need to set time to zero
+            // otherwise datetime would use current system time (which is not the response time)
             $requestDate->setTime(0, 0, 0, 0);
         }
 
