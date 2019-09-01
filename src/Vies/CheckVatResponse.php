@@ -368,13 +368,16 @@ class CheckVatResponse
             }
         }
 
-        // prepare request date
-        $requestDate = date_create_from_format(
-            self::VIES_DATETIME_FORMAT,
-            $row->requestDate
-        );
-        // Need to set time to zero - otherwise datetime would use current system time (which is not the response time)
-        $requestDate->setTime(0, 0, 0, 0);
+        $requestDate = $row->requestDate;
+        if (!$row->requestDate instanceof \DateTimeInterface) {
+            // prepare request date
+            $requestDate = date_create_from_format(
+                self::VIES_DATETIME_FORMAT,
+                $row->requestDate
+            );
+            // Need to set time to zero - otherwise datetime would use current system time (which is not the response time)
+            $requestDate->setTime(0, 0, 0, 0);
+        }
 
         $this
             // required parameters
