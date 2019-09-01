@@ -375,7 +375,7 @@ class CheckVatResponse
         );
         // Need to set time to zero - otherwise datetime would use current system time (which is not the response time)
         $requestDate->setTime(0, 0, 0, 0);
-        
+
         $this
             // required parameters
             ->setCountryCode($row->countryCode)
