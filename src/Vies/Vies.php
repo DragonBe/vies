@@ -282,10 +282,12 @@ class Vies
         }
 
         try {
-            $response = $this->getSoapClient()->__soapCall('checkVatApprox', [$requestParams]);
-            // Soap returns "yyyy-mm-dd+hh:mm" so we need to convert it
-            $response->requestDate = date_create_from_format('Y-m-d\+H:i', $response->requestDate);
-            return new CheckVatResponse($response);
+            return new CheckVatResponse(
+                $this->getSoapClient()->__soapCall(
+                    'checkVatApprox',
+                    [$requestParams]
+                )
+            );
         } catch (SoapFault $e) {
             $message = sprintf(
                 'Back-end VIES service cannot validate the VAT number "%s%s" at this moment. '
