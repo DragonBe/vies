@@ -247,7 +247,10 @@ class Vies
         if (! isset(self::VIES_EU_COUNTRY_LIST[$countryCode])) {
             throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
         }
-        $vatNumber = self::filterVat($vatNumber);
+
+        # DISABLED - redundant filtering (here and in validateVarSum)
+        ## todo delete this commented code
+        #$vatNumber = self::filterVat($vatNumber);
 
         if (! $this->validateVatSum($countryCode, $vatNumber)) {
             $params = (object) [
@@ -275,7 +278,7 @@ class Vies
             if (! isset(self::VIES_EU_COUNTRY_LIST[$requesterCountryCode])) {
                 throw new ViesException(sprintf('Invalid requestor country code "%s" provided', $requesterCountryCode));
             }
-            $requesterVatNumber = self::filterVat($requesterVatNumber);
+            $requesterVatNumber = Validator\ValidatorAbstract::sanitize($requesterVatNumber);
 
             $requestParams['requesterCountryCode'] = $requesterCountryCode;
             $requestParams['requesterVatNumber'] = $requesterVatNumber;
@@ -307,19 +310,23 @@ class Vies
      *
      * @param string $countryCode The two-character country code of a European
      * member country
-     * @param string $vatNumber The VAT number (without the country
+     * @param string &$vatNumber The VAT number (without the country
      * identification) of a registered company
      * @return bool
      * @throws ViesException
      */
-    public function validateVatSum(string $countryCode, string $vatNumber): bool
+    public function validateVatSum(string $countryCode, string &$vatNumber): bool
     {
         if (! isset(self::VIES_EU_COUNTRY_LIST[$countryCode])) {
             throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
         }
         $className = self::VIES_EU_COUNTRY_LIST[$countryCode]['validator'];
 
-        return (new $className())->validate(self::filterVat($vatNumber));
+        /** @var Validator\ValidatorInterface $validator */
+        $validator = new $className();
+
+        $vatNumber = $validator->sanitize($vatNumber);
+        return $validator->validate($vatNumber);
     }
 
     /**
@@ -331,7 +338,9 @@ class Vies
      */
     public static function filterVat(string $vatNumber): string
     {
-        return str_replace([' ', '.', '-'], '', $vatNumber);
+        // Note: keeping Vies::filterVat because it was public and some users may rely on it.
+        // But it now redirects to ValidatorAbstract::sanitize.
+        return Validator\ValidatorAbstract::sanitize($vatNumber);
     }
 
     /**
