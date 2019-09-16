@@ -31,6 +31,20 @@ class ValidatorBE extends ValidatorAbstract
     /**
      * {@inheritdoc}
      */
+    public static function sanitize(string $vatNumber): string
+    {
+        $vatNumber = parent::sanitize($vatNumber);
+
+        if (strlen($vatNumber) === 9) {
+            $vatNumber = "0" . $vatNumber;
+        }
+
+        return $vatNumber;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function validate(string $vatNumber): bool
     {
         if (strlen($vatNumber) == 9) {
