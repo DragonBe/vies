@@ -13,6 +13,15 @@ abstract class ValidatorAbstract implements ValidatorInterface
     abstract public function validate(string $vatNumber): bool;
 
     /**
+     * {@inheritdoc}
+     */
+    public static function sanitize(string $vatNumber): string
+    {
+        // Filter VAT number and normalizes it to an alfanumeric string
+        return str_replace([' ', '.', '-'], '', $vatNumber);
+    }
+
+    /**
      * @param int $val
      *
      * @return int
