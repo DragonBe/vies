@@ -47,11 +47,13 @@ class ValidatorBE extends ValidatorAbstract
      */
     public function validate(string $vatNumber): bool
     {
-        if (strlen($vatNumber) == 9) {
-            $vatNumber = "0" . $vatNumber;
-        }
+        # DISABLED - use ::sanitize to prepare the $vatNumber
+        ## todo delete this commented code
+        #if (strlen($vatNumber) == 9) {
+        #    $vatNumber = "0" . $vatNumber;
+        #}
 
-        if (strlen($vatNumber) != 10) {
+        if (strlen($vatNumber) !== 10) {
             return false;
         }
 
