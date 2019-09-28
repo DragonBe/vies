@@ -64,8 +64,10 @@ class ValidatorTest extends TestCase
             }
             foreach ($numbers[0] as $number) {
                 $result = $vies->validateVatSum($country, $number);
-                $this->assertTrue($result,
-                    'VAT ID ' . $country . $number . ' should validate, but is not valid');
+                $this->assertTrue(
+                    $result,
+                    'VAT ID ' . $country . $number . ' should validate, but is not valid'
+                );
             }
         }
     }
