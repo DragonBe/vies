@@ -12,7 +12,7 @@ class ValidatorTest extends TestCase
     {
         return [
             'AT' => ['U10223006', ['U1022300', 'A10223006', 'U10223005']],
-            'BE' => ['776091951', ['0776091952', '07760919']],
+            'BE' => ['0776091951', ['0776091952', '07760919']],
             'BG' => [['204514061', '301004503'], ['10100450', '301004502']],
             'CY' => ['00532445O', ['005324451', '0053244511', '12000139V', '72000139V']],
             'CZ' => [
@@ -64,7 +64,8 @@ class ValidatorTest extends TestCase
             }
             foreach ($numbers[0] as $number) {
                 $result = $vies->validateVatSum($country, $number);
-                $this->assertTrue($result);
+                $this->assertTrue($result,
+                    'VAT ID ' . $country . $number . ' should validate, but is not valid');
             }
         }
     }

@@ -33,10 +33,6 @@ class ValidatorBE extends ValidatorAbstract
      */
     public function validate(string $vatNumber): bool
     {
-        if (strlen($vatNumber) == 9) {
-            $vatNumber = "0" . $vatNumber;
-        }
-
         if (strlen($vatNumber) != 10) {
             return false;
         }

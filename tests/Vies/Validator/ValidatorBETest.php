@@ -18,9 +18,11 @@ class ValidatorBETest extends AbstractValidatorTest
     public function vatNumberProvider()
     {
         return [
-            ['776091951', true],
+            ['776091951', false],
             ['0776091952', false],
             ['07760919', false],
+            ['0417710407', true],
+            ['0627515170', true],
         ];
     }
 }
