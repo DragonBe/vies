@@ -343,12 +343,10 @@ class Vies
     {
         static $list;
 
-        $list = $list ?? array_combine(
+        return $list ?? array_combine(
             array_keys(self::VIES_EU_COUNTRY_LIST),
             array_column(self::VIES_EU_COUNTRY_LIST, 'name')
         );
-
-        return $list;
     }
 
     /**
@@ -382,8 +380,7 @@ class Vies
     private function filterArgument(string $argumentValue): string
     {
         $argumentValue = str_replace(['"', '\''], '', $argumentValue);
-        $argumentValue = filter_var($argumentValue, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_STRIP_HIGH);
-        return $argumentValue;
+        return filter_var($argumentValue, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_STRIP_HIGH);
     }
 
     /**
@@ -395,9 +392,9 @@ class Vies
      */
     private function validateArgument(string $argumentValue): bool
     {
-        if (false === ($result = filter_var($argumentValue, FILTER_VALIDATE_REGEXP, [
+        if (false === filter_var($argumentValue, FILTER_VALIDATE_REGEXP, [
             'options' => ['regexp' => '/^[a-zA-Z0-9\s\.\-,]+$/']
-        ]))) {
+        ])) {
             return false;
         }
         return true;

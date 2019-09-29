@@ -134,7 +134,7 @@ class ValidatorCZ extends ValidatorAbstract
         //validate month
         if (in_array($monthOfBirth, $monthBase) === false) {
             return false;
-        };
+        }
 
         //validate year
         if ($yearOfBirth > 53) {
@@ -223,7 +223,7 @@ class ValidatorCZ extends ValidatorAbstract
         //validate month
         if (in_array($monthOfBirth, $monthBase) === false) {
             return false;
-        };
+        }
 
         //validate year
         if ($yearOfBirth > (int)date("y") && $yearOfBirth < 54) {
