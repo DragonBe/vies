@@ -16,12 +16,7 @@ script:
 - mkdir -p build/logs
 - vendor/bin/phpcs
 - vendor/bin/phpunit
-- >
-    if [ "${TRAVIS_SECURE_ENV_VARS}" == "true" ]; then
-      echo;
-      echo "Running sonar build";
-      sonar-scanner;
-    fi;
+- 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sonar-scanner; fi'
 
 cache:
   directories:
