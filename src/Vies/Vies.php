@@ -272,7 +272,7 @@ class Vies
         $this->addOptionalArguments($requestParams, 'traderCity', $traderCity);
 
         if ($requesterCountryCode && $requesterVatNumber) {
-            if (! isset(self::VIES_EU_COUNTRY_LIST[$requesterCountryCode])) {
+            if (! isset(self::VIES_EU_COUNTRY_LIST[$requesterCountryCode]) && 'EU' !== $requesterCountryCode) {
                 throw new ViesException(sprintf('Invalid requestor country code "%s" provided', $requesterCountryCode));
             }
             $requesterVatNumber = self::filterVat($requesterVatNumber);
