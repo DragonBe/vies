@@ -49,7 +49,7 @@ class Vies
     const VIES_PROTO = 'http';
     const VIES_DOMAIN = 'ec.europa.eu';
     const VIES_WSDL = '/taxation_customs/vies/checkVatService.wsdl';
-    const VIES_EU_COUNTRY_TOTAL = 28;
+    const VIES_EU_COUNTRY_TOTAL = 29;
 
     protected const VIES_EU_COUNTRY_LIST = [
         'AT' => ['name' => 'Austria', 'validator' => Validator\ValidatorAT::class],
@@ -80,6 +80,7 @@ class Vies
         'SI' => ['name' => 'Slovenia', 'validator' => Validator\ValidatorSI::class],
         'SK' => ['name' => 'Slovakia', 'validator' => Validator\ValidatorSK::class],
         'GB' => ['name' => 'United Kingdom', 'validator' => Validator\ValidatorGB::class],
+        'EU' => ['name' => 'MOSS Number', 'validator' => Validator\ValidatorEU::class],
     ];
 
     /**
@@ -343,12 +344,10 @@ class Vies
     {
         static $list;
 
-        $list = $list ?? array_combine(
+        return $list ?? array_combine(
             array_keys(self::VIES_EU_COUNTRY_LIST),
             array_column(self::VIES_EU_COUNTRY_LIST, 'name')
         );
-
-        return $list;
     }
 
     /**
@@ -382,8 +381,7 @@ class Vies
     private function filterArgument(string $argumentValue): string
     {
         $argumentValue = str_replace(['"', '\''], '', $argumentValue);
-        $argumentValue = filter_var($argumentValue, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_STRIP_HIGH);
-        return $argumentValue;
+        return filter_var($argumentValue, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_STRIP_HIGH);
     }
 
     /**
@@ -395,9 +393,9 @@ class Vies
      */
     private function validateArgument(string $argumentValue): bool
     {
-        if (false === ($result = filter_var($argumentValue, FILTER_VALIDATE_REGEXP, [
+        if (false === filter_var($argumentValue, FILTER_VALIDATE_REGEXP, [
             'options' => ['regexp' => '/^[a-zA-Z0-9\s\.\-,]+$/']
-        ]))) {
+        ])) {
             return false;
         }
         return true;

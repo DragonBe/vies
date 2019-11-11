@@ -16,7 +16,7 @@ script:
 - mkdir -p build/logs
 - vendor/bin/phpcs
 - vendor/bin/phpunit
-- sonar-scanner
+- 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sonar-scanner; fi'
 
 cache:
   directories:
