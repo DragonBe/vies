@@ -15,7 +15,7 @@ use SoapFault;
 /**
  * @coversDefaultClass \DragonBe\Vies\Vies
  */
-class ViestTest extends TestCase
+class ViesTest extends TestCase
 {
     public function vatNumberProvider()
     {
