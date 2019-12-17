@@ -344,10 +344,15 @@ class Vies
     {
         static $list;
 
-        return $list ?? array_combine(
-            array_keys(self::VIES_EU_COUNTRY_LIST),
-            array_column(self::VIES_EU_COUNTRY_LIST, 'name')
-        );
+        if (!$list) {
+            $list = array_combine(
+                array_keys(self::VIES_EU_COUNTRY_LIST),
+                array_column(self::VIES_EU_COUNTRY_LIST, 'name')
+            );
+            unset($list['EU']);
+        }
+
+        return $list;
     }
 
     /**
