@@ -23,6 +23,7 @@ class ValidatorNLTest extends AbstractValidatorTest
             ['12345678901', false],
             ['123456789A12', false],
             ['123456789B00', false],
+            ['002342672B42', true],
         ];
     }
 }

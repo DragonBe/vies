@@ -34,6 +34,7 @@ When you have implemented this service package in your own project, be sure that
 - Recommended PHP version: 7.2
 - Extension: soap
 - Extension: pcntl
+- Extension: ctype
 
 Please read the [release notes](https://github.com/DragonBe/vies/releases) for details.
 
