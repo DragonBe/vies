@@ -118,12 +118,12 @@ class ValidatorNL extends ValidatorAbstract
      */
     protected function validateSole(string $vatNumber): bool
     {
-        $sumBase = (int)array_reduce(str_split($vatNumber), function($acc, $e) {
+        $sumBase = (int) array_reduce(str_split($vatNumber), function ($acc, $e) {
             if (ctype_digit($e)) {
                 return $acc.$e;
             }
 
-            if(isset($this->checkCharacter[$e])) {
+            if (isset($this->checkCharacter[$e])) {
                 return $acc.$this->checkCharacter[$e];
             }
 
