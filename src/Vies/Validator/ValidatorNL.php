@@ -52,7 +52,7 @@ class ValidatorNL extends ValidatorAbstract
         'Y' => 34,
         'Z' => 35,
         '+' => 36,
-        '*' => 37
+        '*' => 37,
     ];
 
     /**
@@ -68,7 +68,7 @@ class ValidatorNL extends ValidatorAbstract
             return false;
         }
 
-        return $this->validateCommercial($vatNumber) || $this->validateSole($vatNumber);
+        return $this->validateCommercial($vatNumber) || $this->validateSoleProprietor($vatNumber);
     }
 
     /**
@@ -116,18 +116,18 @@ class ValidatorNL extends ValidatorAbstract
      * @param string $vatNumber
      * @return bool
      */
-    protected function validateSole(string $vatNumber): bool
+    protected function validateSoleProprietor(string $vatNumber): bool
     {
-        $sumBase = (int) array_reduce(str_split($vatNumber), function ($acc, $e) {
+        if (! preg_match("#^[A-Z0-9+*]{9}B[0-9]{2}$#u", $vatNumber)) {
+            return false;
+        }
+
+        $sumBase = (int)array_reduce(str_split($vatNumber), function ($acc, $e) {
             if (ctype_digit($e)) {
                 return $acc.$e;
             }
 
-            if (isset($this->checkCharacter[$e])) {
-                return $acc.$this->checkCharacter[$e];
-            }
-
-            return $acc;
+            return $acc.$this->checkCharacter[$e];
         }, '2321');
 
         return ($sumBase % 97) === 1;
