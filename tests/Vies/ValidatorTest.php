@@ -56,8 +56,6 @@ class ValidatorTest extends TestCase
         ];
     }
 
-
-
     public function testVatNumberChecksumSuccess()
     {
         $vies = new Vies();
