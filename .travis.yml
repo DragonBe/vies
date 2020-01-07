@@ -16,8 +16,13 @@ env:
   global:
     - CC_TEST_REPORTER_ID=54bede52e30ba07a150007dc
 
+cache:
+  directories:
+    - '$HOME/.sonar/cache'
+    - '$HOME/.composer/cache'
+
 before_script:
-  - composer install --prefer-source --no-interaction
+  - composer install --prefer-dist --no-interaction --optimize-autoloader --no-suggest --no-progress
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
@@ -28,8 +33,4 @@ script:
   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sonar-scanner; fi'
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
-
-cache:
-  directories:
-    - '$HOME/.sonar/cache'
 
