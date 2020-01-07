@@ -2,4 +2,3 @@ vendor/
 build/
 composer.lock
 .scannerwork/
-.idea
