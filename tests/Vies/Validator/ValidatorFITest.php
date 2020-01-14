@@ -21,6 +21,7 @@ class ValidatorFITest extends AbstractValidatorTest
             ['09853608', true],
             ['09853607', false],
             ['1234567', false],
+            ['01089940', true],
         ];
     }
 }
