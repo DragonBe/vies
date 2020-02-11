@@ -11,14 +11,26 @@ addons:
     token:
       secure: "tSNywFsYthwLQc89JpDthdVgU91E6A5VYs1n95FC5hPWZZxc6kYCkLAA6dD8pLi0BRTx5zStWN6IAdH0sB5xgexeu5lBAuyDr66v3B/TtPMyXyD5YIUbb0JyylA3rW45lSOqUV439Qhniqyu59VD7HCeCS8B64k7XW9tOGcL4yc="
 
-before_script:
-- composer install --prefer-source --no-interaction
-script:
-- mkdir -p build/logs
-- vendor/bin/phpcs
-- vendor/bin/phpunit
-- 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sonar-scanner; fi'
+# CodeClimat settings
+env:
+  global:
+    - CC_TEST_REPORTER_ID=54bede52e30ba07a150007dc
 
 cache:
   directories:
     - '$HOME/.sonar/cache'
+    - '$HOME/.composer/cache'
+
+before_script:
+  - composer install --prefer-dist --no-interaction --optimize-autoloader --no-suggest --no-progress
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+script:
+  - mkdir -p build/logs
+  - vendor/bin/phpcs
+  - vendor/bin/phpunit
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sonar-scanner; fi'
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+
