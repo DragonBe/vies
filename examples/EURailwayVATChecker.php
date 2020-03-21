@@ -140,10 +140,10 @@ foreach ($companies as $company) {
         );
     } catch (ViesException $viesException) {
         echo 'Cannot process VAT validation: ' . $viesException->getMessage();
-        exit (2);
+        continue;
     } catch (ViesServiceException $viesServiceException) {
         echo 'Cannot process VAT validation: ' . $viesServiceException->getMessage();
-        exit (2);
+        continue;
     }
 
     echo ($vatResult->isValid() ? 'Valid' : 'Not valid') . PHP_EOL;
