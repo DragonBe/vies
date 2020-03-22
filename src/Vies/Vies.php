@@ -48,6 +48,7 @@ class Vies
 {
     const VIES_PROTO = 'http';
     const VIES_DOMAIN = 'ec.europa.eu';
+    const VIES_PORT = 80;
     const VIES_WSDL = '/taxation_customs/vies/checkVatService.wsdl';
     const VIES_EU_COUNTRY_TOTAL = 28;
 
@@ -193,7 +194,7 @@ class Vies
      */
     public function getHeartBeat(): HeartBeat
     {
-        $this->heartBeat = $this->heartBeat ?? new HeartBeat('tcp://' . self::VIES_DOMAIN, 80);
+        $this->heartBeat = $this->heartBeat ?? new HeartBeat(self::VIES_DOMAIN, self::VIES_PORT);
 
         return $this->heartBeat;
     }

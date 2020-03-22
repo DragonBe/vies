@@ -31,7 +31,7 @@ When you have implemented this service package in your own project, be sure that
 ## Requirements
 
 - Minimum PHP version: 7.1
-- Recommended PHP version: 7.2
+- Recommended PHP version: 7.4
 - Extension: soap
 - Extension: pcntl
 - Extension: ctype
@@ -72,6 +72,22 @@ if (false === $vies->getHeartBeat()->isAlive()) {
     echo 'Service is not available at the moment, please try again later.' . PHP_EOL;
     exit(1);
 }
+```
+
+#### If using a proxy, you can now use the following approach
+
+```php
+$vies = new Vies();
+$options = [
+    'proxy_host' => '127.0.0.1',
+    'proxy_port' => '8888',
+];
+$vies->setOptions($options);
+
+$heartBeat = new \DragonBe\Vies\HeartBeat('tcp://' . $options['proxy_host'], $options['proxy_port']);
+$vies->setHeartBeat($heartBeat);
+
+$isAlive = $vies->getHeartBeat()->isAlive();
 ```
 
 ### 3. Validate VAT
