@@ -38,9 +38,9 @@ class ValidatorEE extends ValidatorAbstract
             return false;
         }
 
-        $checkval = $this->sumWeights([3, 7, 1, 3, 7, 1, 3, 7], $vatNumber);
-        $checkval = (ceil($checkval / 10) * 10) - $checkval;
+        $checkVal = $this->sumWeights([3, 7, 1, 3, 7, 1, 3, 7], $vatNumber);
+        $checkVal = (ceil($checkVal / 10) * 10) - $checkVal;
 
-        return $checkval == (int)$vatNumber[8];
+        return $checkVal == (int)$vatNumber[8];
     }
 }

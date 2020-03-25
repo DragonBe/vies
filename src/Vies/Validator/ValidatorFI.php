@@ -39,10 +39,10 @@ class ValidatorFI extends ValidatorAbstract
         }
 
         $weights = [7, 9, 10, 5, 8, 4, 2];
-        $checkval = $this->sumWeights($weights, $vatNumber);
+        $checkVal = $this->sumWeights($weights, $vatNumber);
 
-        return (0 === $checkval % 11)
+        return (0 === $checkVal % 11)
             ? (int) $vatNumber[7] === 0
-            : 11 - ($checkval % 11) == (int) $vatNumber[7];
+            : 11 - ($checkVal % 11) == (int) $vatNumber[7];
     }
 }
