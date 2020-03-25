@@ -165,15 +165,15 @@ class ValidatorES extends ValidatorAbstract
      */
     private function validateJuridical(string $vatNumber): string
     {
-        $checkval = 0;
+        $checkVal = 0;
 
         for ($i = 2; $i <= 8; $i++) {
-            $checkval += $this->crossSum((int)$vatNumber[9 - $i] * ($this->isEven($i) ? 2 : 1));
+            $checkVal += $this->crossSum((int)$vatNumber[9 - $i] * ($this->isEven($i) ? 2 : 1));
         }
 
-        $checkval = 10 - ($checkval % 10);
+        $checkVal = 10 - ($checkVal % 10);
 
-        return $this->checkCharacter[$checkval];
+        return $this->checkCharacter[$checkVal];
     }
 
     /**
@@ -183,15 +183,15 @@ class ValidatorES extends ValidatorAbstract
      */
     private function validateNational(string $vatNumber): int
     {
-        $checkval = 0;
+        $checkVal = 0;
 
         for ($i = 2; $i <= 8; $i++) {
-            $checkval += $this->crossSum((int)$vatNumber[9 - $i] * ($this->isEven($i) ? 2 : 1));
+            $checkVal += $this->crossSum((int)$vatNumber[9 - $i] * ($this->isEven($i) ? 2 : 1));
         }
 
-        $checkval = 10 - ($checkval % 10);
+        $checkVal = 10 - ($checkVal % 10);
 
-        return $checkval % 10;
+        return $checkVal % 10;
     }
 
     /**
@@ -204,11 +204,11 @@ class ValidatorES extends ValidatorAbstract
         $vatNumber[0] = str_replace(['Y', 'Z'], [1, 2], $vatNumber[0]);
 
         if (ctype_digit($vatNumber[0])) {
-            $checkval = ((int)substr($vatNumber, 0, 8) % 23) + 1;
+            $checkVal = ((int)substr($vatNumber, 0, 8) % 23) + 1;
         } else {
-            $checkval = ((int)substr($vatNumber, 1, 7) % 23) + 1;
+            $checkVal = ((int)substr($vatNumber, 1, 7) % 23) + 1;
         }
 
-        return $this->checkCharacterPhysical[$checkval];
+        return $this->checkCharacterPhysical[$checkVal];
     }
 }

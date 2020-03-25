@@ -45,13 +45,13 @@ class ValidatorAT extends ValidatorAbstract
             return false;
         }
 
-        $checkval = 0;
+        $checkVal = 0;
         for ($i = 1; $i < 8; $i++) {
-            $checkval += $this->crossSum((int)$vatNumber[$i] * ($this->isEven($i) ? 2 : 1));
+            $checkVal += $this->crossSum((int)$vatNumber[$i] * ($this->isEven($i) ? 2 : 1));
         }
 
-        $checkval = substr((string)(96 - $checkval), -1);
+        $checkVal = substr((string)(96 - $checkVal), -1);
 
-        return (int)$vatNumber[8] == $checkval;
+        return (int)$vatNumber[8] == $checkVal;
     }
 }

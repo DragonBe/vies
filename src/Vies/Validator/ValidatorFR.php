@@ -88,11 +88,11 @@ class ValidatorFR extends ValidatorAbstract
      */
     private function validateOld(string $vatNumber): string
     {
-        $checkval = substr($vatNumber, 2);
-        $checkval .= "12";
-        $checkval = intval($checkval) % 97;
+        $checkVal = substr($vatNumber, 2);
+        $checkVal .= "12";
+        $checkVal = intval($checkVal) % 97;
 
-        return $checkval == 0 ? "00" : (string) $checkval;
+        return $checkVal == 0 ? "00" : (string) $checkVal;
     }
 
     /**
@@ -103,15 +103,15 @@ class ValidatorFR extends ValidatorAbstract
     private function validateNew(string $vatNumber): bool
     {
         $multiplier = 34;
-        $substractor = 100;
+        $subStractor = 100;
         if (ctype_digit($vatNumber[0])) {
             $multiplier = 24;
-            $substractor = 10;
+            $subStractor = 10;
         }
 
         $checkCharacter = array_flip(str_split($this->alphabet));
-        $checkval = ($checkCharacter[$vatNumber[0]] * $multiplier) + $checkCharacter[$vatNumber[1]] - $substractor;
+        $checkVal = ($checkCharacter[$vatNumber[0]] * $multiplier) + $checkCharacter[$vatNumber[1]] - $subStractor;
 
-        return (((intval(substr($vatNumber, 2)) + ($checkval / 11) + 1) % 11) == $checkval % 11);
+        return (((intval(substr($vatNumber, 2)) + ($checkVal / 11) + 1) % 11) == $checkVal % 11);
     }
 }
