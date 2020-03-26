@@ -9,7 +9,7 @@ RUN apt-get update \
     unzip \
     zlib1g-dev
 
-RUN curl -sSLo xdebug-latest.tar.gz https://xdebug.org/files/xdebug-2.7.0beta1.tgz \
+RUN curl -sSLo xdebug-latest.tar.gz https://xdebug.org/files/xdebug-2.9.4.tgz \
   && mkdir -p /tmp/xdebug \
   && tar --strip-components=1 -C /tmp/xdebug -xf xdebug-latest.tar.gz \
   && rm xdebug-latest.tar.gz \
@@ -26,7 +26,7 @@ RUN curl -sSLo xdebug-latest.tar.gz https://xdebug.org/files/xdebug-2.7.0beta1.t
 RUN docker-php-ext-install -j$(nproc) \
     soap \
     pcntl \
-    zip 
+    zip
 
 RUN useradd -m -s /bin/bash phpuser \
   && mkdir -p /usr/src/php \
