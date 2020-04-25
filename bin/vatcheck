@@ -17,7 +17,7 @@ if (false === $vies->getHeartBeat()->isAlive()) {
     exit(0);
 }
 
-$vatId = splitVatId($argv[1]);
+$vatId = $vies->splitVatId($argv[1]);
 
 $result = null;
 try {
@@ -30,12 +30,9 @@ try {
     exit(1);
 }
 
-var_dump($result);
-
-function splitVatId(string $vatId): array
-{
-    return [
-        'country' => substr($vatId, 0, 2),
-        'id' => substr($vatId, 2),
-    ];
-}
+echo sprintf(
+        'VAT ID %s %s is %s',
+        $result->getCountryCode(),
+        $result->getVatNumber(),
+        $result->isValid() ? 'VALID' : 'NOT VALID'
+    ) . PHP_EOL;
