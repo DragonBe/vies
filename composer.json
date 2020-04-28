@@ -27,10 +27,10 @@
     "require": {
         "php": ">=7.1",
         "ext-soap": "*",
-        "ext-ctype": "*"
+        "ext-ctype": "*",
+        "ext-pcntl": "*"
     },
     "require-dev": {
-        "ext-pcntl": "*",
         "phpunit/phpunit": "^7.1",
         "phpunit/php-invoker": "^2.0",
         "phploc/phploc": "^4.0",
