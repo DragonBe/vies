@@ -393,7 +393,7 @@ class Vies
     private function filterArgument(string $argumentValue): string
     {
         $argumentValue = str_replace(['"', '\''], '', $argumentValue);
-        return filter_var($argumentValue, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_STRIP_HIGH);
+        return filter_var($argumentValue, FILTER_SANITIZE_STRIPPED, FILTER_FLAG_STRIP_LOW);
     }
 
     /**
@@ -405,8 +405,9 @@ class Vies
      */
     private function validateArgument(string $argumentValue): bool
     {
+        $regexp = '/^[a-zA-Z0-9\s\.\-,&\+\(\)\/º\pL]+$/u';
         if (false === filter_var($argumentValue, FILTER_VALIDATE_REGEXP, [
-            'options' => ['regexp' => '/^[a-zA-Z0-9\s\.\-,]+$/']
+            'options' => ['regexp' => $regexp]
         ])) {
             return false;
         }

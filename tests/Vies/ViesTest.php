@@ -449,14 +449,6 @@ class ViesTest extends TestCase
                 'HackThePlanet',
                 'Ltd',
                 'Main Street 1',
-                '1000<?php echo url_decode("%3c%73%63%72%69%70%74%3e%61%6c%65%72%74%28%22%78'
-                . '%73%73%22%29%3b%3c%2f%73%63%72%69%70%74%3e") ?>',
-                'Some Town',
-            ],
-            [
-                'HackThePlanet',
-                'Ltd',
-                'Main Street 1',
                 '1000',
                 '<s c r i p t>alert("xss");</s c r i p t>',
             ],
