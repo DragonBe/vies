@@ -46,17 +46,17 @@ class ValidatorLV extends ValidatorAbstract
 
         $weights = [9, 1, 4, 8, 3, 10, 2, 5, 7, 6];
         $checksum = (int)substr($vatNumber, -1);
-        $checkval = $this->sumWeights($weights, $vatNumber);
-        $checkval = 3 - ($checkval % 11);
+        $checkVal = $this->sumWeights($weights, $vatNumber);
+        $checkVal = 3 - ($checkVal % 11);
 
-        if ($checkval == -1) {
+        if ($checkVal == -1) {
             return false;
         }
 
-        if ($checkval < -1) {
-            $checkval += 11;
+        if ($checkVal < -1) {
+            $checkVal += 11;
         }
 
-        return $checksum == $checkval;
+        return $checksum == $checkVal;
     }
 }

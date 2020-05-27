@@ -36,8 +36,8 @@ class ValidatorLU extends ValidatorAbstract
         }
 
         $checksum = (int)substr($vatNumber, -2);
-        $checkval = (int)substr($vatNumber, 0, 6);
+        $checkVal = (int)substr($vatNumber, 0, 6);
 
-        return ($checkval % 89) == $checksum;
+        return ($checkVal % 89) == $checksum;
     }
 }

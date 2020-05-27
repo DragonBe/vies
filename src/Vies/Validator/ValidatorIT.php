@@ -59,8 +59,8 @@ class ValidatorIT extends ValidatorAbstract
             }
         }
 
-        $checkval = (10 - ($Sum1 + $Sum2) % 10) % 10;
+        $checkVal = (10 - ($Sum1 + $Sum2) % 10) % 10;
 
-        return $checksum == $checkval;
+        return $checksum == $checkVal;
     }
 }

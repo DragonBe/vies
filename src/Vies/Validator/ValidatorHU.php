@@ -29,7 +29,6 @@ namespace DragonBe\Vies\Validator;
  */
 class ValidatorHU extends ValidatorAbstract
 {
-
     /**
      * {@inheritdoc}
      */
@@ -41,10 +40,10 @@ class ValidatorHU extends ValidatorAbstract
 
         $weights = [9, 7, 3, 1, 9, 7, 3];
         $checksum = (int) $vatNumber[7];
-        $checkval = $this->sumWeights($weights, $vatNumber);
-        $checkval = (int) substr((string) $checkval, -1);
-        $checkval = ($checkval > 0) ? 10 - $checkval : 0;
+        $checkVal = $this->sumWeights($weights, $vatNumber);
+        $checkVal = (int) substr((string) $checkVal, -1);
+        $checkVal = ($checkVal > 0) ? 10 - $checkVal : 0;
 
-        return $checksum == $checkval;
+        return $checksum == $checkVal;
     }
 }
