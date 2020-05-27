@@ -12,7 +12,7 @@ $pdo = new \PDO('sqlite:' . __DIR__ . '/vatqueue.db');
 $validationStmt = $pdo->prepare('SELECT `id`, `vat_id` FROM `vat_validation` WHERE `validated` = "" ORDER BY `id` DESC LIMIT 1');
 $updateVatId = $pdo->prepare('UPDATE `vat_validation` SET `validated` = ?, `result` = ?, `reason` = ?, `name` = ?, `address` = ?, `identifier` = ? WHERE `id` = ?');
 
-function debug($message = '')
+function debug($message = ''): void
 {
     $debug = false;
     if ($debug) {
@@ -41,7 +41,7 @@ do {
     $vatNumber = substr($vatin, 2);
     $vatNumber = $vies->filterVat($vatNumber);
     $reason = '';
-    
+
     try {
         $result = $vies->validateVat($vatCountry, $vatNumber);
         debug('Result: ' . var_export($result, 1));
@@ -65,5 +65,5 @@ do {
     $updateVatId->bindValue(7, $id);
 
     $updateVatId->execute();
-  
+
 } while (true);
