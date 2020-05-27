@@ -636,4 +636,60 @@ class ViesTest extends TestCase
 
         $this->assertInstanceOf(SoapClient::class, $vies->getSoapClient());
     }
+
+    public function vatTestNumberProvider(): array
+    {
+        return [
+            'Belgian VAT ID that tests valid' => ['BE', '100', true],
+            'Irish VAT ID that tests invalid' => ['IE', '200', false],
+            'German VAT ID that tests valid'  => ['DE', '100', true],
+        ];
+    }
+
+    /**
+     * Testing the test VAT SOAP service
+     *
+     * @param string $countryCode
+     * @param string $vatNumber
+     * @param bool $expectation
+     * @throws ViesException
+     * @throws ViesServiceException
+     *
+     * @covers ::validateTestVat
+     * @covers ::validateVat
+     * @covers ::setWsdl
+     *
+     * @dataProvider vatTestNumberProvider
+     */
+    public function testViesTestService(string $countryCode, string $vatNumber, bool $expectation)
+    {
+        $result = (new Vies())->validateVat($countryCode, $vatNumber);
+        $this->assertSame($expectation, $result->isValid());
+    }
+
+    /**
+     * Testing if we can catch soap exceptions when trying
+     * to make VIES test calls
+     *
+     * @throws ViesException
+     * @throws ViesServiceException
+     * @throws \ReflectionException
+     *
+     * @covers ::validateVat
+     * @covers ::validateTestVat
+     */
+    public function testExceptionIsRaisedWhenSoapCallFailsForTestService()
+    {
+        $this->expectException(ViesServiceException::class);
+        $stub = $this->getMockFromWsdl(dirname(__FILE__) . '/_files/checkVatTestService.wsdl');
+        $stub->expects($this->any())
+            ->method('__soapCall')
+            ->will($this->throwException(new SoapFault("test", "myMessage")));
+
+        (new Vies())
+            ->setSoapClient($stub)
+            ->validateVat('BE', '100')
+        ;
+        $this->fail('Expected exception was not raised');
+    }
 }
