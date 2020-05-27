@@ -141,6 +141,58 @@ class ValidatorTest extends TestCase
                     'traderCity'           => 'WARSZAWA',
                 ],
             ],
+            'Ampesant Trader Name' => [
+                [
+                    'countryCode'          => 'BE',
+                    'vatNumber'            => '0458591947',
+                    'requesterCountryCode' => 'BE',
+                    'requesterVatNumber'   => '0458591947',
+                    'traderName'           => 'VAN AERDE & PARTNERS',
+                    'traderCompanyType'    => 'BVBA',
+                    'traderStreet'         => 'RIJSELSTRAAT 274',
+                    'traderPostcode'       => '8200',
+                    'traderCity'           => 'BRUGGE',
+                ],
+            ],
+            'Dot-dash Trader Name' => [
+                [
+                    'countryCode'          => 'BE',
+                    'vatNumber'            => '0467609086',
+                    'requesterCountryCode' => 'BE',
+                    'requesterVatNumber'   => '0467609086',
+                    'traderName'           => 'HAELTERMAN C.V.-KLIMA',
+                    'traderCompanyType'    => 'BVBA',
+                    'traderStreet'         => 'GERAARDSBERGSESTEENWEG 307',
+                    'traderPostcode'       => '9404',
+                    'traderCity'           => 'NINOVE',
+                ],
+            ],
+            'Accent Trader Name' => [
+                [
+                    'countryCode'          => 'BE',
+                    'vatNumber'            => '0873284862',
+                    'requesterCountryCode' => 'BE',
+                    'requesterVatNumber'   => '0873284862',
+                    'traderName'           => '\'t GERIEF',
+                    'traderCompanyType'    => 'CVBA',
+                    'traderStreet'         => 'LICHTAARTSEWEG(HRT) 22',
+                    'traderPostcode'       => '2200',
+                    'traderCity'           => 'HERENTALS',
+                ],
+            ],
+            'Plus Trader Name' => [
+                [
+                    'countryCode'          => 'BE',
+                    'vatNumber'            => '0629758840',
+                    'requesterCountryCode' => 'BE',
+                    'requesterVatNumber'   => '0629758840',
+                    'traderName'           => 'ARCHITECTUUR+',
+                    'traderCompanyType'    => 'BVBA',
+                    'traderStreet'         => 'STATIONSSTRAAT 28',
+                    'traderPostcode'       => '3930',
+                    'traderCity'           => 'HAMONT-ACHEL',
+                ],
+            ],
         ];
     }
 
