@@ -51,7 +51,7 @@ class Vies
     const VIES_WSDL = '/taxation_customs/vies/checkVatService.wsdl';
     const VIES_TEST_WSDL = '/taxation_customs/vies/checkVatTestService.wsdl';
     const VIES_EU_COUNTRY_TOTAL = 28;
-    const VIES_TEST_VAT_NRS = [100, 200];
+    const VIES_TEST_VAT_NRS = [100, 200, 201, 202, 300, 301, 302, 400, 401, 500, 501, 600, 601];
 
     protected const VIES_EU_COUNTRY_LIST = [
         'AT' => ['name' => 'Austria', 'validator' => Validator\ValidatorAT::class],
@@ -86,6 +86,11 @@ class Vies
     ];
 
     /**
+     * @var bool Require explicit checking against self::VIES_TEST_VAT_NRS
+     */
+    protected $allowTestCodes = false;
+
+    /**
      * @var SoapClient
      */
     protected $soapClient;
@@ -104,6 +109,42 @@ class Vies
      * @var HeartBeat A heartbeat checker to verify if the VIES service is available
      */
     protected $heartBeat;
+
+
+    /**
+     * Allow VAT number to be compared to the know VIES test codes (self::VIES_TEST_VAT_NRS)
+     *
+     * @return self
+     */
+    public function allowTestCodes(): self
+    {
+        $this->allowTestCodes = true;
+
+        return $this;
+    }
+
+    /**
+     * Disallow VAT number to be compared to the know VIES test codes (self::VIES_TEST_VAT_NRS)
+     *
+     * @return self
+     */
+    public function disallowTestCodes(): self
+    {
+        $this->allowTestCodes = false;
+
+        return $this;
+    }
+
+    /**
+     * Check if test error codes are allowed
+     *
+     * @return bool
+     */
+    public function areTestCodesAllowed(): bool
+    {
+        return $this->allowTestCodes;
+    }
+
 
     /**
      * Retrieves the SOAP client that will be used to communicate with the VIES
@@ -251,7 +292,7 @@ class Vies
             throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
         }
 
-        if (in_array((int) $vatNumber, self::VIES_TEST_VAT_NRS, true)) {
+        if ($this->allowTestCodes && in_array((int) $vatNumber, self::VIES_TEST_VAT_NRS, true)) {
             return $this->validateTestVat($countryCode, $vatNumber);
         }
 
