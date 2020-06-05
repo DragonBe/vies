@@ -88,7 +88,7 @@ class Vies
     /**
      * @var bool Require explicit checking against self::VIES_TEST_VAT_NRS
      */
-    protected $allowTestCodes = false;
+    protected $allowTestCodes = true;
 
     /**
      * @var SoapClient
@@ -292,7 +292,7 @@ class Vies
             throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
         }
 
-        if ($this->allowTestCodes && in_array((int) $vatNumber, self::VIES_TEST_VAT_NRS, true)) {
+        if ($this->areTestCodesAllowed() && in_array((int) $vatNumber, self::VIES_TEST_VAT_NRS, true)) {
             return $this->validateTestVat($countryCode, $vatNumber);
         }
 
