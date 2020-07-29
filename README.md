@@ -74,6 +74,22 @@ if (false === $vies->getHeartBeat()->isAlive()) {
 }
 ```
 
+#### If using a proxy, you can now use the following approach
+
+```php
+$vies = new Vies();
+$options = [
+    'proxy_host' => '127.0.0.1',
+    'proxy_port' => '8888',
+];
+$vies->setOptions($options);
+
+$heartBeat = new \DragonBe\Vies\HeartBeat('tcp://' . $options['proxy_host'], $options['proxy_port']);
+$vies->setHeartBeat($heartBeat);
+
+$isAlive = $vies->getHeartBeat()->isAlive();
+```
+
 ### 3. Validate VAT
 
 Now that we know the service is alive, we can start validating VAT ID's

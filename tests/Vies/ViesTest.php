@@ -329,8 +329,8 @@ class ViesTest extends TestCase
     {
         $hb = (new Vies())->getHeartBeat();
         $this->assertInstanceOf(HeartBeat::class, $hb);
-        $this->assertSame('tcp://' . Vies::VIES_DOMAIN, $hb->getHost());
-        $this->assertSame(80, $hb->getPort());
+        $this->assertSame(Vies::VIES_DOMAIN, $hb->getHost());
+        $this->assertSame(Vies::VIES_PORT, $hb->getPort());
     }
 
     /**
@@ -443,14 +443,6 @@ class ViesTest extends TestCase
                 "Main Street 1\x3c\x73\x63\x72\x69\x70\x74\x3e\x61\x6c\x65\x72\x74\x28\x22"
                 . "\x78\x73\x73\x22\x29\x3b\x3c\x2f\x73\x63\x72\x69\x70\x74\x3e",
                 '1000',
-                'Some Town',
-            ],
-            [
-                'HackThePlanet',
-                'Ltd',
-                'Main Street 1',
-                '1000<?php echo url_decode("%3c%73%63%72%69%70%74%3e%61%6c%65%72%74%28%22%78'
-                . '%73%73%22%29%3b%3c%2f%73%63%72%69%70%74%3e") ?>',
                 'Some Town',
             ],
             [
@@ -643,6 +635,62 @@ class ViesTest extends TestCase
         $vies->setSoapClient($soapClient);
 
         $this->assertInstanceOf(SoapClient::class, $vies->getSoapClient());
+    }
+
+    public function vatTestNumberProvider(): array
+    {
+        return [
+            'Belgian VAT ID that tests valid' => ['BE', '100', true],
+            'Irish VAT ID that tests invalid' => ['IE', '200', false],
+            'German VAT ID that tests valid'  => ['DE', '100', true],
+        ];
+    }
+
+    /**
+     * Testing the test VAT SOAP service
+     *
+     * @param string $countryCode
+     * @param string $vatNumber
+     * @param bool $expectation
+     * @throws ViesException
+     * @throws ViesServiceException
+     *
+     * @covers ::validateTestVat
+     * @covers ::validateVat
+     * @covers ::setWsdl
+     *
+     * @dataProvider vatTestNumberProvider
+     */
+    public function testViesTestService(string $countryCode, string $vatNumber, bool $expectation)
+    {
+        $result = (new Vies())->validateVat($countryCode, $vatNumber);
+        $this->assertSame($expectation, $result->isValid());
+    }
+
+    /**
+     * Testing if we can catch soap exceptions when trying
+     * to make VIES test calls
+     *
+     * @throws ViesException
+     * @throws ViesServiceException
+     * @throws \ReflectionException
+     *
+     * @covers ::validateVat
+     * @covers ::validateTestVat
+     */
+    public function testExceptionIsRaisedWhenSoapCallFailsForTestService()
+    {
+        $this->expectException(ViesServiceException::class);
+        $stub = $this->getMockFromWsdl(dirname(__FILE__) . '/_files/checkVatTestService.wsdl');
+        $stub->expects($this->any())
+            ->method('__soapCall')
+            ->will($this->throwException(new SoapFault("test", "myMessage")));
+
+        (new Vies())
+            ->setSoapClient($stub)
+            ->validateVat('BE', '100')
+        ;
+        $this->fail('Expected exception was not raised');
     }
 
     /**
