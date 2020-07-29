@@ -329,8 +329,8 @@ class ViesTest extends TestCase
     {
         $hb = (new Vies())->getHeartBeat();
         $this->assertInstanceOf(HeartBeat::class, $hb);
-        $this->assertSame('tcp://' . Vies::VIES_DOMAIN, $hb->getHost());
-        $this->assertSame(80, $hb->getPort());
+        $this->assertSame(Vies::VIES_DOMAIN, $hb->getHost());
+        $this->assertSame(Vies::VIES_PORT, $hb->getPort());
     }
 
     /**

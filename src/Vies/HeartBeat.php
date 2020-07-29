@@ -38,6 +38,11 @@ class HeartBeat
     protected $port;
 
     /**
+     * @var int The timeout in seconds
+     */
+    protected $timeout;
+
+    /**
      * @var bool Allow the service to be tested without integration of sockets
      */
     public static $testingEnabled = false;
@@ -50,14 +55,16 @@ class HeartBeat
     /**
      * @param string|null $host
      * @param int $port
+     * @param int $timeout
      */
-    public function __construct(?string $host = null, int $port = 80)
+    public function __construct(?string $host = null, int $port = 80, int $timeout = 10)
     {
         if (null !== $host) {
             $this->setHost($host);
         }
 
         $this->setPort($port);
+        $this->setTimeout($timeout);
     }
 
     /**
@@ -103,6 +110,24 @@ class HeartBeat
     }
 
     /**
+     * @return int
+     */
+    public function getTimeout(): int
+    {
+        return $this->timeout;
+    }
+
+    /**
+     * @param int $timeout
+     * @return HeartBeat
+     */
+    public function setTimeout(int $timeout): HeartBeat
+    {
+        $this->timeout = $timeout;
+        return $this;
+    }
+
+    /**
      * Checks if the VIES service is online and available
      *
      * @return bool
@@ -110,9 +135,46 @@ class HeartBeat
     public function isAlive(): bool
     {
         if (false === static::$testingEnabled) {
-            return false !== fsockopen($this->getHost(), $this->getPort());
+            return $this->reachOut();
         }
 
         return static::$testingServiceIsUp;
+    }
+
+    /**
+     * A private routine to send a request over a socket to
+     * test if the remote service is responding with a status
+     * code of 200 OK. Now supports also proxy connections.
+     *
+     * @return bool
+     */
+    private function reachOut(): bool
+    {
+        $errno = 0;
+        $error = '';
+        $host = $this->getHost();
+        $port = $this->getPort();
+        $timeout = $this->getTimeout();
+        if (false === ($fs = fsockopen('tcp://' . $host, $port, $errno, $error, $timeout))) {
+            return false;
+        }
+        $response = '';
+        $uri = sprintf('%s://%s/', Vies::VIES_PROTO, Vies::VIES_DOMAIN);
+        $stream = [
+            'GET ' . $uri . ' HTTP/1.0',
+            'Host: ' . Vies::VIES_DOMAIN,
+            'Connection: close',
+        ];
+        fwrite($fs, implode("\r\n", $stream) . "\r\n\r\n");
+        while (! feof($fs)) {
+            $response .= fgets($fs, 1024);
+        }
+        fclose($fs);
+        $response = str_replace("\r\n", PHP_EOL, $response);
+        $data = explode(PHP_EOL, $response);
+        return (
+            (0 === strcmp('HTTP/1.1 200 OK', $data[0])) ||
+            (0 === strcmp('HTTP/1.1 307 Temporary Redirect', $data[0]))
+        );
     }
 }
