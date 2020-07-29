@@ -59,18 +59,18 @@ class ValidatorBG extends ValidatorAbstract
     private function validateBusiness(string $vatNumber): bool
     {
         $weights = [1, 2, 3, 4, 5, 6, 7, 8];
-        $checkval = $this->sumWeights($weights, $vatNumber);
+        $checkVal = $this->sumWeights($weights, $vatNumber);
 
-        if ($checkval % 11 == 10) {
+        if ($checkVal % 11 == 10) {
             $weights = [3, 4, 5, 6, 7, 8, 9, 10];
-            $checkval = $this->sumWeights($weights, $vatNumber);
+            $checkVal = $this->sumWeights($weights, $vatNumber);
 
-            $checkval = ($checkval % 11) == 10 ? 0 : ($checkval % 11);
+            $checkVal = ($checkVal % 11) == 10 ? 0 : ($checkVal % 11);
         } else {
-            $checkval = $checkval % 11;
+            $checkVal = $checkVal % 11;
         }
 
-        return $checkval == (int) $vatNumber[8];
+        return $checkVal == (int) $vatNumber[8];
     }
 
     /**
@@ -83,17 +83,17 @@ class ValidatorBG extends ValidatorAbstract
     private function validateNaturalPerson(string $vatNumber): bool
     {
         $weights = [2, 4, 8, 5, 10, 9, 7, 3, 6];
-        $checkval = $this->sumWeights($weights, $vatNumber);
+        $checkVal = $this->sumWeights($weights, $vatNumber);
 
-        if ($checkval % 11 == 10) {
+        if ($checkVal % 11 == 10) {
             $weights = [3, 4, 5, 6, 7, 8, 9, 10];
-            $checkval = $this->sumWeights($weights, $vatNumber);
+            $checkVal = $this->sumWeights($weights, $vatNumber);
 
-            $checkval = ($checkval % 11) == 10 ? 0 : ($checkval % 11);
+            $checkVal = ($checkVal % 11) == 10 ? 0 : ($checkVal % 11);
         } else {
-            $checkval = $checkval % 11;
+            $checkVal = $checkVal % 11;
         }
 
-        return $checkval == (int) $vatNumber[9];
+        return $checkVal == (int) $vatNumber[9];
     }
 }

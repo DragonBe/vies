@@ -38,9 +38,9 @@ class ValidatorEL extends ValidatorAbstract
         }
 
         $weights = [256, 128, 64, 32, 16, 8, 4, 2];
-        $checkval = $this->sumWeights($weights, $vatNumber);
-        $checkval = ($checkval % 11) > 9 ? 0 : ($checkval % 11);
+        $checkVal = $this->sumWeights($weights, $vatNumber);
+        $checkVal = ($checkVal % 11) > 9 ? 0 : ($checkVal % 11);
 
-        return $checkval === (int) $vatNumber[8];
+        return $checkVal === (int) $vatNumber[8];
     }
 }

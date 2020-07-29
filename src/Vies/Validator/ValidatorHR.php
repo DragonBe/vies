@@ -17,7 +17,6 @@ namespace DragonBe\Vies\Validator;
  */
 class ValidatorHR extends ValidatorAbstract
 {
-
     /**
      * {@inheritdoc}
      */

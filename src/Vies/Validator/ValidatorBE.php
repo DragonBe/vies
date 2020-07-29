@@ -37,8 +37,8 @@ class ValidatorBE extends ValidatorAbstract
             return false;
         }
 
-        $checkvals = (int) substr($vatNumber, 0, -2);
+        $checkVal = (int) substr($vatNumber, 0, -2);
 
-        return 97 - ($checkvals % 97) == (int) substr($vatNumber, -2);
+        return 97 - ($checkVal % 97) == (int) substr($vatNumber, -2);
     }
 }

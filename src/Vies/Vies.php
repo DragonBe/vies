@@ -50,7 +50,9 @@ class Vies
     const VIES_DOMAIN = 'ec.europa.eu';
     const VIES_PORT = 80;
     const VIES_WSDL = '/taxation_customs/vies/checkVatService.wsdl';
+    const VIES_TEST_WSDL = '/taxation_customs/vies/checkVatTestService.wsdl';
     const VIES_EU_COUNTRY_TOTAL = 28;
+    const VIES_TEST_VAT_NRS = [100, 200, 201, 202, 300, 301, 302, 400, 401, 500, 501, 600, 601];
 
     protected const VIES_EU_COUNTRY_LIST = [
         'AT' => ['name' => 'Austria', 'validator' => Validator\ValidatorAT::class],
@@ -85,6 +87,11 @@ class Vies
     ];
 
     /**
+     * @var bool Require explicit checking against self::VIES_TEST_VAT_NRS
+     */
+    protected $allowTestCodes = true;
+
+    /**
      * @var SoapClient
      */
     protected $soapClient;
@@ -103,6 +110,42 @@ class Vies
      * @var HeartBeat A heartbeat checker to verify if the VIES service is available
      */
     protected $heartBeat;
+
+
+    /**
+     * Allow VAT number to be compared to the know VIES test codes (self::VIES_TEST_VAT_NRS)
+     *
+     * @return self
+     */
+    public function allowTestCodes(): self
+    {
+        $this->allowTestCodes = true;
+
+        return $this;
+    }
+
+    /**
+     * Disallow VAT number to be compared to the know VIES test codes (self::VIES_TEST_VAT_NRS)
+     *
+     * @return self
+     */
+    public function disallowTestCodes(): self
+    {
+        $this->allowTestCodes = false;
+
+        return $this;
+    }
+
+    /**
+     * Check if test error codes are allowed
+     *
+     * @return bool
+     */
+    public function areTestCodesAllowed(): bool
+    {
+        return $this->allowTestCodes;
+    }
+
 
     /**
      * Retrieves the SOAP client that will be used to communicate with the VIES
@@ -249,6 +292,11 @@ class Vies
         if (! isset(self::VIES_EU_COUNTRY_LIST[$countryCode])) {
             throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
         }
+
+        if ($this->areTestCodesAllowed() && in_array((int) $vatNumber, self::VIES_TEST_VAT_NRS, true)) {
+            return $this->validateTestVat($countryCode, $vatNumber);
+        }
+
         $vatNumber = self::filterVat($vatNumber);
 
         if (! $this->validateVatSum($countryCode, $vatNumber)) {
@@ -387,7 +435,7 @@ class Vies
     private function filterArgument(string $argumentValue): string
     {
         $argumentValue = str_replace(['"', '\''], '', $argumentValue);
-        return filter_var($argumentValue, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_FLAG_STRIP_HIGH);
+        return filter_var($argumentValue, FILTER_SANITIZE_STRIPPED, FILTER_FLAG_STRIP_LOW);
     }
 
     /**
@@ -399,11 +447,38 @@ class Vies
      */
     private function validateArgument(string $argumentValue): bool
     {
+        $regexp = '/^[a-zA-Z0-9\s\.\-,&\+\(\)\/º\pL]+$/u';
         if (false === filter_var($argumentValue, FILTER_VALIDATE_REGEXP, [
-            'options' => ['regexp' => '/^[a-zA-Z0-9\s\.\-,]+$/']
+            'options' => ['regexp' => $regexp]
         ])) {
             return false;
         }
         return true;
+    }
+
+    private function validateTestVat($countryCode, $testVatNumber): CheckVatResponse
+    {
+        $wsdl = sprintf('%s://%s%s', self::VIES_PROTO, self::VIES_DOMAIN, self::VIES_TEST_WSDL);
+        $this->setWsdl($wsdl);
+        $requestParams = [
+            'countryCode' => $countryCode,
+            'vatNumber' => $testVatNumber,
+        ];
+        try {
+            return new CheckVatResponse(
+                $this->getSoapClient()->__soapCall('checkVat', [$requestParams])
+            );
+        } catch (SoapFault $e) {
+            $message = sprintf(
+                'Back-end VIES service cannot validate the VAT number "%s%s" at this moment. '
+                . 'The service responded with the critical error "%s". This is probably a temporary '
+                . 'problem. Please try again later.',
+                $countryCode,
+                $testVatNumber,
+                $e->getMessage()
+            );
+
+            throw new ViesServiceException($message, 0, $e);
+        }
     }
 }

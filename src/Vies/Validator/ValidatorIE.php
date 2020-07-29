@@ -58,27 +58,27 @@ class ValidatorIE extends ValidatorAbstract
     {
         $checksum = strtoupper(substr($vatNumber, 7, 1));
         $checkNumber = substr($vatNumber, 0, 8);
-        $checkval = 0;
+        $checkVal = 0;
 
         for ($i = 2; $i <= 8; $i++) {
-            $checkval += (int)$checkNumber[8 - $i] * $i;
+            $checkVal += (int)$checkNumber[8 - $i] * $i;
         }
 
         if (strlen($vatNumber) == 9) {
-            $checkval += (9 * strpos($this->alphabet, $vatNumber[8]));
+            $checkVal += (9 * strpos($this->alphabet, $vatNumber[8]));
         }
 
-        $checkval = ($checkval % 23);
+        $checkVal = ($checkVal % 23);
 
-        if ($checkval == 0) {
+        if ($checkVal == 0) {
             return $checksum == 'W';
         }
 
-        $checkchar = 'A';
-        for ($i = $checkval - 1; $i > 0; $i--) {
-            $checkchar++;
+        $checkChar = 'A';
+        for ($i = $checkVal - 1; $i > 0; $i--) {
+            $checkChar++;
         }
 
-        return $checkchar == $checksum;
+        return $checkChar == $checksum;
     }
 }

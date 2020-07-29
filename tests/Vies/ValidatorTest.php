@@ -85,4 +85,140 @@ class ValidatorTest extends TestCase
             }
         }
     }
+
+    public function traderDataProvider()
+    {
+        return [
+            'Belgian Trader Name' => [
+                [
+                    'countryCode'          => 'BE',
+                    'vatNumber'            => '0203430576',
+                    'requesterCountryCode' => 'BE',
+                    'requesterVatNumber'   => '0203430576',
+                    'traderName'           => 'B-Rail',
+                    'traderCompanyType'    => 'NV',
+                    'traderStreet'         => 'Frankrijkstraat 65',
+                    'traderPostcode'       => '1060',
+                    'traderCity'           => 'Sint-Gillis',
+                ],
+            ],
+            'German Trader Name' => [
+                [
+                    'countryCode'          => 'DE',
+                    'vatNumber'            => '811569869',
+                    'requesterCountryCode' => 'DE',
+                    'requesterVatNumber'   => '811569869',
+                    'traderName'           => 'Deutsche Bahn',
+                    'traderCompanyType'    => 'AG',
+                    'traderStreet'         => 'Potsdamer Platz 2',
+                    'traderPostcode'       => '10785',
+                    'traderCity'           => 'Berlin',
+                ],
+            ],
+            'Greek Trader Name' => [
+                [
+                    'countryCode'          => 'EL',
+                    'vatNumber'            => '999645865',
+                    'requesterCountryCode' => 'EL',
+                    'requesterVatNumber'   => '999645865',
+                    'traderName'           => 'ΤΡΑΙΝΟΣΕ',
+                    'traderCompanyType'    => 'AE',
+                    'traderStreet'         => 'ΚΑΡΟΛΟΥ 1-3',
+                    'traderPostcode'       => '10437',
+                    'traderCity'           => 'ΑΘΗΝΑ',
+                ],
+            ],
+            'Polish Trader Name' => [
+                [
+                    'countryCode'          => 'PL',
+                    'vatNumber'            => '1132316427',
+                    'requesterCountryCode' => 'PL',
+                    'requesterVatNumber'   => '1132316427',
+                    'traderName'           => 'PKP POLSKIE LINIE KOLEJOWE SPÓŁKA AKCYJNA',
+                    'traderCompanyType'    => '',
+                    'traderStreet'         => 'TARGOWA 74',
+                    'traderPostcode'       => '03-734',
+                    'traderCity'           => 'WARSZAWA',
+                ],
+            ],
+            'Ampesant Trader Name' => [
+                [
+                    'countryCode'          => 'BE',
+                    'vatNumber'            => '0458591947',
+                    'requesterCountryCode' => 'BE',
+                    'requesterVatNumber'   => '0458591947',
+                    'traderName'           => 'VAN AERDE & PARTNERS',
+                    'traderCompanyType'    => 'BVBA',
+                    'traderStreet'         => 'RIJSELSTRAAT 274',
+                    'traderPostcode'       => '8200',
+                    'traderCity'           => 'BRUGGE',
+                ],
+            ],
+            'Dot-dash Trader Name' => [
+                [
+                    'countryCode'          => 'BE',
+                    'vatNumber'            => '0467609086',
+                    'requesterCountryCode' => 'BE',
+                    'requesterVatNumber'   => '0467609086',
+                    'traderName'           => 'HAELTERMAN C.V.-KLIMA',
+                    'traderCompanyType'    => 'BVBA',
+                    'traderStreet'         => 'GERAARDSBERGSESTEENWEG 307',
+                    'traderPostcode'       => '9404',
+                    'traderCity'           => 'NINOVE',
+                ],
+            ],
+            'Accent Trader Name' => [
+                [
+                    'countryCode'          => 'BE',
+                    'vatNumber'            => '0873284862',
+                    'requesterCountryCode' => 'BE',
+                    'requesterVatNumber'   => '0873284862',
+                    'traderName'           => '\'t GERIEF',
+                    'traderCompanyType'    => 'CVBA',
+                    'traderStreet'         => 'LICHTAARTSEWEG(HRT) 22',
+                    'traderPostcode'       => '2200',
+                    'traderCity'           => 'HERENTALS',
+                ],
+            ],
+            'Plus Trader Name' => [
+                [
+                    'countryCode'          => 'BE',
+                    'vatNumber'            => '0629758840',
+                    'requesterCountryCode' => 'BE',
+                    'requesterVatNumber'   => '0629758840',
+                    'traderName'           => 'ARCHITECTUUR+',
+                    'traderCompanyType'    => 'BVBA',
+                    'traderStreet'         => 'STATIONSSTRAAT 28',
+                    'traderPostcode'       => '3930',
+                    'traderCity'           => 'HAMONT-ACHEL',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Testing that arguments that contain non-latin values are still
+     * validated correctly
+     *
+     * @group issue-99
+     * @covers \DragonBe\Vies\Vies::validateVat
+     * @covers \DragonBe\Vies\Vies::validateArgument
+     * @dataProvider TraderDataProvider
+     */
+    public function testArgumentValidationSucceedsForNonLatinArgumentValues(array $traderData)
+    {
+        $vies = new Vies();
+        $vatResponse = $vies->validateVat(
+            $traderData['countryCode'],
+            $traderData['vatNumber'],
+            $traderData['requesterCountryCode'],
+            $traderData['requesterVatNumber'],
+            $traderData['traderName'],
+            $traderData['traderCompanyType'],
+            $traderData['traderStreet'],
+            $traderData['traderPostcode'],
+            $traderData['traderCity']
+        );
+        $this->assertTrue($vatResponse->isValid());
+    }
 }

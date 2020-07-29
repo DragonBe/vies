@@ -33,7 +33,7 @@ abstract class ValidatorAbstract implements ValidatorInterface
      */
     protected function isEven(int $val): bool
     {
-        return $val / 2 == floor($val / 2);
+        return $val % 2 === 0;
     }
 
     /**
@@ -45,12 +45,12 @@ abstract class ValidatorAbstract implements ValidatorInterface
      */
     protected function sumWeights(array $weights, string $vatNumber, int $start = 0): int
     {
-        $checkval = 0;
+        $checkVal = 0;
         $count = count($weights);
         for ($i = $start; $i < $count; $i++) {
-            $checkval += (int)$vatNumber[$i] * $weights[$i];
+            $checkVal += (int)$vatNumber[$i] * $weights[$i];
         }
 
-        return $checkval;
+        return $checkVal;
     }
 }

@@ -61,10 +61,10 @@ class ValidatorGB extends ValidatorAbstract
         }
 
         $weights = [8, 7, 6, 5, 4, 3, 2];
-        $checkval = $this->sumWeights($weights, $vatNumber);
-        $checkval += (int)substr($vatNumber, 7, 2);
+        $checkVal = $this->sumWeights($weights, $vatNumber);
+        $checkVal += (int)substr($vatNumber, 7, 2);
 
-        $Result1 = $checkval % 97;
+        $Result1 = $checkVal % 97;
         $Result2 = ($Result1 + 55) % 97;
 
         return ! ($Result1 * $Result2);

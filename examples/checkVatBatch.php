@@ -53,7 +53,7 @@ if (false === $vies->getHeartBeat()->isAlive()) {
  *
  * @return array
  */
-function vatinProvider()
+function vatinProvider(): array
 {
     $filename = realpath(__DIR__ . '/vatins.php');
 
