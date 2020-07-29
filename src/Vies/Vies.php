@@ -385,6 +385,20 @@ class Vies
     }
 
     /**
+     * Splits a VAT ID on country code and VAT number
+     *
+     * @param string $vatId
+     * @return array
+     */
+    public function splitVatId(string $vatId): array
+    {
+        return [
+            'country' => substr($vatId, 0, 2),
+            'id' => substr($vatId, 2),
+        ];
+    }
+
+    /**
      * A list of European Union countries as of January 2015
      *
      * @return array
