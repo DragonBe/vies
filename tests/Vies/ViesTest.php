@@ -705,7 +705,7 @@ class ViesTest extends TestCase
         $countryCode = 'BE';
         $vatNumber = '1234567890';
         $resultSet = (new Vies())->splitVatId($vatId);
-        $this->assertSame($resultSet['country'], $countryCode);
-        $this->assertSame($resultSet['id'], $vatNumber);
+        $this->assertSame($countryCode, $resultSet['country']);
+        $this->assertSame($vatNumber, $resultSet['id']);
     }
 }
