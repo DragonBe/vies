@@ -45,7 +45,8 @@ class ValidatorBG extends ValidatorAbstract
         }
 
         if (10 === $vatNumberLength) {
-            return $this->validateNaturalPerson($vatNumber);
+            return $this->validateNaturalPerson($vatNumber)
+                || $this->validateForeignNaturalPerson($vatNumber);
         }
         return $this->validateBusiness($vatNumber);
     }
@@ -92,6 +93,30 @@ class ValidatorBG extends ValidatorAbstract
             $checkVal = ($checkVal % 11) == 10 ? 0 : ($checkVal % 11);
         } else {
             $checkVal = $checkVal % 11;
+        }
+
+        return $checkVal == (int) $vatNumber[9];
+    }
+
+    /**
+     * Validate VAT ID's for foreign natural persons
+     *
+     * @param string $vatNumber
+     * @return bool
+     * @see https://github.com/yolk/valvat/blob/master/lib/valvat/checksum/bg.rb
+     */
+    private function validateForeignNaturalPerson(string $vatNumber): bool
+    {
+        $weights = [21, 19, 17, 13, 11, 9, 7, 3, 1];
+        $checkVal = $this->sumWeights($weights, $vatNumber);
+
+        if ($checkVal % 11 == 10) {
+            $weights = [3, 4, 5, 6, 7, 8, 9, 10];
+            $checkVal = $this->sumWeights($weights, $vatNumber);
+
+            $checkVal = ($checkVal % 11) == 10 ? 0 : ($checkVal % 11);
+        } else {
+            $checkVal = $checkVal % 10;
         }
 
         return $checkVal == (int) $vatNumber[9];
