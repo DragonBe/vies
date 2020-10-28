@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace DragonBe\Test\Vies;
 
 use DragonBe\Vies\Vies;
+use DragonBe\Vies\ViesServiceException;
 use PHPUnit\Framework\TestCase;
 
 class ValidatorTest extends TestCase
@@ -208,17 +209,21 @@ class ValidatorTest extends TestCase
     public function testArgumentValidationSucceedsForNonLatinArgumentValues(array $traderData)
     {
         $vies = new Vies();
-        $vatResponse = $vies->validateVat(
-            $traderData['countryCode'],
-            $traderData['vatNumber'],
-            $traderData['requesterCountryCode'],
-            $traderData['requesterVatNumber'],
-            $traderData['traderName'],
-            $traderData['traderCompanyType'],
-            $traderData['traderStreet'],
-            $traderData['traderPostcode'],
-            $traderData['traderCity']
-        );
-        $this->assertTrue($vatResponse->isValid());
+        try {
+            $vatResponse = $vies->validateVat(
+                $traderData['countryCode'],
+                $traderData['vatNumber'],
+                $traderData['requesterCountryCode'],
+                $traderData['requesterVatNumber'],
+                $traderData['traderName'],
+                $traderData['traderCompanyType'],
+                $traderData['traderStreet'],
+                $traderData['traderPostcode'],
+                $traderData['traderCity']
+            );
+            $this->assertTrue($vatResponse->isValid());
+        } catch (ViesServiceException $viesServiceException) {
+            $this->markTestSkipped('Service unavailable at the moment');
+        }
     }
 }
