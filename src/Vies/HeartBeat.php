@@ -155,7 +155,7 @@ class HeartBeat
         $host = $this->getHost();
         $port = $this->getPort();
         $timeout = $this->getTimeout();
-        if (false === ($fs = fsockopen('tcp://' . $host, $port, $errno, $error, $timeout))) {
+        if (false === ($handle = \fsockopen('tcp://' . $host, $port, $errno, $error, $timeout))) {
             return false;
         }
         $response = '';
@@ -165,11 +165,11 @@ class HeartBeat
             'Host: ' . Vies::VIES_DOMAIN,
             'Connection: close',
         ];
-        fwrite($fs, implode("\r\n", $stream) . "\r\n\r\n");
-        while (! feof($fs)) {
-            $response .= fgets($fs, 1024);
+        fwrite($handle, implode("\r\n", $stream) . "\r\n\r\n");
+        while (! feof($handle)) {
+            $response .= fgets($handle, 1024);
         }
-        fclose($fs);
+        fclose($handle);
         $response = str_replace("\r\n", PHP_EOL, $response);
         $data = explode(PHP_EOL, $response);
         return (
