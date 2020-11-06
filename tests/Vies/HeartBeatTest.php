@@ -48,6 +48,7 @@ class HeartBeatTest extends TestCase
 
     /**
      * @covers ::setPort
+     * @covers ::getPort
      */
     public function testCanSetPort()
     {
@@ -55,6 +56,18 @@ class HeartBeatTest extends TestCase
         $hb = new HeartBeat();
         $hb->setPort($port);
         $this->assertSame($port, $hb->getPort());
+    }
+
+    /**
+     * @covers ::setTimeout
+     * @covers ::getTimeout
+     */
+    public function testCanSetTimeout()
+    {
+        $timeout = 300;
+        $hb = new HeartBeat();
+        $hb->setTimeout($timeout);
+        $this->assertSame($timeout, $hb->getTimeout());
     }
 
     /**
