@@ -708,4 +708,30 @@ class ViesTest extends TestCase
         $this->assertSame($countryCode, $resultSet['country']);
         $this->assertSame($vatNumber, $resultSet['id']);
     }
+
+    /**
+     * Testing to see if we allow test codes to be used
+     * for testing VIES services
+     *
+     * @covers ::allowTestCodes
+     * @covers ::areTestCodesAllowed
+     */
+    public function testAllowingTestCodes()
+    {
+        $vies = (new Vies())->allowTestCodes();
+        $this->assertTrue($vies->areTestCodesAllowed());
+    }
+
+    /**
+     * Testing to see if we disallow test codes to be used
+     * for testing VIES services
+     *
+     * @covers ::disallowTestCodes
+     * @covers ::areTestCodesAllowed
+     */
+    public function testDisallowingTestCodes()
+    {
+        $vies = (new Vies())->disallowTestCodes();
+        $this->assertFalse($vies->areTestCodesAllowed());
+    }
 }
