@@ -277,6 +277,68 @@ class CheckVatResponseTest extends TestCase
     }
 
     /**
+     * @covers ::__construct
+     * @covers ::populate
+     * @covers ::setCountryCode
+     * @covers ::getCountryCode
+     * @covers ::setVatNumber
+     * @covers ::getVatNumber
+     * @covers ::setRequestDate
+     * @covers ::getRequestDate
+     * @covers ::setValid
+     * @covers ::isValid
+     * @covers ::setName
+     * @covers ::getName
+     * @covers ::setAddress
+     * @covers ::getAddress
+     * @covers ::setIdentifier
+     * @covers ::getIdentifier
+     * @covers ::setNameMatch
+     * @covers ::getNameMatch
+     * @covers ::setCompanyTypeMatch
+     * @covers ::getCompanyTypeMatch
+     * @covers ::setStreetMatch
+     * @covers ::getStreetMatch
+     * @covers ::setPostcodeMatch
+     * @covers ::getPostcodeMatch
+     * @covers ::setCityMatch
+     * @covers ::getCityMatch
+     *
+     * @dataProvider requiredDataProvider
+     */
+    public function testResponseAcceptsStringDates(
+        $countryCode,
+        $vatNumber,
+        $requestDate,
+        $valid
+    ) {
+
+        $expectedResult = [
+            'countryCode' => $countryCode,
+            'vatNumber' => $vatNumber,
+            'requestDate' => substr($requestDate, 0, -6),
+            'valid' => $valid,
+            'name' => '---',
+            'address' => '---',
+            'identifier' => '',
+            'nameMatch' => '',
+            'companyTypeMatch' => '',
+            'streetMatch' => '',
+            'postcodeMatch' => '',
+            'cityMatch' => '',
+        ];
+
+        $vatResponse = new CheckVatResponse([
+            'countryCode' => $countryCode,
+            'vatNumber' => $vatNumber,
+            'requestDate' => $requestDate,
+            'valid' => $valid,
+        ]);
+
+        $this->assertSame($expectedResult, $vatResponse->toArray());
+    }
+
+    /**
      * Generates trader details that can be submitted to VIES
      * as an additional check
      *
