@@ -152,10 +152,10 @@ class HeartBeat
     {
         $errno = 0;
         $error = '';
-        $host = $this->getHost();
-        $port = $this->getPort();
-        $timeout = $this->getTimeout();
-        if (false === ($handle = \fsockopen('tcp://' . $host, $port, $errno, $error, $timeout))) {
+        $hostname = $this->getHost();
+        $portNumber = $this->getPort();
+        $timeToLive = $this->getTimeout();
+        if (false === ($handle = \fsockopen('tcp://' . $hostname, $portNumber, $errno, $error, $timeToLive))) {
             return false;
         }
         $response = '';
