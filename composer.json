@@ -46,6 +46,7 @@
         "phpcs": "phpcs",
         "phpunit": "phpunit",
         "test": [
+            "@prepare",
             "@phpcs",
             "@phpunit"
         ],
@@ -65,6 +66,7 @@
         "test-all": [
             "@test",
             "@pmd"
-        ]
+        ],
+        "prepare": "mkdir -p build/{logs,coverage}"
     }
 }
