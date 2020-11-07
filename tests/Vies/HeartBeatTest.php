@@ -5,6 +5,7 @@ namespace DragonBe\Test\Vies;
 
 use DomainException;
 use DragonBe\Vies\HeartBeat;
+use DragonBe\Vies\Vies;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -106,5 +107,26 @@ class HeartBeatTest extends TestCase
         HeartBeat::$testingServiceIsUp = false;
         $hb = new HeartBeat($host, $port);
         $this->assertFalse($hb->isAlive());
+    }
+
+    public function socketProvider(): array
+    {
+        return [
+            'Non-existing socket on localhost' => ['127.0.0.1', -1, 10, false],
+            'Socket 80 on ec.europe.eu' => [Vies::VIES_DOMAIN, Vies::VIES_PORT, 10, true],
+        ];
+    }
+
+    /**
+     * @dataProvider socketProvider
+     * @covers ::isAlive
+     * @covers ::reachOut
+     */
+    public function testIsAliveUsingSockets($host, $port, $timeout, $expectedResult)
+    {
+        HeartBeat::$testingEnabled = false;
+        $heartBeat = new HeartBeat($host, $port, $timeout);
+        $actualResult = $heartBeat->isAlive();
+        $this->assertSame($expectedResult, $actualResult);
     }
 }
