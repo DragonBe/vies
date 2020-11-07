@@ -472,8 +472,8 @@ class Vies
 
     private function validateTestVat($countryCode, $testVatNumber): CheckVatResponse
     {
-        $wsdl = sprintf('%s://%s%s', self::VIES_PROTO, self::VIES_DOMAIN, self::VIES_TEST_WSDL);
-        $this->setWsdl($wsdl);
+        $wsdlUri = sprintf('%s://%s%s', self::VIES_PROTO, self::VIES_DOMAIN, self::VIES_TEST_WSDL);
+        $this->setWsdl($wsdlUri);
         $requestParams = [
             'countryCode' => $countryCode,
             'vatNumber' => $testVatNumber,
