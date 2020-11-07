@@ -28,6 +28,7 @@ class ValidatorCZTest extends AbstractValidatorTest
             ['96505334', false],
             ['46505333', false],
             ['7103192743', false],
+            ['5103192743', false],
             ['1903192745', false],
             ['7133192745', false],
             ['395632439', false],

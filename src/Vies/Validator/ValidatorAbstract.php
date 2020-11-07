@@ -7,6 +7,7 @@ namespace DragonBe\Vies\Validator;
 
 abstract class ValidatorAbstract implements ValidatorInterface
 {
+    const DEFAULT_WEIGHT_START = 0;
     const DEFAULT_MODULO = 11;
     const DEFAULT_VAT_POSITION = 9;
 
@@ -46,7 +47,7 @@ abstract class ValidatorAbstract implements ValidatorInterface
      *
      * @return int
      */
-    protected function sumWeights(array $weights, string $vatNumber, int $start = 0): int
+    protected function sumWeights(array $weights, string $vatNumber, int $start = self::DEFAULT_WEIGHT_START): int
     {
         $checkVal = 0;
         $count = count($weights);
@@ -71,12 +72,13 @@ abstract class ValidatorAbstract implements ValidatorInterface
         $vatNumber,
         $weights,
         $restModulo = self::DEFAULT_MODULO,
-        $vatNumberPosition = self::DEFAULT_VAT_POSITION
+        $vatNumberPosition = self::DEFAULT_VAT_POSITION,
+        $weightStart = self::DEFAULT_WEIGHT_START
     ) {
         $checkVal = $this->sumWeights($weights, $vatNumber);
         if ($checkVal % 11 == 10) {
             $weights = [3, 4, 5, 6, 7, 8, 9, 10];
-            $checkVal = $this->sumWeights($weights, $vatNumber);
+            $checkVal = $this->sumWeights($weights, $vatNumber, $weightStart);
 
             $checkVal = ($checkVal % 11) == 10 ? 0 : ($checkVal % 11);
         } else {
