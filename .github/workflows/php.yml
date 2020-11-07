@@ -38,3 +38,31 @@ jobs:
 
     - name: Run PHPUnit
       run: ${{ github.workspace }}/vendor/bin/phpunit
+
+    - name: Run PMD-Naming
+      run: ${{ github.workspace }}/vendor/bin/phpmd src xml naming --reportfile build/logs/pmd-naming.xml --strict --ignore-violations-on-exit
+
+    - name: Run PMD-Unused
+      run: ${{ github.workspace }}/vendor/bin/phpmd src xml unusedcode --reportfile build/logs/pmd-unusedcode.xml --strict --ignore-violations-on-exit
+
+    - name: Run PMD-Codesize
+      run: ${{ github.workspace }}/vendor/bin/phpmd src xml codesize --reportfile build/logs/pmd-codesize.xml --strict --ignore-violations-on-exit
+
+    - name: Run PMD-Cleancode
+      run: ${{ github.workspace }}/vendor/bin/phpmd src xml cleancode --reportfile build/logs/pmd-cleancode.xml --strict --ignore-violations-on-exit
+
+    - name: Run PMD-CPD
+      run: ${{ github.workspace }}/vendor/bin/phpcpd --log-pmd=build/logs/pmd-cpd.xml --min-lines=3 --min-tokens=50 --fuzzy --progress src
+
+    - name: Run PDepend
+      run: ${{ github.workspace }}/vendor/bin/pdepend --jdepend-chart=build/logs/jdepend-chart.svg --jdepend-xml=build/logs/jdepend.xml --overview-pyramid=build/logs/pyramid.svg src
+      
+    - name: Setup sonarqube
+      uses: warchant/setup-sonar-scanner@v3
+
+    - name: Run sonarqube
+      env:
+        # to get access to secrets.SONAR_TOKEN, provide GITHUB_TOKEN
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: sonar-scanner
+        -Dsonar.login=${{ secrets.SONAR_TOKEN }}
