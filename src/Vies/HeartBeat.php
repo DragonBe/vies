@@ -155,7 +155,11 @@ class HeartBeat
         $hostname = $this->getHost();
         $portNumber = $this->getPort();
         $timeToLive = $this->getTimeout();
-        if (false === ($handle = \fsockopen('tcp://' . $hostname, $portNumber, $errno, $error, $timeToLive))) {
+        try {
+            if (false === ($handle = \fsockopen('tcp://' . $hostname, $portNumber, $errno, $error, $timeToLive))) {
+                return false;
+            }
+        } catch (\Exception $exception) {
             return false;
         }
         $response = '';
