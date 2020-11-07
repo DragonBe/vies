@@ -33,8 +33,5 @@ jobs:
     - name: Prepare for Quality
       run: /bin/sh -c 'mkdir -p ${{ github.workspace }}/build/logs && touch ${{ github.workspace }}/build/logs/checkstyle.xml'
       
-    - name: Run PHP CodeSniffer
-      run: ${{ github.workspace }}/vendor/bin/phpcs
-
-    - name: Run PHPUnit
-      run: ${{ github.workspace }}/vendor/bin/phpunit
+    - name: Run PHP Quality Tools
+      run: composer run-script test
