@@ -60,18 +60,7 @@ class ValidatorBG extends ValidatorAbstract
     private function validateBusiness(string $vatNumber): bool
     {
         $weights = [1, 2, 3, 4, 5, 6, 7, 8];
-        $checkVal = $this->sumWeights($weights, $vatNumber);
-
-        if ($checkVal % 11 == 10) {
-            $weights = [3, 4, 5, 6, 7, 8, 9, 10];
-            $checkVal = $this->sumWeights($weights, $vatNumber);
-
-            $checkVal = ($checkVal % 11) == 10 ? 0 : ($checkVal % 11);
-        } else {
-            $checkVal = $checkVal % 11;
-        }
-
-        return $checkVal == (int) $vatNumber[8];
+        return $this->checkValue($vatNumber, $weights, parent::DEFAULT_MODULO, 8);
     }
 
     /**
@@ -84,18 +73,7 @@ class ValidatorBG extends ValidatorAbstract
     private function validateNaturalPerson(string $vatNumber): bool
     {
         $weights = [2, 4, 8, 5, 10, 9, 7, 3, 6];
-        $checkVal = $this->sumWeights($weights, $vatNumber);
-
-        if ($checkVal % 11 == 10) {
-            $weights = [3, 4, 5, 6, 7, 8, 9, 10];
-            $checkVal = $this->sumWeights($weights, $vatNumber);
-
-            $checkVal = ($checkVal % 11) == 10 ? 0 : ($checkVal % 11);
-        } else {
-            $checkVal = $checkVal % 11;
-        }
-
-        return $checkVal == (int) $vatNumber[9];
+        return $this->checkValue($vatNumber, $weights, parent::DEFAULT_MODULO, parent::DEFAULT_VAT_POSITION);
     }
 
     /**
@@ -108,17 +86,6 @@ class ValidatorBG extends ValidatorAbstract
     private function validateForeignNaturalPerson(string $vatNumber): bool
     {
         $weights = [21, 19, 17, 13, 11, 9, 7, 3, 1];
-        $checkVal = $this->sumWeights($weights, $vatNumber);
-
-        if ($checkVal % 11 == 10) {
-            $weights = [3, 4, 5, 6, 7, 8, 9, 10];
-            $checkVal = $this->sumWeights($weights, $vatNumber);
-
-            $checkVal = ($checkVal % 11) == 10 ? 0 : ($checkVal % 11);
-        } else {
-            $checkVal = $checkVal % 10;
-        }
-
-        return $checkVal == (int) $vatNumber[9];
+        return $this->checkValue($vatNumber, $weights, 10, parent::DEFAULT_VAT_POSITION);
     }
 }
