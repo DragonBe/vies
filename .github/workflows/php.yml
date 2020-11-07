@@ -30,6 +30,9 @@ jobs:
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --no-suggest
       
+    - name: Prepare for Quality
+      run: /bin/sh -c 'mkdir -p ${{ github.workspace }}/build/{logs,coverage} && touch ${{ github.workspace }}/build/logs/checkstyle.xml'
+      
     - name: Run PHP CodeSniffer
       run: ${{ github.workspace }}/vendor/bin/phpcs
 
