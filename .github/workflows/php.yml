@@ -56,13 +56,16 @@ jobs:
 
     - name: Run PDepend
       run: ${{ github.workspace }}/vendor/bin/pdepend --jdepend-chart=build/logs/jdepend-chart.svg --jdepend-xml=build/logs/jdepend.xml --overview-pyramid=build/logs/pyramid.svg src
-      
-    - name: Setup sonarqube
-      uses: warchant/setup-sonar-scanner@v3
 
-    - name: Run sonarqube
-      env:
-        # to get access to secrets.SONAR_TOKEN, provide GITHUB_TOKEN
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: sonar-scanner -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-      if: ${{ github.event_name }} == 'merged'
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
