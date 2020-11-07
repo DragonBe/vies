@@ -64,5 +64,5 @@ jobs:
       env:
         # to get access to secrets.SONAR_TOKEN, provide GITHUB_TOKEN
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: sonar-scanner
-        -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      run: sonar-scanner -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      if: ${{ github.event_name }} == 'merged'
