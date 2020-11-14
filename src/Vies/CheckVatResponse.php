@@ -377,7 +377,7 @@ class CheckVatResponse
         if (! $row->requestDate instanceof DateTime) {
             // prepare request date
             $requestDate = date_create_from_format(
-                self::VIES_DATETIME_FORMAT,
+                static::VIES_DATETIME_FORMAT,
                 $row->requestDate
             );
             // Need to set time to zero

@@ -87,7 +87,7 @@ class Vies
     ];
 
     /**
-     * @var bool Require explicit checking against self::VIES_TEST_VAT_NRS
+     * @var bool Require explicit checking against static::VIES_TEST_VAT_NRS
      */
     protected $allowTestCodes = true;
 
@@ -113,7 +113,7 @@ class Vies
 
 
     /**
-     * Allow VAT number to be compared to the know VIES test codes (self::VIES_TEST_VAT_NRS)
+     * Allow VAT number to be compared to the know VIES test codes (static::VIES_TEST_VAT_NRS)
      *
      * @return self
      */
@@ -125,7 +125,7 @@ class Vies
     }
 
     /**
-     * Disallow VAT number to be compared to the know VIES test codes (self::VIES_TEST_VAT_NRS)
+     * Disallow VAT number to be compared to the know VIES test codes (static::VIES_TEST_VAT_NRS)
      *
      * @return self
      */
@@ -182,7 +182,7 @@ class Vies
      */
     public function getWsdl(): string
     {
-        $this->wsdl = $this->wsdl ?? sprintf('%s://%s%s', self::VIES_PROTO, self::VIES_DOMAIN, self::VIES_WSDL);
+        $this->wsdl = $this->wsdl ?? sprintf('%s://%s%s', static::VIES_PROTO, static::VIES_DOMAIN, static::VIES_WSDL);
 
         return $this->wsdl;
     }
@@ -237,7 +237,7 @@ class Vies
      */
     public function getHeartBeat(): HeartBeat
     {
-        $this->heartBeat = $this->heartBeat ?? new HeartBeat(self::VIES_DOMAIN, self::VIES_PORT);
+        $this->heartBeat = $this->heartBeat ?? new HeartBeat(static::VIES_DOMAIN, static::VIES_PORT);
 
         return $this->heartBeat;
     }
@@ -289,15 +289,15 @@ class Vies
         string $traderCity = ''
     ): CheckVatResponse {
 
-        if (! isset(self::VIES_EU_COUNTRY_LIST[$countryCode])) {
+        if (! isset(static::VIES_EU_COUNTRY_LIST[$countryCode])) {
             throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
         }
 
-        if ($this->areTestCodesAllowed() && in_array((int) $vatNumber, self::VIES_TEST_VAT_NRS, true)) {
+        if ($this->areTestCodesAllowed() && in_array((int) $vatNumber, static::VIES_TEST_VAT_NRS, true)) {
             return $this->validateTestVat($countryCode, $vatNumber);
         }
 
-        $vatNumber = self::filterVat($vatNumber);
+        $vatNumber = static::filterVat($vatNumber);
 
         if (! $this->validateVatSum($countryCode, $vatNumber)) {
             $params = (object) [
@@ -322,10 +322,10 @@ class Vies
         $this->addOptionalArguments($requestParams, 'traderCity', $traderCity);
 
         if ($requesterCountryCode && $requesterVatNumber) {
-            if (! isset(self::VIES_EU_COUNTRY_LIST[$requesterCountryCode])) {
+            if (! isset(static::VIES_EU_COUNTRY_LIST[$requesterCountryCode])) {
                 throw new ViesException(sprintf('Invalid requestor country code "%s" provided', $requesterCountryCode));
             }
-            $requesterVatNumber = self::filterVat($requesterVatNumber);
+            $requesterVatNumber = static::filterVat($requesterVatNumber);
 
             $requestParams['requesterCountryCode'] = $requesterCountryCode;
             $requestParams['requesterVatNumber'] = $requesterVatNumber;
@@ -364,12 +364,12 @@ class Vies
      */
     public function validateVatSum(string $countryCode, string $vatNumber): bool
     {
-        if (! isset(self::VIES_EU_COUNTRY_LIST[$countryCode])) {
+        if (! isset(static::VIES_EU_COUNTRY_LIST[$countryCode])) {
             throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
         }
-        $className = self::VIES_EU_COUNTRY_LIST[$countryCode]['validator'];
+        $className = static::VIES_EU_COUNTRY_LIST[$countryCode]['validator'];
 
-        return (new $className())->validate(self::filterVat($vatNumber));
+        return (new $className())->validate(static::filterVat($vatNumber));
     }
 
     /**
@@ -409,8 +409,8 @@ class Vies
 
         if (! $list) {
             $list = array_combine(
-                array_keys(self::VIES_EU_COUNTRY_LIST),
-                array_column(self::VIES_EU_COUNTRY_LIST, 'name')
+                array_keys(static::VIES_EU_COUNTRY_LIST),
+                array_column(static::VIES_EU_COUNTRY_LIST, 'name')
             );
             unset($list['EU']);
         }
@@ -472,7 +472,7 @@ class Vies
 
     private function validateTestVat($countryCode, $testVatNumber): CheckVatResponse
     {
-        $wsdlUri = sprintf('%s://%s%s', self::VIES_PROTO, self::VIES_DOMAIN, self::VIES_TEST_WSDL);
+        $wsdlUri = sprintf('%s://%s%s', static::VIES_PROTO, static::VIES_DOMAIN, static::VIES_TEST_WSDL);
         $this->setWsdl($wsdlUri);
         $requestParams = [
             'countryCode' => $countryCode,
