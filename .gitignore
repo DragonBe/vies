@@ -1,5 +1,6 @@
-vendor/
+/.scannerwork/
 build/
+vendor/
+.phpunit.result.cache
 composer.lock
-.scannerwork/
-
+composer.phar
