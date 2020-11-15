@@ -318,7 +318,7 @@ class ViesTest extends TestCase
     {
         $vies = new Vies();
         $options = $vies->getOptions();
-        $this->assertInternalType('array', $options);
+        $this->assertIsArray($options);
         $this->assertEmpty($options);
     }
 
