@@ -8,16 +8,20 @@ use DragonBe\Vies\HeartBeat;
 use DragonBe\Vies\Vies;
 use DragonBe\Vies\ViesException;
 use DragonBe\Vies\ViesServiceException;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use ReflectionException;
 use SoapClient;
 use SoapFault;
+use TypeError;
 
 /**
  * @coversDefaultClass \DragonBe\Vies\Vies
  */
 class ViesTest extends TestCase
 {
-    public function vatNumberProvider()
+    public function vatNumberProvider(): array
     {
         return  [
             ['0123456749','0123456749'],
@@ -26,16 +30,19 @@ class ViesTest extends TestCase
             ['0123-456-749','0123456749'],
         ];
     }
+
     /**
      * @dataProvider vatNumberProvider
      * @covers ::filterVat
+     * @param string $vatNumber
+     * @param string $filteredNumber
      */
-    public function testVatNumberFilter($vatNumber, $filteredNumber)
+    public function testVatNumberFilter(string $vatNumber, string $filteredNumber)
     {
         $this->assertEquals($filteredNumber, Vies::filterVat($vatNumber));
     }
 
-    protected function createdStubbedViesClient($response)
+    protected function createdStubbedViesClient($response): Vies
     {
         $stub = $this->getMockFromWsdl(dirname(__FILE__) . '/_files/checkVatService.wsdl');
 
@@ -50,7 +57,7 @@ class ViesTest extends TestCase
      * @covers ::validateVat
      * @covers ::setSoapClient
      */
-    public function testSuccessVatNumberValidation()
+    public function testSuccessVatNumberValidation(): CheckVatResponse
     {
         $response = (object) [];
         $response->countryCode = 'BE';
@@ -76,7 +83,7 @@ class ViesTest extends TestCase
      * @covers ::validateVat
      * @covers ::setSoapClient
      */
-    public function testSuccessVatNumberValidationWithRequester()
+    public function testSuccessVatNumberValidationWithRequester(): CheckVatResponse
     {
         $response = (object) [];
         $response->countryCode = 'BE';
@@ -119,7 +126,7 @@ class ViesTest extends TestCase
         $this->assertFalse($response->isValid());
     }
 
-    public function badCountryCodeProvider()
+    public function badCountryCodeProvider(): array
     {
         return [
             ['AA'],
@@ -179,9 +186,9 @@ class ViesTest extends TestCase
      * @param CheckVatResponse $response
      *
      * @depends testSuccessVatNumberValidation
-     * @covers \DragonBe\Vies\CheckVatResponse::toArray
+     * @covers  \DragonBe\Vies\CheckVatResponse::toArray
      */
-    public function testConvertObjectIntoArray($response)
+    public function testConvertObjectIntoArray(CheckVatResponse $response)
     {
         $array = $response->toArray();
         $this->assertSame('BE', $array['countryCode']);
@@ -318,7 +325,7 @@ class ViesTest extends TestCase
     {
         $vies = new Vies();
         $options = $vies->getOptions();
-        $this->assertInternalType('array', $options);
+        $this->assertIsArray($options);
         $this->assertEmpty($options);
     }
 
@@ -381,7 +388,7 @@ class ViesTest extends TestCase
      */
     public function testCanAddOptionalArgumentsWithValue()
     {
-        $viesRef = new \ReflectionClass(Vies::class);
+        $viesRef = new ReflectionClass(Vies::class);
         $addOptionalArguments = $viesRef->getMethod('addOptionalArguments');
         $addOptionalArguments->setAccessible(true);
 
@@ -401,7 +408,7 @@ class ViesTest extends TestCase
      */
     public function testCanNotAddOptionalArgumentsWithoutValue()
     {
-        $viesRef = new \ReflectionClass(Vies::class);
+        $viesRef = new ReflectionClass(Vies::class);
         $addOptionalArguments = $viesRef->getMethod('addOptionalArguments');
         $addOptionalArguments->setAccessible(true);
 
@@ -476,13 +483,13 @@ class ViesTest extends TestCase
         string $traderPostcode,
         string $traderCity
     ) {
-        $viesRef = new \ReflectionClass(Vies::class);
+        $viesRef = new ReflectionClass(Vies::class);
         $addOptionalArguments = $viesRef->getMethod('addOptionalArguments');
         $addOptionalArguments->setAccessible(true);
 
         $array = [];
         $object = new Vies();
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $addOptionalArguments->invokeArgs($object, [&$array, 'traderName', $traderName]);
         $addOptionalArguments->invokeArgs($object, [&$array, 'traderCompanyType', $traderCompanyType]);
         $addOptionalArguments->invokeArgs($object, [&$array, 'traderStreet', $traderStreet]);
@@ -530,7 +537,7 @@ class ViesTest extends TestCase
         string $traderPostcode,
         string $traderCity
     ) {
-        $viesRef = new \ReflectionClass(Vies::class);
+        $viesRef = new ReflectionClass(Vies::class);
         $addOptionalArguments = $viesRef->getMethod('addOptionalArguments');
         $addOptionalArguments->setAccessible(true);
 
@@ -553,11 +560,11 @@ class ViesTest extends TestCase
      */
     public function testBreakValidationOfOptionalArguments()
     {
-        $viesRef = new \ReflectionClass(Vies::class);
+        $viesRef = new ReflectionClass(Vies::class);
         $addOptionalArguments = $viesRef->getMethod('addOptionalArguments');
         $addOptionalArguments->setAccessible(true);
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
         $array = [];
         $object = new Vies();
         $addOptionalArguments->invokeArgs($object, [&$array, 0, []]);
@@ -673,7 +680,7 @@ class ViesTest extends TestCase
      *
      * @throws ViesException
      * @throws ViesServiceException
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @covers ::validateVat
      * @covers ::validateTestVat
