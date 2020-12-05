@@ -9,7 +9,7 @@
     "authors": [
         {
             "name": "Michelangelo van Dam",
-            "email": "dragonbe@gmail.com",
+            "email": "dragonbe+githubs@gmail.com",
             "homepage": "http://dragonbe.com",
             "role": "Developer"
         }
@@ -25,22 +25,13 @@
         }
     },
     "require": {
-        "php": ">=7.1",
+        "php": "^7.4|^8.0",
         "ext-soap": "*",
         "ext-ctype": "*"
     },
     "require-dev": {
-        "ext-pcntl": "*",
-        "phpunit/phpunit": "^7.1",
-        "phpunit/php-invoker": "^2.0",
-        "phploc/phploc": "^4.0",
-        "phpmd/phpmd": "^2.6",
-        "sebastian/phpcpd": "^4.0",
-        "pdepend/pdepend": "^2.5",
-        "squizlabs/php_codesniffer": "^3.2",
-        "phing/phing": "^2.16",
-        "infection/infection": "^0.8",
-        "sensiolabs/security-checker": "^5.0"
+        "phpunit/phpunit": "^9.5",
+        "squizlabs/php_codesniffer": "^3.5"
     },
     "scripts": {
         "phpcs": "phpcs",
@@ -48,23 +39,6 @@
         "test": [
             "@phpcs",
             "@phpunit"
-        ],
-        "pmd": [
-            "@pmd-naming",
-            "@pmd-unused",
-            "@pmd-codesize",
-            "@pmd-cleancode",
-            "@phpcpd"
-        ],
-        "pmd-naming": "phpmd src xml naming --reportfile build/logs/pmd-naming.xml --strict --ignore-violations-on-exit",
-        "pmd-unused": "phpmd src xml unusedcode --reportfile build/logs/pmd-unusedcode.xml --strict --ignore-violations-on-exit",
-        "pmd-codesize": "phpmd src xml codesize --reportfile build/logs/pmd-codesize.xml --strict --ignore-violations-on-exit",
-        "pmd-cleancode": "phpmd src xml cleancode --reportfile build/logs/pmd-cleancode.xml --strict --ignore-violations-on-exit",
-        "pdepend": "pdepend --jdepend-chart=build/logs/jdepend-chart.svg --jdepend-xml=build/logs/jdepend.xml --overview-pyramid=build/logs/pyramid.svg src",
-        "phpcpd": "phpcpd --log-pmd=build/logs/pmd-cpd.xml --min-lines=3 --min-tokens=50 --fuzzy --progress src",
-        "test-all": [
-            "@test",
-            "@pmd"
         ]
     }
 }

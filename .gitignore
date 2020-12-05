@@ -1,5 +1,8 @@
-vendor/
-build/
-composer.lock
-.scannerwork/
-
+/vendor/
+/build/
+/composer.lock
+/.scannerwork/
+/.phpunit.result.cache
+/phpunit.xml
+/phpcs.xml
+/*.phar
