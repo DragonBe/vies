@@ -14,7 +14,7 @@ jobs:
     steps:
 
     - name: Set default PHP version 7.4
-      run: update-alternatives –set php /usr/bin/php7.4
+      run: update-alternatives -–set php /usr/bin/php7.4
 
     - name: Display current PHP version
       run: php --version
