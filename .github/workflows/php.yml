@@ -12,6 +12,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Set default PHP version 7.4
+      run: sudo ln -snf /usr/bin/php7.4 /usr/bin/php
+
+    - name: Display current PHP version
+      run: php --version
+
     - uses: actions/checkout@v2
 
     - name: Validate composer.json and composer.lock
@@ -37,7 +43,7 @@ jobs:
       run: ${{ github.workspace }}/vendor/bin/phpcs
 
     - name: Run PHPUnit
-      run: ${{ github.workspace }}/vendor/bin/phpunit
+      run: php -dxdebug.mode=coverage ${{ github.workspace }}/vendor/bin/phpunit
 
     - name: Run PMD-Naming
       run: ${{ github.workspace }}/vendor/bin/phpmd src xml naming --reportfile build/logs/pmd-naming.xml --strict --ignore-violations-on-exit
@@ -50,9 +56,6 @@ jobs:
 
     - name: Run PMD-Cleancode
       run: ${{ github.workspace }}/vendor/bin/phpmd src xml cleancode --reportfile build/logs/pmd-cleancode.xml --strict --ignore-violations-on-exit
-
-    - name: Run PMD-CPD
-      run: ${{ github.workspace }}/vendor/bin/phpcpd --log-pmd=build/logs/pmd-cpd.xml --min-lines=3 --min-tokens=50 --fuzzy --progress src
 
     - name: Run PDepend
       run: ${{ github.workspace }}/vendor/bin/pdepend --jdepend-chart=build/logs/jdepend-chart.svg --jdepend-xml=build/logs/jdepend.xml --overview-pyramid=build/logs/pyramid.svg src
