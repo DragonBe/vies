@@ -43,7 +43,7 @@ jobs:
       run: ${{ github.workspace }}/vendor/bin/phpcs
 
     - name: Run PHPUnit
-      run: ${{ github.workspace }}/vendor/bin/phpunit -d xdebug.mode=coverage
+      run: php -dxdebug.mode=coverage ${{ github.workspace }}/vendor/bin/phpunit
 
     - name: Run PMD-Naming
       run: ${{ github.workspace }}/vendor/bin/phpmd src xml naming --reportfile build/logs/pmd-naming.xml --strict --ignore-violations-on-exit
