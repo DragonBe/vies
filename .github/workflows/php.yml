@@ -12,6 +12,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+    - name: Set default PHP version 7.4
+      run: update-alternatives –set php /usr/bin/php7.4
+
+    - name: Display current PHP version
+      run: php --version
+
     - uses: actions/checkout@v2
 
     - name: Validate composer.json and composer.lock
