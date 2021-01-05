@@ -51,7 +51,7 @@ class Vies
     const VIES_PORT = 80;
     const VIES_WSDL = '/taxation_customs/vies/checkVatService.wsdl';
     const VIES_TEST_WSDL = '/taxation_customs/vies/checkVatTestService.wsdl';
-    const VIES_EU_COUNTRY_TOTAL = 28;
+    const VIES_EU_COUNTRY_TOTAL = 29;
     const VIES_TEST_VAT_NRS = [100, 200, 201, 202, 300, 301, 302, 400, 401, 500, 501, 600, 601];
 
     protected const VIES_EU_COUNTRY_LIST = [
@@ -83,6 +83,7 @@ class Vies
         'SI' => ['name' => 'Slovenia', 'validator' => Validator\ValidatorSI::class],
         'SK' => ['name' => 'Slovakia', 'validator' => Validator\ValidatorSK::class],
         'GB' => ['name' => 'United Kingdom', 'validator' => Validator\ValidatorGB::class],
+        'XI' => ['name' => 'United Kingdom (Northern Ireland)', 'validator' => Validator\ValidatorXI::class],
         'EU' => ['name' => 'MOSS Number', 'validator' => Validator\ValidatorEU::class],
     ];
 
