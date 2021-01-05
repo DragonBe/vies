@@ -16,7 +16,7 @@ jobs:
       run: which php
 
     - name: Set default PHP version 7.4
-      run: ln -snf /usr/bin/php7.4 /usr/bin/php
+      run: sudo ln -snf /usr/bin/php7.4 /usr/bin/php
 
     - name: Display current PHP version
       run: php --version
