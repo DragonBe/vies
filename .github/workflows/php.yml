@@ -12,9 +12,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Which PHP?
-      run: which php
-
     - name: Set default PHP version 7.4
       run: sudo ln -snf /usr/bin/php7.4 /usr/bin/php
 
@@ -46,7 +43,7 @@ jobs:
       run: ${{ github.workspace }}/vendor/bin/phpcs
 
     - name: Run PHPUnit
-      run: ${{ github.workspace }}/vendor/bin/phpunit
+      run: ${{ github.workspace }}/vendor/bin/phpunit -d xdebug.mode=coverage
 
     - name: Run PMD-Naming
       run: ${{ github.workspace }}/vendor/bin/phpmd src xml naming --reportfile build/logs/pmd-naming.xml --strict --ignore-violations-on-exit
