@@ -87,6 +87,10 @@ class Vies
         'EU' => ['name' => 'MOSS Number', 'validator' => Validator\ValidatorEU::class],
     ];
 
+    protected const VIES_EXCLUDED_COUNTRY_CODES = [
+        'GB' => ['name' => 'United Kingdom', 'excluded' => '2021-01-01', 'reason' => 'Brexit'],
+    ];
+
     /**
      * @var bool Require explicit checking against self::VIES_TEST_VAT_NRS
      */
@@ -309,6 +313,15 @@ class Vies
             ];
 
             return new CheckVatResponse($params);
+        }
+
+        if (array_key_exists($countryCode, self::VIES_EXCLUDED_COUNTRY_CODES)) {
+            throw new ViesServiceException(sprintf(
+                'Country %s is no longer supported by VIES services provided by EC since %s because of %s',
+                self::VIES_EXCLUDED_COUNTRY_CODES[$countryCode]['name'],
+                self::VIES_EXCLUDED_COUNTRY_CODES[$countryCode]['excluded'],
+                self::VIES_EXCLUDED_COUNTRY_CODES[$countryCode]['reason'],
+            ));
         }
 
         $requestParams = [
