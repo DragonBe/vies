@@ -291,6 +291,18 @@ Here's a list of products or projects that have included this VIES package
 
 If you have a product or a project that's using this package and you want some attribution for your work, send me an [email](mailto://dragonbe+github@gmail.com) or ping me on [Twitter](https://www.twitter.com/DragonBe) or [Facebook](https://www.facebook.com/dragonbe).
 
+## Docker containers
+
+If you like to have Docker containers, you can now make use of a container designed for that purpose.
+
+```shell
+docker run --rm -d -p 8000:18080 dragonbe/vies-web
+```
+
+Point your browser to [localhost:8000](http://localhost:8000) to use the web interface for validating VAT.
+
+![A screenshot of VIES web application](docs/images/vies-web-screenshot.png)
+
 ## Referenced on the web
 
 - [Microsoft Dynamics GP - Dynamics GP real time EU tax registration number validation using VIES](http://timwappat.info/post/2013/08/22/Dynamics-GP-real-time-EU-tax-registration-number-validation-using-VIES)
@@ -300,6 +312,8 @@ If you have a product or a project that's using this package and you want some a
 ## Clarification on exceptions
 
 For Greece the [international country ISO code](https://www.iso.org/obp/ui/#iso:code:3166:GR) is **GR**, but for VAT IDN's they use the prefix **EL**. Thanks to [Johan Wilfer](https://github.com/johanwilfer) for [reporting this](https://github.com/DragonBe/vies/issues/57).
+
+Since January 1, 2021 the UK is no longer a member of the European Union and as a result, the VIES service provided by the European Commission no longer validates VAT ID's for the UK. There is one exception though and that is for Northern Ireland (XI) for which VAT ID's can be validated using this library and the EC VIES service.
 
 ## Licence
 
