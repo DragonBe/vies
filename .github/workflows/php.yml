@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-
+    name: ViesBuild
     runs-on: ubuntu-latest
 
     steps:
