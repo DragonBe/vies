@@ -16,7 +16,7 @@ Stated on the European Commission website:
 
 More information at http://ec.europa.eu/taxation_customs/vies/faqvies.do#item16
 
-[![Actions Status](https://github.com/DragonBe/vies/workflows/ViesBuild%Workflow/badge.svg)](https://github.com/DragonBe/vies/actions) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dragonbe-vies&metric=alert_status)](https://sonarcloud.io/dashboard?id=dragonbe-vies)
+[![Actions Status](https://github.com/DragonBe/vies/workflows/PHP%20Composer/badge.svg?branch=master)](https://github.com/DragonBe/vies/actions) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dragonbe-vies&metric=alert_status)](https://sonarcloud.io/dashboard?id=dragonbe-vies)
 
 ## GDPR and privacy regulation of VAT within the EU
 
