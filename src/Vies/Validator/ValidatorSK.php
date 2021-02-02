@@ -42,7 +42,13 @@ class ValidatorSK extends ValidatorAbstract
             return false;
         }
 
-        return in_array((int) $vatNumber[2], [2, 3, 4, 7, 8, 9])
-            && $vatNumber % 11 == 0;
+        if (in_array((int) $vatNumber[2], [2, 3, 4, 7, 8, 9])) {
+            if (PHP_INT_SIZE === 4 && function_exists('bcmod')) {
+                return bcmod($vatNumber, '11') === '0';
+            } else {
+                return $vatNumber % 11 == 0;
+            }
+        }
+        return false;
     }
 }
