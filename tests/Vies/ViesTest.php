@@ -734,4 +734,38 @@ class ViesTest extends TestCase
         $vies = (new Vies())->disallowTestCodes();
         $this->assertFalse($vies->areTestCodesAllowed());
     }
+
+    public function excludedCountryProvider()
+    {
+        return [
+            'United Kingdom (Brexit 2021-01-01)' => ['GB', '244795376', 'United Kingdom', '2021-01-01', 'Brexit'],
+        ];
+    }
+
+    /**
+     * @param string $countryCode
+     * @param string $vatId
+     * @param string $country
+     * @param string $excluded
+     * @param string $reason
+     *
+     * @throws ViesException
+     * @throws ViesServiceException
+     *
+     * @covers ::validateVat
+     * @dataProvider excludedCountryProvider
+     */
+    public function testExcludedCountryVatValidation($countryCode, $vatId, $country, $excluded, $reason)
+    {
+        $exceptionMessage = sprintf(
+            'Country %s is no longer supported by VIES services provided by EC since %s because of %s',
+            $country,
+            $excluded,
+            $reason,
+        );
+        $this->expectException(ViesServiceException::class);
+        $this->expectExceptionMessage($exceptionMessage);
+        (new Vies())->validateVat($countryCode, $vatId);
+        $this->fail('Expected exception was not thrown');
+    }
 }
