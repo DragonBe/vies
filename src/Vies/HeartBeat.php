@@ -173,7 +173,7 @@ class HeartBeat
      */
     private function readContents($handle): array
     {
-        if (!is_resource($handle)) {
+        if (! is_resource($handle)) {
             throw new \InvalidArgumentException('Expecting a resource to be provided');
         }
         $response = '';
@@ -228,7 +228,7 @@ class HeartBeat
             $streamContext
         );
 
-        if (!$stream) {
+        if (! $stream) {
             throw new \RuntimeException('Can not create socket stream: ' . $error);
         }
 
