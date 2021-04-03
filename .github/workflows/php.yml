@@ -58,7 +58,7 @@ jobs:
       run: ${{ github.workspace }}/vendor/bin/phpmd src xml cleancode --reportfile build/logs/pmd-cleancode.xml --strict --ignore-violations-on-exit
 
     - name: Run PMD-CPD
-      run: ${{ github.workspace }}/vendor/bin/phpcpd --log-pmd=build/logs/pmd-cpd.xml --min-lines=3 --min-tokens=50 --fuzzy --progress src
+      run: ${{ github.workspace }}/vendor/bin/phpcpd --log-pmd=build/logs/pmd-cpd.xml --min-lines=3 --min-tokens=50 --fuzzy src
 
     - name: Run PDepend
       run: ${{ github.workspace }}/vendor/bin/pdepend --jdepend-chart=build/logs/jdepend-chart.svg --jdepend-xml=build/logs/jdepend.xml --overview-pyramid=build/logs/pyramid.svg src
