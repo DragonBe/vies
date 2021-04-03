@@ -122,7 +122,7 @@ class ValidatorNL extends ValidatorAbstract
             return false;
         }
 
-        $sumBase = (int)array_reduce(str_split($vatNumber), function ($acc, $e) {
+        $sumBase = array_reduce(str_split($vatNumber), function ($acc, $e) {
             if (ctype_digit($e)) {
                 return $acc.$e;
             }
@@ -130,6 +130,10 @@ class ValidatorNL extends ValidatorAbstract
             return $acc.$this->checkCharacter[$e];
         }, '2321');
 
-        return ($sumBase % 97) === 1;
+        if (PHP_INT_SIZE === 4 && function_exists('bcmod')) {
+            return bcmod($sumBase, '97') === '1';
+        } else {
+            return ((int) $sumBase % 97) === 1;
+        }
     }
 }
