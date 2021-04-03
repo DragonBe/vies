@@ -1,6 +1,8 @@
-/.scannerwork/
-build/
 vendor/
+build/
 .phpunit.result.cache
 composer.lock
 composer.phar
+.scannerwork/
+.idea/
+

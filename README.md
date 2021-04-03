@@ -16,7 +16,7 @@ Stated on the European Commission website:
 
 More information at http://ec.europa.eu/taxation_customs/vies/faqvies.do#item16
 
-[![Travis-CI Build status](https://api.travis-ci.org/DragonBe/vies.png)](https://travis-ci.org/DragonBe/vies) [![SensioLabs Insights](https://insight.sensiolabs.com/projects/21b019ce-dd1d-4d16-8b74-880b9ee5e795/mini.png)](https://insight.sensiolabs.com/projects/21b019ce-dd1d-4d16-8b74-880b9ee5e795) [![CodeClimate Analysis](https://d3s6mut3hikguw.cloudfront.net/github/DragonBe/vies/badges/gpa.svg)](https://codeclimate.com/github/DragonBe/vies) [![CodeClimate CodeCoverage](https://d3s6mut3hikguw.cloudfront.net/github/DragonBe/vies/badges/coverage.svg)](https://codeclimate.com/github/DragonBe/vies) [![CodeShip CI](https://codeship.com/projects/304718e0-8d01-0132-6960-7671d147512f/status?branch=master)](https://codeship.com/projects/60548) [![Build Status](https://status.continuousphp.com/git-hub/DragonBe/vies?token=e8721fe8-0619-4789-9691-33021709f42f)](https://continuousphp.com/git-hub/DragonBe/vies) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dragonbe-vies&metric=alert_status)](https://sonarcloud.io/dashboard?id=dragonbe-vies)
+[![Actions Status](https://github.com/DragonBe/vies/workflows/PHP%20Composer/badge.svg?branch=master)](https://github.com/DragonBe/vies/actions) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dragonbe-vies&metric=alert_status)](https://sonarcloud.io/dashboard?id=dragonbe-vies)
 
 ## GDPR and privacy regulation of VAT within the EU
 
@@ -291,6 +291,18 @@ Here's a list of products or projects that have included this VIES package
 
 If you have a product or a project that's using this package and you want some attribution for your work, send me an [email](mailto://dragonbe+github@gmail.com) or ping me on [Twitter](https://www.twitter.com/DragonBe) or [Facebook](https://www.facebook.com/dragonbe).
 
+## Docker containers
+
+If you like to have Docker containers, you can now make use of a container designed for that purpose.
+
+```shell
+docker run --rm -d -p 8000:18080 dragonbe/vies-web
+```
+
+Point your browser to [localhost:8000](http://localhost:8000) to use the web interface for validating VAT.
+
+![A screenshot of VIES web application](docs/images/vies-web-screenshot.png)
+
 ## Referenced on the web
 
 - [Microsoft Dynamics GP - Dynamics GP real time EU tax registration number validation using VIES](http://timwappat.info/post/2013/08/22/Dynamics-GP-real-time-EU-tax-registration-number-validation-using-VIES)
@@ -300,6 +312,8 @@ If you have a product or a project that's using this package and you want some a
 ## Clarification on exceptions
 
 For Greece the [international country ISO code](https://www.iso.org/obp/ui/#iso:code:3166:GR) is **GR**, but for VAT IDN's they use the prefix **EL**. Thanks to [Johan Wilfer](https://github.com/johanwilfer) for [reporting this](https://github.com/DragonBe/vies/issues/57).
+
+Since January 1, 2021 the UK is no longer a member of the European Union and as a result, the VIES service provided by the European Commission no longer validates VAT ID's for the UK. There is one exception though and that is for Northern Ireland (XI) for which VAT ID's can be validated using this library and the EC VIES service.
 
 ## Licence
 
