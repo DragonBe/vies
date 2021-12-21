@@ -30,7 +30,7 @@ When you have implemented this service package in your own project, be sure that
 
 ## Requirements
 
-- Minimum PHP version: 7.1
+- Minimum PHP version: 7.3
 - Recommended PHP version: 7.4
 - Extension: soap
 - Extension: pcntl
