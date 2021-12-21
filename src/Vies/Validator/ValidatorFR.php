@@ -122,7 +122,7 @@ class ValidatorFR extends ValidatorAbstract
         if (PHP_INT_SIZE === 4 && function_exists("bcmod")) {
             return (int) bcmod(bcadd(substr($vatNumber, 2), strval(($checkVal / 11) + 1)), "11") === $checkVal % 11;
         } else {
-            return ((intval(substr($vatNumber, 2)) + ($checkVal / 11) + 1) % 11) == $checkVal % 11;
+            return ((int)(intval(substr($vatNumber, 2)) + ($checkVal / 11) + 1) % 11) == $checkVal % 11;
         }
     }
 }
