@@ -44,7 +44,7 @@ This project is on [Packagist](https://packagist.org/packages/dragonbe/vies)!
 
 To install the latest stable version use `composer require dragonbe/vies`.
 
-To install specifically a version (e.g. 2.0.4), just add it to the command above, for example `composer require dragonbe/vies:2.0.4`
+To install specifically a version (e.g. 2.2.0), just add it to the command above, for example `composer require dragonbe/vies:2.2.0`
 
 ## Usage
 
