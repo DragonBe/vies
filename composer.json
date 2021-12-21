@@ -39,7 +39,7 @@
         "pdepend/pdepend": "^2.5",
         "squizlabs/php_codesniffer": "^3.2",
         "phing/phing": "^2.16",
-        "infection/infection": "^0.20",
+        "infection/infection": "^0.25",
         "enlightn/security-checker": "^1.2"
     },
     "scripts": {
