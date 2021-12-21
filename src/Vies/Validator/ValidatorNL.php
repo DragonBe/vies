@@ -130,7 +130,7 @@ class ValidatorNL extends ValidatorAbstract
             return $acc.$this->checkCharacter[$e];
         }, '2321');
 
-        if (PHP_INT_SIZE === 4 && function_exists('bcmod')) {
+        if (PHP_INT_SIZE === 4 && extension_loaded('bcmath')) {
             return bcmod($sumBase, '97') === '1';
         } else {
             return ((int) $sumBase % 97) === 1;

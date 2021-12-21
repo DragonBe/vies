@@ -93,7 +93,7 @@ class ValidatorFR extends ValidatorAbstract
             return "";
         }
         $checkVal .= "12";
-        if (PHP_INT_SIZE === 4 && function_exists("bcmod")) {
+        if (PHP_INT_SIZE === 4 && extension_loaded('bcmath')) {
             $checkVal = (int) bcmod($checkVal, "97");
         } else {
             $checkVal = intval($checkVal) % 97;
@@ -119,10 +119,10 @@ class ValidatorFR extends ValidatorAbstract
         $checkCharacter = array_flip(str_split($this->alphabet));
         $checkVal = ($checkCharacter[$vatNumber[0]] * $multiplier) + $checkCharacter[$vatNumber[1]] - $subStractor;
 
-        if (PHP_INT_SIZE === 4 && function_exists("bcmod")) {
+        if (PHP_INT_SIZE === 4 && extension_loaded("bcmath")) {
             return (int) bcmod(bcadd(substr($vatNumber, 2), strval(($checkVal / 11) + 1)), "11") === $checkVal % 11;
         } else {
-            return ((int)(intval(substr($vatNumber, 2)) + ($checkVal / 11) + 1) % 11) == $checkVal % 11;
+            return ((int) (intval(substr($vatNumber, 2)) + ($checkVal / 11) + 1) % 11) == $checkVal % 11;
         }
     }
 }

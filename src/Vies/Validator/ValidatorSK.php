@@ -41,7 +41,7 @@ class ValidatorSK extends ValidatorAbstract
             return false;
         }
 
-        if (PHP_INT_SIZE === 4 && function_exists('bcmod')) {
+        if (PHP_INT_SIZE === 4 && extension_loaded("bcmath")) {
             return bcmod($vatNumber, '11') === '0';
         } else {
             return $vatNumber % 11 == 0;
