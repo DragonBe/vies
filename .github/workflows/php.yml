@@ -9,11 +9,15 @@ on:
 jobs:
   build:
     name: ViesBuild
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [ubuntu-latest]
+        php-versions: ['7.4', '8.0']
 
     steps:
-    - name: Set default PHP version 7.4
-      run: sudo ln -snf /usr/bin/php7.4 /usr/bin/php
+    - name: Set default PHP version ${{ matrix.php-versions }}
+      run: sudo ln -snf /usr/bin/php${{ matrix.php-versions }} /usr/bin/php
 
     - name: Display current PHP version
       run: php --version
