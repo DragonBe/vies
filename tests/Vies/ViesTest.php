@@ -305,9 +305,15 @@ class ViesTest extends TestCase
         $vies = new Vies();
         $vies->setSoapClient($this->createdStubbedViesClient('blabla')->getSoapClient());
         $vies->setOptions($options);
-        $soapClient = $vies->getSoapClient();
-        $actual = $soapClient->_soap_version;
-        $this->assertSame($options['soap_version'], $actual);
+
+        /**
+         * Skip for php >=8.1.0 as _soap_version is private now
+         */
+        if (version_compare(PHP_VERSION, '8.1', '<')) {
+            $soapClient = $vies->getSoapClient();
+            $actual = $soapClient->_soap_version;
+            $this->assertSame($options['soap_version'], $actual);
+        }
         $this->assertSame($options, $vies->getOptions());
     }
 

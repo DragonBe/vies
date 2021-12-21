@@ -463,7 +463,7 @@ class Vies
     private function filterArgument(string $argumentValue): string
     {
         $argumentValue = str_replace(['"', '\''], '', $argumentValue);
-        return filter_var($argumentValue, FILTER_SANITIZE_STRIPPED, FILTER_FLAG_STRIP_LOW);
+        return filter_var($argumentValue, FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW);
     }
 
     /**
