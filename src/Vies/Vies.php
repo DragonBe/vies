@@ -51,7 +51,7 @@ class Vies
     const VIES_PORT = 443;
     const VIES_WSDL = '/taxation_customs/vies/checkVatService.wsdl';
     const VIES_TEST_WSDL = '/taxation_customs/vies/checkVatTestService.wsdl';
-    const VIES_EU_COUNTRY_TOTAL = 29;
+    const VIES_EU_COUNTRY_TOTAL = 28;
     const VIES_TEST_VAT_NRS = [100, 200, 201, 202, 300, 301, 302, 400, 401, 500, 501, 600, 601];
 
     protected const VIES_EU_COUNTRY_LIST = [
@@ -294,7 +294,7 @@ class Vies
         string $traderCity = ''
     ): CheckVatResponse {
 
-        if (! isset(self::VIES_EU_COUNTRY_LIST[$countryCode])) {
+        if ($this->validateCountryCode($countryCode, true) === false) {
             throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
         }
 
@@ -336,7 +336,7 @@ class Vies
         $this->addOptionalArguments($requestParams, 'traderCity', $traderCity);
 
         if ($requesterCountryCode && $requesterVatNumber) {
-            if (! isset(self::VIES_EU_COUNTRY_LIST[$requesterCountryCode])) {
+            if ($this->validateCountryCode($requesterCountryCode) === false) {
                 throw new ViesException(sprintf('Invalid requestor country code "%s" provided', $requesterCountryCode));
             }
             $requesterVatNumber = self::filterVat($requesterVatNumber);
@@ -378,7 +378,7 @@ class Vies
      */
     public function validateVatSum(string $countryCode, string $vatNumber): bool
     {
-        if (! isset(self::VIES_EU_COUNTRY_LIST[$countryCode])) {
+        if ($this->validateCountryCode($countryCode, true) === false) {
             throw new ViesException(sprintf('Invalid country code "%s" provided', $countryCode));
         }
         $className = self::VIES_EU_COUNTRY_LIST[$countryCode]['validator'];
@@ -427,6 +427,9 @@ class Vies
                 array_column(self::VIES_EU_COUNTRY_LIST, 'name')
             );
             unset($list['EU']);
+            foreach (array_keys(self::VIES_EXCLUDED_COUNTRY_CODES) as $excludedCountryCode) {
+                unset($list[$excludedCountryCode]);
+            }
         }
 
         return $list;
@@ -484,7 +487,14 @@ class Vies
         return true;
     }
 
-    private function validateTestVat($countryCode, $testVatNumber): CheckVatResponse
+    /**
+     * @param string $countryCode
+     * @param string $testVatNumber
+     *
+     * @return CheckVatResponse
+     * @throws ViesServiceException
+     */
+    private function validateTestVat(string $countryCode, string $testVatNumber): CheckVatResponse
     {
         $wsdlUri = sprintf('%s://%s%s', self::VIES_PROTO, self::VIES_DOMAIN, self::VIES_TEST_WSDL);
         $this->setWsdl($wsdlUri);
@@ -508,5 +518,23 @@ class Vies
 
             throw new ViesServiceException($message, 0, $e);
         }
+    }
+
+    /**
+     * @param string $countryCode
+     * @param bool   $useExcludedCountries
+     *
+     * @return bool
+     */
+    private function validateCountryCode(string $countryCode, bool $useExcludedCountries = false): bool
+    {
+        if (! isset(self::VIES_EU_COUNTRY_LIST[$countryCode])) {
+            return false;
+        }
+        if ($useExcludedCountries === false && isset(self::VIES_EXCLUDED_COUNTRY_CODES[$countryCode])) {
+            return false;
+        }
+
+        return true;
     }
 }
