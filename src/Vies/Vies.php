@@ -243,7 +243,7 @@ class Vies
      */
     public function getHeartBeat(): HeartBeat
     {
-        $this->heartBeat = $this->heartBeat ?? new HeartBeat(self::VIES_DOMAIN, self::VIES_PORT, self::VIES_PATH);
+        $this->heartBeat = $this->heartBeat ?? new HeartBeat(self::VIES_DOMAIN, self::VIES_PORT, HeartBeat::DEFAULT_TIMEOUT, self::VIES_PATH);
 
         return $this->heartBeat;
     }
