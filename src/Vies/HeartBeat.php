@@ -28,7 +28,7 @@ use DomainException;
  */
 class HeartBeat
 {
-    private const DEFAULT_TIMEOUT = 10;
+    public const DEFAULT_TIMEOUT = 10;
 
     /**
      * @var string The host you want to verify
@@ -39,7 +39,7 @@ class HeartBeat
      */
     protected $port;
     /**
-     * @var string The path to append
+     * @var ?string The path to append
      */
     protected $path;
 
@@ -63,7 +63,7 @@ class HeartBeat
      * @param int $port
      * @param int $timeout
      */
-    public function __construct(?string $host = null, int $port = Vies::VIES_PORT, ?string $path = null, int $timeout = self::DEFAULT_TIMEOUT)
+    public function __construct(?string $host = null, int $port = Vies::VIES_PORT, int $timeout = self::DEFAULT_TIMEOUT, ?string $path = null)
     {
         if (null !== $host) {
             $this->setHost($host);
@@ -98,18 +98,18 @@ class HeartBeat
     }
 
     /**
-     * @return string
+     * @return ?string
      */
-    public function getPath(): string
+    public function getPath(): ?string
     {
         return $this->path;
     }
 
     /**
-     * @param string $path
+     * @param ?string $path
      * @return self
      */
-    public function setPath(string $path): self
+    public function setPath(?string $path = null): self
     {
         $this->path = $path;
 

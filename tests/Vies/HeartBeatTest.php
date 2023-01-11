@@ -112,8 +112,9 @@ class HeartBeatTest extends TestCase
     public function socketProvider(): array
     {
         return [
-            'Non-existing socket on localhost' => ['127.0.0.1', -1, 10, false],
-            'Socket 443 on ec.europe.eu' => [Vies::VIES_DOMAIN, Vies::VIES_PORT, 10, true],
+            'Non-existing socket on localhost' => ['127.0.0.1', -1, 10, null, false],
+            'Socket 443 on ec.europe.eu' => [Vies::VIES_DOMAIN, Vies::VIES_PORT, 10, null, false],
+            'Socket 443 on ec.europe.eu'.Vies::VIES_PATH => [Vies::VIES_DOMAIN, Vies::VIES_PORT, 10, Vies::VIES_PATH, true],
         ];
     }
 
@@ -124,10 +125,10 @@ class HeartBeatTest extends TestCase
      * @covers ::getSecuredResponse
      * @covers ::readContents
      */
-    public function testIsAliveUsingSockets($host, $port, $timeout, $expectedResult)
+    public function testIsAliveUsingSockets($host, $port, $timeout, $path, $expectedResult)
     {
         HeartBeat::$testingEnabled = false;
-        $heartBeat = new HeartBeat($host, $port, $timeout);
+        $heartBeat = new HeartBeat($host, $port, $timeout, $path);
         $actualResult = $heartBeat->isAlive();
         $this->assertSame($expectedResult, $actualResult);
     }
