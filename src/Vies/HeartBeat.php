@@ -28,7 +28,7 @@ use DomainException;
  */
 class HeartBeat
 {
-    private const DEFAULT_TIMEOUT = 10;
+    public const DEFAULT_TIMEOUT = 10;
 
     /**
      * @var string The host you want to verify
@@ -38,6 +38,10 @@ class HeartBeat
      * @var int The port you want to verify
      */
     protected $port;
+    /**
+     * @var ?string The path to append
+     */
+    protected $path;
 
     /**
      * @var int The timeout in seconds
@@ -59,12 +63,13 @@ class HeartBeat
      * @param int $port
      * @param int $timeout
      */
-    public function __construct(?string $host = null, int $port = Vies::VIES_PORT, int $timeout = self::DEFAULT_TIMEOUT)
+    public function __construct(?string $host = null, int $port = Vies::VIES_PORT, int $timeout = self::DEFAULT_TIMEOUT, ?string $path = null)
     {
         if (null !== $host) {
             $this->setHost($host);
         }
 
+        $this->setPath($path);
         $this->setPort($port);
         $this->setTimeout($timeout);
     }
@@ -88,6 +93,25 @@ class HeartBeat
     public function setHost(string $host): self
     {
         $this->host = $host;
+
+        return $this;
+    }
+
+    /**
+     * @return ?string
+     */
+    public function getPath(): ?string
+    {
+        return $this->path;
+    }
+
+    /**
+     * @param ?string $path
+     * @return self
+     */
+    public function setPath(?string $path = null): self
+    {
+        $this->path = $path;
 
         return $this;
     }
@@ -177,7 +201,7 @@ class HeartBeat
             throw new \InvalidArgumentException('Expecting a resource to be provided');
         }
         $response = '';
-        $uri = sprintf('%s://%s/', Vies::VIES_PROTO, $this->host);
+        $uri = sprintf('%s://%s%s', Vies::VIES_PROTO, $this->host, $this->path);
         $stream = [
             'GET ' . $uri . ' HTTP/1.0',
             'Host: ' . $this->host,

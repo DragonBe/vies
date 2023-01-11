@@ -49,6 +49,7 @@ class Vies
     const VIES_PROTO = 'https';
     const VIES_DOMAIN = 'ec.europa.eu';
     const VIES_PORT = 443;
+    const VIES_PATH = '/taxation_customs/vies';
     const VIES_WSDL = '/taxation_customs/vies/checkVatService.wsdl';
     const VIES_TEST_WSDL = '/taxation_customs/vies/checkVatTestService.wsdl';
     const VIES_EU_COUNTRY_TOTAL = 28;
@@ -242,7 +243,7 @@ class Vies
      */
     public function getHeartBeat(): HeartBeat
     {
-        $this->heartBeat = $this->heartBeat ?? new HeartBeat(self::VIES_DOMAIN, self::VIES_PORT);
+        $this->heartBeat = $this->heartBeat ?? new HeartBeat(self::VIES_DOMAIN, self::VIES_PORT, HeartBeat::DEFAULT_TIMEOUT, self::VIES_PATH);
 
         return $this->heartBeat;
     }
