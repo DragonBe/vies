@@ -18,7 +18,7 @@ namespace DragonBe\Vies\Validator;
  * VAT format: [C0 C1 C2 C3 C4 C5 C6 C7 C8 C9]
  *
  * Range:
- *      C0 Always the digit '0'
+ *      C0 Either 0 or 1 (starting september 2023)
  *      C1 Numeric from 1 to 9
  *      C2 ... C9 Numeric from 0 to 9
  *
