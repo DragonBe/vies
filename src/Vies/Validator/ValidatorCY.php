@@ -20,7 +20,7 @@ namespace DragonBe\Vies\Validator;
  * Range:
  *      C1 ... C8 Numeric from 0 to 9
  *      C9 Alphabetic
- *      C1 0, 1, 3, 4, 5, 9
+ *      C1 0, 1, 3, 4, 5, 6, 9
  *
  * Rules:
  * C1 C2
@@ -41,7 +41,7 @@ class ValidatorCY extends ValidatorAbstract
             return false;
         }
 
-        return in_array((int) $vatNumber[0], [0, 1, 3, 4, 5, 9], true)
+        return in_array((int) $vatNumber[0], [0, 1, 3, 4, 5, 6, 9], true)
             && ctype_alpha($vatNumber[8]);
     }
 }
