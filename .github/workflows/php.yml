@@ -40,7 +40,9 @@ jobs:
 
     - name: Install dependencies
       if: steps.composer-cache.outputs.cache-hit != 'true'
-      run: composer install --prefer-dist --no-progress --no-suggest
+      run: |
+        composer config --no-plugins allow-plugins.infection/extension-installer true
+        composer install --prefer-dist --no-progress --no-suggest
       
     - name: Prepare for Quality
       run: /bin/sh -c 'mkdir -p ${{ github.workspace }}/build/logs && touch ${{ github.workspace }}/build/logs/checkstyle.xml'
