@@ -20,7 +20,7 @@ jobs:
       run: sudo ln -snf /usr/bin/php${{ matrix.php-versions }} /usr/bin/php
 
     - name: Display current PHP version
-      run: php --version
+      run: /usr/bin/php --version
 
     - uses: actions/checkout@v2
 
