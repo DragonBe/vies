@@ -19,7 +19,7 @@ jobs:
     - name: Set default PHP version ${{ matrix.php-versions }}
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '{{ matrix.php-versions }}'
+        php-version: "${{ matrix.php-versions }}"
 
     - name: Display current PHP version
       run: php --version
