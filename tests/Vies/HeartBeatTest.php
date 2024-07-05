@@ -114,7 +114,13 @@ class HeartBeatTest extends TestCase
         return [
             'Non-existing socket on localhost' => ['127.0.0.1', -1, 10, null, false],
             'Socket 443 on ec.europe.eu' => [Vies::VIES_DOMAIN, Vies::VIES_PORT, 10, null, false],
-            'Socket 443 on ec.europe.eu'.Vies::VIES_PATH => [Vies::VIES_DOMAIN, Vies::VIES_PORT, 10, Vies::VIES_PATH, true],
+            'Socket 443 on ec.europe.eu'.Vies::VIES_PATH => [
+                Vies::VIES_DOMAIN,
+                Vies::VIES_PORT,
+                10,
+                Vies::VIES_PATH,
+                true
+            ],
         ];
     }
 

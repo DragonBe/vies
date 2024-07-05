@@ -66,5 +66,10 @@
             "@test",
             "@pmd"
         ]
+    },
+    "config": {
+        "allow-plugins": {
+            "infection/extension-installer": true
+        }
     }
 }

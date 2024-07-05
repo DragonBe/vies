@@ -63,8 +63,12 @@ class HeartBeat
      * @param int $port
      * @param int $timeout
      */
-    public function __construct(?string $host = null, int $port = Vies::VIES_PORT, int $timeout = self::DEFAULT_TIMEOUT, ?string $path = null)
-    {
+    public function __construct(
+        ?string $host = null,
+        int $port = Vies::VIES_PORT,
+        int $timeout = self::DEFAULT_TIMEOUT,
+        ?string $path = null
+    ) {
         if (null !== $host) {
             $this->setHost($host);
         }
