@@ -40,10 +40,6 @@ class ValidatorLV extends ValidatorAbstract
             return false;
         }
 
-        if ((int)$vatNumber[0] <= 3) {
-            return false;
-        }
-
         $weights = [9, 1, 4, 8, 3, 10, 2, 5, 7, 6];
         $checksum = (int)substr($vatNumber, -1);
         $checkVal = $this->sumWeights($weights, $vatNumber);
