@@ -17,10 +17,12 @@ jobs:
 
     steps:
     - name: Set default PHP version ${{ matrix.php-versions }}
-      run: sudo ln -snf /usr/bin/php${{ matrix.php-versions }} /usr/bin/php
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '{{ matrix.php-versions }}'
 
     - name: Display current PHP version
-      run: /usr/bin/php --version
+      run: php --version
 
     - uses: actions/checkout@v2
 
