@@ -19,7 +19,6 @@ namespace DragonBe\Vies\Validator;
  *
  * Range:
  *      C1 ... C11 Numeric from 0 to 9
- *      C1 > 3
  *
  * Rules:
  * C11
@@ -40,8 +39,9 @@ class ValidatorLV extends ValidatorAbstract
             return false;
         }
 
-        if ((int)$vatNumber[0] <= 3) {
-            return false;
+        // Differentiate between legal entities and natural bodies. For the latter, there is a simpler check
+        if (preg_match('/^[0-3]/', $vatNumber)) {
+            return preg_match('/^[0-3]\d[0-1]\d/', $vatNumber) == 1;
         }
 
         $weights = [9, 1, 4, 8, 3, 10, 2, 5, 7, 6];
