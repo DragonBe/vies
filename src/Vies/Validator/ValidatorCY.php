@@ -41,7 +41,32 @@ class ValidatorCY extends ValidatorAbstract
             return false;
         }
 
-        return in_array((int) $vatNumber[0], [0, 1, 3, 4, 5, 6, 9], true)
-            && ctype_alpha($vatNumber[8]);
+        $total = 0;
+        for ($i = 0; $i < 8; ++$i) {
+            $temp = (int) $vatNumber[$i];
+            if (0 === $i % 2) {
+                if (0 === $temp) {
+                    $temp = 1;
+                } elseif (1 === $temp) {
+                    $temp = 0;
+                } elseif (2 === $temp) {
+                    $temp = 5;
+                } elseif (3 === $temp) {
+                    $temp = 7;
+                } elseif (4 === $temp) {
+                    $temp = 9;
+                } else {
+                    $temp = 2 * $temp + 3;
+                }
+            }
+            $total += $temp;
+        }
+
+        // Establish check digit using modulus 26, and translate to char. equivalent.
+        $total = $total % 26;
+        $total = chr($total + 65);
+
+        // Check to see if the check digit given is correct
+        return $vatNumber[8] === $total;
     }
 }

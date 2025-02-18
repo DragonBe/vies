@@ -18,6 +18,8 @@ class ValidatorCYTest extends AbstractValidatorTest
     public function vatNumberProvider()
     {
         return [
+            ['60040893B', true],
+            ['60052853Y', true],
             ['00532445O', true],
             ['005324451', false],
             ['0053244511', false],
