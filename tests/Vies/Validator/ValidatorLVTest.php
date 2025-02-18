@@ -19,6 +19,7 @@ class ValidatorLVTest extends AbstractValidatorTest
     {
         return [
             ['40003009497', true],
+            ['10038010132', true],
             ['40013009497', false],
             ['40003009496', false],
             ['1234567890', false],
