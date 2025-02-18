@@ -41,7 +41,7 @@ class ValidatorLV extends ValidatorAbstract
 
         // Differentiate between legal entities and natural bodies. For the latter, there is a simpler check
         if (preg_match('/^[0-3]/', $vatNumber)) {
-            return preg_match('/^[0-3][0-9][0-1][0-9]/', $vatNumber) == 1;
+            return preg_match('/^[0-3]\d[0-1]\d/', $vatNumber) == 1;
         }
 
         $weights = [9, 1, 4, 8, 3, 10, 2, 5, 7, 6];
