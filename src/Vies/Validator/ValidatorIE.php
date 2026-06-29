@@ -76,7 +76,9 @@ class ValidatorIE extends ValidatorAbstract
 
         $checkChar = 'A';
         for ($i = $checkVal - 1; $i > 0; $i--) {
-            $checkChar++;
+            // chr(ord(...) + 1) replaces $checkChar++ to avoid incrementing a
+            // non-numeric string, deprecated since PHP 8.3 (valid on PHP 7.3+).
+            $checkChar = chr(ord($checkChar) + 1);
         }
 
         return $checkChar == $checksum;
