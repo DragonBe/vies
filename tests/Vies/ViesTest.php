@@ -389,7 +389,9 @@ class ViesTest extends TestCase
     {
         $viesRef = new \ReflectionClass(Vies::class);
         $addOptionalArguments = $viesRef->getMethod('addOptionalArguments');
-        $addOptionalArguments->setAccessible(true);
+        if (\PHP_VERSION_ID < 80100) {
+            $addOptionalArguments->setAccessible(true);
+        }
 
         $array = [];
         $object = new Vies();
@@ -409,7 +411,9 @@ class ViesTest extends TestCase
     {
         $viesRef = new \ReflectionClass(Vies::class);
         $addOptionalArguments = $viesRef->getMethod('addOptionalArguments');
-        $addOptionalArguments->setAccessible(true);
+        if (\PHP_VERSION_ID < 80100) {
+            $addOptionalArguments->setAccessible(true);
+        }
 
         $array = [];
         $object = new Vies();
@@ -484,7 +488,9 @@ class ViesTest extends TestCase
     ) {
         $viesRef = new \ReflectionClass(Vies::class);
         $addOptionalArguments = $viesRef->getMethod('addOptionalArguments');
-        $addOptionalArguments->setAccessible(true);
+        if (\PHP_VERSION_ID < 80100) {
+            $addOptionalArguments->setAccessible(true);
+        }
 
         $array = [];
         $object = new Vies();
@@ -538,7 +544,9 @@ class ViesTest extends TestCase
     ) {
         $viesRef = new \ReflectionClass(Vies::class);
         $addOptionalArguments = $viesRef->getMethod('addOptionalArguments');
-        $addOptionalArguments->setAccessible(true);
+        if (\PHP_VERSION_ID < 80100) {
+            $addOptionalArguments->setAccessible(true);
+        }
 
         $array = [];
         $object = new Vies();
@@ -561,7 +569,9 @@ class ViesTest extends TestCase
     {
         $viesRef = new \ReflectionClass(Vies::class);
         $addOptionalArguments = $viesRef->getMethod('addOptionalArguments');
-        $addOptionalArguments->setAccessible(true);
+        if (\PHP_VERSION_ID < 80100) {
+            $addOptionalArguments->setAccessible(true);
+        }
 
         $this->expectException(\TypeError::class);
         $array = [];
