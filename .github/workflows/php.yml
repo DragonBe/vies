@@ -10,6 +10,9 @@ jobs:
   build:
     name: ViesBuild
     runs-on: ${{ matrix.operating-system }}
+    # Let the experimental (next-PHP) leg fail without failing the workflow.
+    # Legs without an "experimental" value resolve to false and stay blocking.
+    continue-on-error: ${{ matrix.experimental || false }}
     strategy:
       fail-fast: false
       matrix:
@@ -20,7 +23,8 @@ jobs:
           # Forward-looking, non-blocking signal against the next PHP.
           # This plugin exists to smooth installs on newer PHP, so an
           # early-warning leg against the upcoming release fits its purpose.
-          -   php: '8.6'
+          -   operating-system: ubuntu-latest
+              php: '8.6'
               dependencies: highest
               experimental: true        
 
@@ -43,15 +47,19 @@ jobs:
       uses: actions/cache@v5
       with:
         path: vendor
-        key: ${{ runner.os }}-php-${{ matrix.php }}-${{ hashFiles('**/composer.json') }}
+        key: ${{ runner.os }}-php-${{ matrix.php }}-${{ matrix.dependencies }}-${{ hashFiles('**/composer.json') }}
         restore-keys: |
-          ${{ runner.os }}-php-${{ matrix.php }}-
+          ${{ runner.os }}-php-${{ matrix.php }}-${{ matrix.dependencies }}-
 
     - name: Install dependencies
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: |
         composer config --no-plugins allow-plugins.infection/extension-installer true
-        composer install --prefer-dist --no-progress --no-suggest
+        if [ "${{ matrix.dependencies }}" = "lowest" ]; then
+          composer update --prefer-lowest --prefer-stable --prefer-dist --no-progress
+        else
+          composer update --prefer-dist --no-progress
+        fi
       
     - name: Prepare for Quality
       run: /bin/sh -c 'mkdir -p ${{ github.workspace }}/build/logs && touch ${{ github.workspace }}/build/logs/checkstyle.xml'
