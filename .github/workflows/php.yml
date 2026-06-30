@@ -1,42 +1,49 @@
 name: PHP Composer
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push, pull_request]
 
 jobs:
   build:
     name: ViesBuild
     runs-on: ${{ matrix.operating-system }}
+    # Let the experimental (next-PHP) leg fail without failing the workflow.
+    # Legs without an "experimental" value resolve to false and stay blocking.
+    continue-on-error: ${{ matrix.experimental || false }}
     strategy:
+      fail-fast: false
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: ['7.4', '8.0', '8.1']
+        php: ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
+        include:
+          # Forward-looking, non-blocking signal against the next PHP.
+          # This plugin exists to smooth installs on newer PHP, so an
+          # early-warning leg against the upcoming release fits its purpose.
+          -   operating-system: ubuntu-latest
+              php: '8.6'
+              experimental: true
 
     steps:
-    - name: Set default PHP version ${{ matrix.php-versions }}
+    - name: Set default PHP version ${{ matrix.php }}
       uses: shivammathur/setup-php@v2
       with:
-        php-version: "${{ matrix.php-versions }}"
+        php-version: "${{ matrix.php }}"
 
     - name: Display current PHP version
       run: php --version
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v5
 
     - name: Validate composer.json and composer.lock
       run: composer validate
 
     - name: Cache Composer packages
       id: composer-cache
-      uses: actions/cache@v2
+      uses: actions/cache@v5
       with:
         path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        key: ${{ runner.os }}-php-${{ matrix.php }}-${{ hashFiles('**/composer.json') }}
         restore-keys: |
-          ${{ runner.os }}-php-
+          ${{ runner.os }}-php-${{ matrix.php }}-
 
     - name: Install dependencies
       if: steps.composer-cache.outputs.cache-hit != 'true'

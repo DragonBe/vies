@@ -35,6 +35,7 @@ class ValidatorSK extends ValidatorAbstract
     public function validate(string $vatNumber): bool
     {
         if (strlen($vatNumber) != 10
+            || ! ctype_digit($vatNumber)
             || intval($vatNumber[0]) == 0
             || ! in_array((int) $vatNumber[2], [2, 3, 4, 7, 8, 9])
         ) {
